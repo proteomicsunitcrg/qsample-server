@@ -1,0 +1,39 @@
+server:
+    port: 8081
+
+application:
+    version: dev
+
+spring:
+    jackson:
+        time-zone: Europe/Madrid
+    serialization:
+        INDENT_OUTPUT: true
+    datasource:    
+        ## MYSQL
+        url: jdbc:mysql://127.0.0.1:3306/qsample?useSSL=false
+        username: "root"
+        password: "***REMOVED***"
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        
+    h2:
+        console:
+            enabled: false
+    jpa:
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                dialect: MySQL57InnoDB
+        show-sql: false
+    flyway:
+        enabled: false
+
+jwt:
+    header: Authorization
+    secret: L+0P1i+38a26pHiW10iHqPBYAyklvqPdySy98BV9PPCZyDogMggoSZkYxULqCF+WG6Nimlfxd53H6zjdIUJNJA==
+    expiration: 604800  
+    route:
+    authentication:
+        path: api/auth
+        refresh: refresh
