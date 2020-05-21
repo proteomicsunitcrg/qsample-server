@@ -37,6 +37,7 @@ public class UserDetailsImpl implements UserDetails {
 		List<GrantedAuthority> authorities = user.getRoles().stream()
 				.map(role -> new SimpleGrantedAuthority(role.getRoleString()))
 				.collect(Collectors.toList());
+		System.out.println("size " + user.getRoles().size());
 
 		return new UserDetailsImpl(
 				user.getId(), 
@@ -92,5 +93,11 @@ public class UserDetailsImpl implements UserDetails {
 			return false;
 		UserDetailsImpl user = (UserDetailsImpl) o;
 		return Objects.equals(id, user.id);
+	}
+
+	@Override
+	public String toString() {
+		return "UserDetailsImpl [authorities=" + authorities + ", id=" + id + ", password=" + password + ", username="
+				+ username + "]";
 	}
 }

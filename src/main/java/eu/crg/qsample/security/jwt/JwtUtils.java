@@ -29,7 +29,7 @@ public class JwtUtils {
 		return Jwts.builder()
 				.setSubject((userPrincipal.getUsername()))
 				.setIssuedAt(new Date())
-				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs * 1000))
 				.signWith(SignatureAlgorithm.HS512, jwtSecret)
 				.compact();
 	}
@@ -51,7 +51,6 @@ public class JwtUtils {
 		} catch (IllegalArgumentException e) {
 			logger.error("JWT claims string is empty: {}", e.getMessage());
 		}
-
 		return false;
 	}
 }
