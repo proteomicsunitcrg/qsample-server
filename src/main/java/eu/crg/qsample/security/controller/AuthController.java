@@ -2,6 +2,7 @@ package eu.crg.qsample.security.controller;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import eu.crg.qsample.security.UserDetailsImpl;
+import eu.crg.qsample.security.agendo.AgendoAuthService;
 import eu.crg.qsample.security.jwt.JwtUtils;
 import eu.crg.qsample.security.model.ERole;
 import eu.crg.qsample.security.model.Role;
@@ -52,8 +54,20 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 
+	@Autowired
+	AgendoAuthService agendoAuthService;
+
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+
+
+		Optional <User> userOpt = userRepository.findByUsername(loginRequest.getUsername());
+
+
+		if (!agendoAuthService.agendoAuth(loginRequest.getUsername(), loginRequest.getPassword())) {
+			return ResponseEntity.ok(new MessageResponse("UserNotFound"));
+		}
+
 
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -62,6 +76,10 @@ public class AuthController {
 		String jwt = jwtUtils.generateJwtToken(authentication);
 
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+		if (userDetails.getAuthorities().size() == 0) {
+			System.out.println("POLLA");
+		}
+		System.out.println(userDetails.toString());
 		List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
 				.collect(Collectors.toList());
 
@@ -77,16 +95,24 @@ public class AuthController {
 		// Create new user's account
 		User user = new User(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()));
 		UUID userUuid = UUID.randomUUID();
-		user.setFirstname("marioamn");
-		user.setLastname("cacacacacaca");
+		user.setFirstname("marc");
+		user.setLastname("marcaca");
 		user.setApiKey(userUuid);
 
 		Set<Role> roles = new HashSet<>();
-		Role adminRole = roleRepository.findByName(ERole.INTERNAL)
+		Role external = roleRepository.findByName(ERole.ROLE_EXTERNAL).get();
+		Role admin = roleRepository.findByName(ERole.ROLE_ADMIN).get();
+		Role internal = roleRepository.findByName(ERole.ROLE_INTERNAL)
 				.orElseThrow(() -> new RuntimeException("ROLE not found"));
-		roles.add(adminRole);
+		roles.add(external);
+		Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+				.orElseThrow(() -> new RuntimeException("ROLE not found"));
+		roles.add(internal);
+		roles.add(admin);
+		roles.add(userRole);
 		user.setRoles(roles);
 		userRepository.save(user);
+		System.out.println(user.getRoles().size());
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}

@@ -9,10 +9,12 @@ import eu.crg.qsample.security.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    
+
     // Optional <User> findByEmail(String email);
 
 	Boolean existsByUsername(String username);
 
 	Optional <User> findByUsername(String username);
+
+	Optional <User> findByAgendoId(Long agendoId);
 }
