@@ -33,8 +33,10 @@ public class UserService {
         Set<Role> roles = new HashSet<>();
         Role internalRole = roleRepo.findByName(ERole.ROLE_INTERNAL).get();
         Role userRole = roleRepo.findByName(ERole.ROLE_USER).get();
+        Role ADMNIRole = roleRepo.findByName(ERole.ROLE_ADMIN).get();
         roles.add(internalRole);
         roles.add(userRole);
+        roles.add(ADMNIRole);
         newUser.setRoles(roles);
         return userRepo.save(newUser);
     }

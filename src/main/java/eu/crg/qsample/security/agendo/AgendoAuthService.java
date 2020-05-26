@@ -33,6 +33,8 @@ public class AgendoAuthService {
 
 
     public boolean agendoAuth(String username, String password) {
+        //TODO: Remove the bypass
+        // return true;
         try {
             ResponseEntity<AgendoAuthResponse> response = restService.loginAgendo(username, password);
             if (response.getBody().isSuccess()) {
