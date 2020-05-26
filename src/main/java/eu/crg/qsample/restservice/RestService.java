@@ -44,14 +44,17 @@ public class RestService {
     }
 
     public ResponseEntity<String> getAllRequests() {
-
+        // converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
+        // messageConverters.add(converter);
+        // restTemplate.setMessageConverters(messageConverters);
         final HttpHeaders headers = new HttpHeaders();
-        headers.set("From", "marc.serret@crg.eu");
-        headers.set("Authorization", "Bearer " + "OXQ2OGxzT1ZFdTNLOGdGblAxbEY5NDI6MjAyMC0wNS0xMSAyMjoyMzowMg==");
+        headers.set("From", "Y3Jn");
+        headers.set("Authorization", "Basic " + mountBasicAuth("marc.serret@crg.eu", "*Garu23Pucca69*"));
 
         final HttpEntity entity = new HttpEntity(headers);
-        final ResponseEntity<String> response = restTemplate.exchange(url + "/requests/class/22/2018-01-01/2020-06-30",
+        final ResponseEntity<String> response = restTemplate.exchange(url + "/requests/class/26/2018-01-01/2020-06-30",
                 HttpMethod.GET, entity, String.class);
+        // System.out.println(response.getBody());
         return response;
     }
 

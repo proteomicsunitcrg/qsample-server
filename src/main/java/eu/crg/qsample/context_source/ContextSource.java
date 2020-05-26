@@ -49,7 +49,11 @@ public class ContextSource {
 
     @ManyToOne
 	@JoinColumn(name = "trace_color_id")
-	private TraceColor traceColor;
+    private TraceColor traceColor;
+
+    // @ManyToOne
+    // @JoinColumn(name = "node_id")
+    // private Plot node;
 
 
 
