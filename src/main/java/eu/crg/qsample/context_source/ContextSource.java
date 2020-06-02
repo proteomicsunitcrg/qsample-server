@@ -117,4 +117,12 @@ public class ContextSource {
         this.charge = charge;
         this.mz = mz;
     }
+
+    public TraceColor getTraceColor() {
+        return traceColor;
+    }
+
+    public void setTraceColor(TraceColor traceColor) {
+        this.traceColor = traceColor;
+    }
 }

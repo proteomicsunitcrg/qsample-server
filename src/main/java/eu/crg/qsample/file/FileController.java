@@ -18,6 +18,12 @@ public class FileController {
     FileService fileService;
 
 
+    @GetMapping("/dummy")
+    // @PreAuthorize("hasRole('ADMIN')")
+    public File insertDummyFileData() {
+        return fileService.insertDummyFileData();
+    }
+
 
 
 

@@ -29,7 +29,7 @@ public class File {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@Column(name = "creation_date", columnDefinition = "DATETIME")
-    private Date creation_date;
+    private Date creationDate;
 
     @Column(name = "filename", length = 50)
     @NotNull
@@ -52,11 +52,11 @@ public class File {
     }
 
     public Date getCreation_date() {
-        return creation_date;
+        return creationDate;
     }
 
     public void setCreation_date(Date creation_date) {
-        this.creation_date = creation_date;
+        this.creationDate = creation_date;
     }
 
     public String getFilename() {
@@ -73,7 +73,7 @@ public class File {
     public File(Long id, String checksum, Date creation_date, String filename) {
         this.id = id;
         this.checksum = checksum;
-        this.creation_date = creation_date;
+        this.creationDate = creation_date;
         this.filename = filename;
     }
 
