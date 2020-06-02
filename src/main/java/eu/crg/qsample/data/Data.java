@@ -5,8 +5,12 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,20 +23,23 @@ import eu.crg.qsample.param.Param;
 @Entity
 @Table(name = "data")
 public class Data {
-    @JsonIgnore
-	@EmbeddedId
-	private DataId dataId;
+    // @JsonIgnore
+	@Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "data_seq")
+    @SequenceGenerator(name = "data_seq", sequenceName = "data_seq", allocationSize = 1)
+    private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "paramId", insertable = false, updatable = false)
+	@JoinColumn(name = "paramId", insertable = true, updatable = false)
 	private Param param;
 
 	@ManyToOne
-	@JoinColumn(name = "contextSourceId", insertable = false, updatable = false)
+	@JoinColumn(name = "contextSourceId", insertable = true, updatable = false)
 	private ContextSource contextSource;
 
 	@ManyToOne
-	@JoinColumn(name = "fileId", insertable = false, updatable = false)
+	@JoinColumn(name = "fileId", insertable = true, updatable = false)
 	private File file;
 
 	private Float value;
@@ -60,12 +67,12 @@ public class Data {
 		this.file = file;
 	}
 
-	public DataId getDataId() {
-		return dataId;
+	public Long getDataId() {
+		return id;
 	}
 
-	public void setDataId(DataId dataId) {
-		this.dataId = dataId;
+	public void setDataId(Long dataId) {
+		this.id = dataId;
 	}
 
 	public Param getParam() {
@@ -113,9 +120,20 @@ public class Data {
 
 	@Override
 	public String toString() {
-		return "Data [calculatedValue=" + calculatedValue + ", contextSource=" + contextSource + ", dataId=" + dataId
+		return "Data [calculatedValue=" + calculatedValue + ", contextSource=" + contextSource + ", dataId=" + id
 				+ ", file=" + file + ", nonConformityStatus=" + nonConformityStatus + ", param=" + param + ", value="
 				+ value + "]";
+	}
+
+	public Data(Long id, Param param, ContextSource contextSource, File file, Float value, Float calculatedValue,
+			InstrumentStatus nonConformityStatus) {
+		this.id = id;
+		this.param = param;
+		this.contextSource = contextSource;
+		this.file = file;
+		this.value = value;
+		this.calculatedValue = calculatedValue;
+		this.nonConformityStatus = nonConformityStatus;
 	}
 
 }

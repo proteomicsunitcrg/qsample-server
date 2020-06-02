@@ -46,6 +46,9 @@ public class Plot {
     @JoinColumn(name = "param_id", referencedColumnName = "id")
     private Param param;
 
+    @Column(name = "name")
+    private String name;
+
     public Plot() {
     }
 
@@ -86,6 +89,22 @@ public class Plot {
 
     public void setParam(Param param) {
         this.param = param;
+    }
+
+    public Plot(Long id, @NotNull UUID apiKey, List<ContextSource> contextSource, Param param, String name) {
+        this.id = id;
+        this.apiKey = apiKey;
+        this.contextSource = contextSource;
+        this.param = param;
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 

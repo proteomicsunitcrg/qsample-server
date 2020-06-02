@@ -35,21 +35,22 @@ public class AgendoAuthService {
     public boolean agendoAuth(String username, String password) {
         //TODO: Remove the bypass
         // return true;
-        try {
-            ResponseEntity<AgendoAuthResponse> response = restService.loginAgendo(username, password);
-            if (response.getBody().isSuccess()) {
-                Optional <User> userOpt =  userRepo.findByAgendoId(response.getBody().getUser().getId());
-                if (userOpt.isPresent()) {
-                    return true;
-                } else {
-                    userService.addUserAgendo(username, password, response.getBody().getUser());
-                    return true;
-                }
-            } else {
-                return false;
-            }
-        } catch (HttpClientErrorException e) {
-            throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT, "Agendo error" + e.getRawStatusCode());
-        }
+        return true;
+        // try {
+        //     ResponseEntity<AgendoAuthResponse> response = restService.loginAgendo(username, password);
+        //     if (response.getBody().isSuccess()) {
+        //         Optional <User> userOpt =  userRepo.findByAgendoId(response.getBody().getUser().getId());
+        //         if (userOpt.isPresent()) {
+        //             return true;
+        //         } else {
+        //             userService.addUserAgendo(username, password, response.getBody().getUser());
+        //             return true;
+        //         }
+        //     } else {
+        //         return false;
+        //     }
+        // } catch (HttpClientErrorException e) {
+        //     throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT, "Agendo error" + e.getRawStatusCode());
+        // }
     }
 }

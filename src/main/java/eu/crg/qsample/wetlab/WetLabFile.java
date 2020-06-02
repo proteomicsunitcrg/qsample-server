@@ -13,7 +13,7 @@ import eu.crg.qsample.file.File;
 public class WetLabFile extends File {
 
     @ManyToOne
-	@JoinColumn(name = "wetLabType", insertable = false, updatable = false)
+	@JoinColumn(name = "wetLabType", insertable = true, updatable = false)
     private WetLab type;
 
     public WetLabFile(Long id, String checksum, Date creation_date, String filename, WetLab type) {
