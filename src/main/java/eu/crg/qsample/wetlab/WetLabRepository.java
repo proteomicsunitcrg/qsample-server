@@ -11,4 +11,6 @@ public interface WetLabRepository extends CrudRepository<WetLab, Long> {
 
     public Optional <WetLab> findOneByApiKey(UUID apiKey);
 
+    public Optional <WetLab> findOneByGuideSetId(Long id);
+
 }

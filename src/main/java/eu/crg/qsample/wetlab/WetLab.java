@@ -3,6 +3,7 @@ package eu.crg.qsample.wetlab;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,10 +11,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import eu.crg.qsample.guideset.GuideSet;
 import eu.crg.qsample.plot.Plot;
 
 @Entity
@@ -35,6 +40,9 @@ public class WetLab {
 
     @ManyToMany
     private List<Plot> plot;
+
+    @OneToOne(orphanRemoval = true)
+    private GuideSet guideSet;
 
     public Long getId() {
         return id;
@@ -82,6 +90,23 @@ public class WetLab {
         this.apiKey = apiKey;
         this.name = name;
         this.plot = plot;
+    }
+
+    @JsonIgnore
+    public GuideSet getGuideSet() {
+        return guideSet;
+    }
+
+    public void setGuideSet(GuideSet guideSet) {
+        this.guideSet = guideSet;
+    }
+
+    public WetLab(Long id, @NotNull UUID apiKey, @NotNull String name, List<Plot> plot, GuideSet guideSet) {
+        this.id = id;
+        this.apiKey = apiKey;
+        this.name = name;
+        this.plot = plot;
+        this.guideSet = guideSet;
     }
 
 

@@ -48,34 +48,16 @@ public class DataService {
         if (!plot.isPresent()) {
             throw new NotFoundException("Plot doesnt found");
         }
-        // System.out.println(plot.get().getContextSource().size());
-        // System.out.println(plot.get().getParam().getId());
-        // System.out.println(wetlab.get().getId());
-        // plot.get().getContextSource().forEach(cs -> {
-        //     System.out.println(cs.getId());
-        //     // data.addAll(dataRepo.findParamData(cs.getId(), plot.get().getParam().getId(), startDate, endDate));
-        //     data.addAll(dataRepo.findParamData(cs.getId(), plot.get().getParam().getId(), startDate, endDate, wetlab.get().getId()));
-        // });
-        // System.out.println(data.toString());
-
-
-        // plot.get().getContextSource().forEach(cs -> );
 
         List <WetLabFile> files = fileRepo.findAllByCreationDateBetweenAndTypeId(startDate, endDate, wetlab.get().getId());
-        System.out.println(files);
-        // for (File file: files) {
-        // for(ContextSource cs: plot.get().getContextSource()
         data = dataRepo.findByFileInAndContextSourceInAndParamId(files, plot.get().getContextSource(), plot.get().getParam().getId());
-        // System.out.println(data.size());
         for (Data d: data) {
-            System.out.println(d.getContextSource().getName());
             if (!traces.containsKey(d.getContextSource().getAbbreviated())) {
                 traces.put(d.getContextSource().getAbbreviated(), generatePlotTraceFromContextSource(d.getContextSource()));
             }
             traces.get(d.getContextSource().getAbbreviated()).getPlotTracePoints().add(generatePlotTracePointFromData(d));
         }
         List <PlotTrace> plotTracesList = traces.toList();
-        // System.out.println(plotTracesList.size());
         return plotTracesList;
     }
 
@@ -88,7 +70,7 @@ public class DataService {
     }
 
     private PlotTracePoint generatePlotTracePointFromData(Data d) {
-        return new PlotTracePoint(d.getFile(), d.getCalculatedValue(), d.getNonConformityStatus());
+        return new PlotTracePoint(d.getFile(), d.getCalculatedValue(),d.getStd(), d.getNonConformityStatus());
     }
 
 }
