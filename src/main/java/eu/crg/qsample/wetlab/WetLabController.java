@@ -33,14 +33,18 @@ public class WetLabController {
     @GetMapping("/{apiKey}")
     @PreAuthorize("hasRole('INTERNAL')")
     public WetLab getByApiKey(@PathVariable UUID apiKey) {
-        System.out.println(apiKey);
-        System.out.println("me cago en todo");
         return wetLabService.getByApiKey(apiKey);
     }
 
+    @GetMapping("/files/{apiKey}")
+    @PreAuthorize("hasRole('INTERNAL')")
+    public List<WetLabFile> getWetLabFilesByApiKey(@PathVariable UUID apiKey) {
+        return wetLabService.getWetLabFilesByApiKey(apiKey);
+    }
+
     @ExceptionHandler(DataRetrievalFailureException.class)
-	void handleNotFound(HttpServletResponse response, Exception e) throws IOException {
-		response.sendError(HttpStatus.NOT_FOUND.value(), e.getMessage());
-	}
+    void handleNotFound(HttpServletResponse response, Exception e) throws IOException {
+        response.sendError(HttpStatus.NOT_FOUND.value(), e.getMessage());
+    }
 
 }

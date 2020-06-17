@@ -24,116 +24,146 @@ import eu.crg.qsample.param.Param;
 @Table(name = "data")
 public class Data {
     // @JsonIgnore
-	@Id
+    @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "data_seq")
     @SequenceGenerator(name = "data_seq", sequenceName = "data_seq", allocationSize = 1)
     private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "paramId", insertable = true, updatable = false)
-	private Param param;
+    @ManyToOne
+    @JoinColumn(name = "paramId", insertable = true, updatable = false)
+    private Param param;
 
-	@ManyToOne
-	@JoinColumn(name = "contextSourceId", insertable = true, updatable = false)
-	private ContextSource contextSource;
+    @ManyToOne
+    @JoinColumn(name = "contextSourceId", insertable = true, updatable = false)
+    private ContextSource contextSource;
 
-	@ManyToOne
-	@JoinColumn(name = "fileId", insertable = true, updatable = false)
-	private File file;
+    @ManyToOne
+    @JoinColumn(name = "fileId", insertable = true, updatable = false)
+    private File file;
 
-	private Float value;
+    private Float value;
 
-	private Float calculatedValue;
+    private Float calculatedValue;
 
-	@Enumerated(EnumType.STRING)
-	@Column(columnDefinition = "varchar(255) default 'OK'")
-	private InstrumentStatus nonConformityStatus = InstrumentStatus.OK;
+    private Float std;
 
-	public Float getValue() {
-		return value;
-	}
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar(255) default 'OK'")
+    private InstrumentStatus nonConformityStatus = InstrumentStatus.OK;
 
-	public void setValue(Float value) {
-		this.value = value;
-	}
+    public Float getValue() {
+        return value;
+    }
 
-	public Data() {
-	}
+    public void setValue(Float value) {
+        this.value = value;
+    }
 
-	public Data(Param param, ContextSource contextSource, File file) {
-		this.param = param;
-		this.contextSource = contextSource;
-		this.file = file;
-	}
+    public Data() {
+    }
 
-	public Long getDataId() {
-		return id;
-	}
+    public Data(Param param, ContextSource contextSource, File file) {
+        this.param = param;
+        this.contextSource = contextSource;
+        this.file = file;
+    }
 
-	public void setDataId(Long dataId) {
-		this.id = dataId;
-	}
+    public Long getDataId() {
+        return id;
+    }
 
-	public Param getParam() {
-		return param;
-	}
+    public void setDataId(Long dataId) {
+        this.id = dataId;
+    }
 
-	public void setParam(Param param) {
-		this.param = param;
-	}
+    public Param getParam() {
+        return param;
+    }
 
-	public ContextSource getContextSource() {
-		return contextSource;
-	}
+    public void setParam(Param param) {
+        this.param = param;
+    }
 
-	public void setContextSource(ContextSource contextSource) {
-		this.contextSource = contextSource;
-	}
+    public ContextSource getContextSource() {
+        return contextSource;
+    }
 
-	public File getFile() {
-		return file;
-	}
+    public void setContextSource(ContextSource contextSource) {
+        this.contextSource = contextSource;
+    }
 
-	public void setFile(File file) {
-		this.file = file;
-	}
+    public File getFile() {
+        return file;
+    }
 
-	public Float getCalculatedValue() {
-		if (calculatedValue == null) {
-			return Float.NaN;
-		}
-		return calculatedValue;
-	}
+    public void setFile(File file) {
+        this.file = file;
+    }
 
-	public void setCalculatedValue(Float calculatedValue) {
-		this.calculatedValue = calculatedValue;
-	}
+    public Float getCalculatedValue() {
+        if (calculatedValue == null) {
+            return Float.NaN;
+        }
+        return calculatedValue;
+    }
 
-	public InstrumentStatus getNonConformityStatus() {
-		return nonConformityStatus;
-	}
+    public void setCalculatedValue(Float calculatedValue) {
+        this.calculatedValue = calculatedValue;
+    }
 
-	public void setNonConformityStatus(InstrumentStatus nonConformityStatus) {
-		this.nonConformityStatus = nonConformityStatus;
-	}
+    public InstrumentStatus getNonConformityStatus() {
+        return nonConformityStatus;
+    }
 
-	@Override
-	public String toString() {
-		return "Data [calculatedValue=" + calculatedValue + ", contextSource=" + contextSource + ", dataId=" + id
-				+ ", file=" + file + ", nonConformityStatus=" + nonConformityStatus + ", param=" + param + ", value="
-				+ value + "]";
-	}
+    public void setNonConformityStatus(InstrumentStatus nonConformityStatus) {
+        this.nonConformityStatus = nonConformityStatus;
+    }
 
-	public Data(Long id, Param param, ContextSource contextSource, File file, Float value, Float calculatedValue,
-			InstrumentStatus nonConformityStatus) {
-		this.id = id;
-		this.param = param;
-		this.contextSource = contextSource;
-		this.file = file;
-		this.value = value;
-		this.calculatedValue = calculatedValue;
-		this.nonConformityStatus = nonConformityStatus;
-	}
+    @Override
+    public String toString() {
+        return "Data [calculatedValue=" + calculatedValue + ", contextSource=" + contextSource + ", dataId=" + id
+                + ", file=" + file + ", nonConformityStatus=" + nonConformityStatus + ", param=" + param + ", value="
+                + value + "]";
+    }
+
+    public Data(Long id, Param param, ContextSource contextSource, File file, Float value, Float calculatedValue,
+            InstrumentStatus nonConformityStatus) {
+        this.id = id;
+        this.param = param;
+        this.contextSource = contextSource;
+        this.file = file;
+        this.value = value;
+        this.calculatedValue = calculatedValue;
+        this.nonConformityStatus = nonConformityStatus;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Float getStd() {
+        return std;
+    }
+
+    public void setStd(Float std) {
+        this.std = std;
+    }
+
+    public Data(Long id, Param param, ContextSource contextSource, File file, Float value, Float calculatedValue,
+            Float std, InstrumentStatus nonConformityStatus) {
+        this.id = id;
+        this.param = param;
+        this.contextSource = contextSource;
+        this.file = file;
+        this.value = value;
+        this.calculatedValue = calculatedValue;
+        this.std = std;
+        this.nonConformityStatus = nonConformityStatus;
+    }
 
 }

@@ -27,7 +27,7 @@ public class File {
     @NotNull
     private String checksum;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	@Column(name = "creation_date", columnDefinition = "DATETIME")
     private Date creationDate;
 

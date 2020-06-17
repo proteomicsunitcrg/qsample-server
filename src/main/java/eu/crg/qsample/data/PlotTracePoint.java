@@ -8,6 +8,8 @@ public class PlotTracePoint {
 
     private Float value;
 
+    private Float std;
+
     private InstrumentStatus nonConformityStatus;
 
     public File getFile() {
@@ -40,6 +42,21 @@ public class PlotTracePoint {
     }
 
     public void setNonConformityStatus(InstrumentStatus nonConformityStatus) {
+        this.nonConformityStatus = nonConformityStatus;
+    }
+
+    public Float getStd() {
+        return std;
+    }
+
+    public void setStd(Float std) {
+        this.std = std;
+    }
+
+    public PlotTracePoint(File file, Float value, Float std, InstrumentStatus nonConformityStatus) {
+        this.file = file;
+        this.value = value;
+        this.std = std;
         this.nonConformityStatus = nonConformityStatus;
     }
 

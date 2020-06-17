@@ -7,7 +7,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.lang.Nullable;
+
 import eu.crg.qsample.file.File;
+import eu.crg.qsample.guideset.GuideSet;
 
 @Entity
 public class WetLabFile extends File {
@@ -31,6 +34,5 @@ public class WetLabFile extends File {
 
     public WetLabFile() {
     }
-
 
 }
