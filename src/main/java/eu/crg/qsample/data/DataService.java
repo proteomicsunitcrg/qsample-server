@@ -18,6 +18,7 @@ import eu.crg.qsample.data.model.ParameterData;
 import eu.crg.qsample.exceptions.NotFoundException;
 import eu.crg.qsample.file.File;
 import eu.crg.qsample.file.FileRepository;
+import eu.crg.qsample.guideset.GuideSetService;
 import eu.crg.qsample.param.Param;
 import eu.crg.qsample.param.ParamRepository;
 import eu.crg.qsample.plot.Plot;
@@ -46,6 +47,9 @@ public class DataService {
 
     @Autowired
     ContextSourceRepository csRepo;
+
+    @Autowired
+    GuideSetService guideSetService;
 
     public List<PlotTrace> getTraceData(Date startDate, Date endDate, Long plotId, UUID wetLabApiKey) {
         Optional<Plot> plot = plotRepo.findById(plotId);

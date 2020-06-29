@@ -28,7 +28,7 @@ spring:
             hibernate:
                 dialect: MySQL57InnoDB
             format_sql: true
-        show-sql: true
+        show-sql: false
     flyway:
         enabled: false
 
