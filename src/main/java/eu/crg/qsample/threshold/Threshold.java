@@ -1,7 +1,9 @@
 package eu.crg.qsample.threshold;
 
+import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,10 +15,12 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import eu.crg.qsample.param.Param;
+import eu.crg.qsample.threshold.params.ThresholdParams;
 import eu.crg.qsample.wetlab.WetLab;
 
 @Entity
@@ -43,10 +47,13 @@ public class Threshold {
 
     @ManyToOne(optional = true)
     @JoinColumn(name = "wetlab_id")
-    protected WetLab instrument;
+    protected WetLab wetLab;
 
     @Column(name = "steps")
     protected int steps;
+
+    @OneToMany(mappedBy = "threshold", cascade = CascadeType.ALL)
+    protected List<ThresholdParams> thresholdParams;
 
     public Long getId() {
         return id;
@@ -80,12 +87,12 @@ public class Threshold {
         this.param = param;
     }
 
-    public WetLab getInstrument() {
-        return instrument;
+    public WetLab getWetlab() {
+        return wetLab;
     }
 
-    public void setInstrument(WetLab instrument) {
-        this.instrument = instrument;
+    public void setWetlab(WetLab wetLab) {
+        this.wetLab = wetLab;
     }
 
     public int getSteps() {
@@ -99,14 +106,33 @@ public class Threshold {
     public Threshold() {
     }
 
-    public Threshold(Long id, UUID apiKey, Direction nonConformityDirection, Param param, WetLab instrument,
+    public Threshold(Long id, UUID apiKey, Direction nonConformityDirection, Param param, WetLab wetLab,
             int steps) {
         this.id = id;
         this.apiKey = apiKey;
         this.nonConformityDirection = nonConformityDirection;
         this.param = param;
-        this.instrument = instrument;
+        this.wetLab = wetLab;
         this.steps = steps;
+    }
+
+    public List<ThresholdParams> getThresholdParams() {
+        return thresholdParams;
+    }
+
+    public void setThresholdParams(List<ThresholdParams> thresholdParams) {
+        this.thresholdParams = thresholdParams;
+    }
+
+    public Threshold(Long id, UUID apiKey, Direction nonConformityDirection, Param param, WetLab wetLab, int steps,
+            List<ThresholdParams> thresholdParams) {
+        this.id = id;
+        this.apiKey = apiKey;
+        this.nonConformityDirection = nonConformityDirection;
+        this.param = param;
+        this.wetLab = wetLab;
+        this.steps = steps;
+        this.thresholdParams = thresholdParams;
     }
 
 }
