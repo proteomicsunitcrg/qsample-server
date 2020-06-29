@@ -115,6 +115,13 @@ public class GuideSetService {
         Optional<WetLab> wetlab = wetlabRepo.findOneByGuideSetId(guideSet.getId());
         wetlab.get().setGuideSet(null);
         guideSetRepo.deleteById(guideSet.getId());
+        Optional <List<Threshold>> wetLabThresh = thresholdRepository.findByWetLab(wetlab.get());
+        if (wetLabThresh.isPresent()) {
+            for (Threshold thres: wetLabThresh.get()) {
+                thresholdParamsRepository.deleteAll(thres.getThresholdParams());
+                thresholdRepository.delete(thres);
+            }
+        }
         return true;
     }
 
