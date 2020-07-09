@@ -40,3 +40,8 @@ jwt:
     authentication:
         path: api/auth
         refresh: refresh
+
+qcloud2:
+    url: http://localhost:5001/qsample
+    username: qsample
+    password: qsample
