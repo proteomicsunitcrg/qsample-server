@@ -11,12 +11,12 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.stereotype.Service;
 
+import eu.crg.qsample.Threshold.InstrumentStatus;
 import eu.crg.qsample.context_source.ContextSourceRepository;
 import eu.crg.qsample.data.Data;
 import eu.crg.qsample.data.DataRepository;
 import eu.crg.qsample.guideset.GuideSetRepository;
 import eu.crg.qsample.param.ParamRepository;
-import eu.crg.qsample.threshold.InstrumentStatus;
 import eu.crg.qsample.wetlab.WetLab;
 import eu.crg.qsample.wetlab.WetLabFile;
 import eu.crg.qsample.wetlab.WetLabRepository;
@@ -62,7 +62,7 @@ public class FileService {
             throw new DataIntegrityViolationException("A file with that checksum already exists!");
         }
         Optional<WetLab> wetlab = wetlabRepo.findOneByApiKey(wetLabApiKey);
-        if (wetlab.isEmpty()) {
+        if (!wetlab.isPresent()) {
             throw new DataRetrievalFailureException("WetLab not found");
         }
         if (isLastFile(toInsert, wetlab.get())) {

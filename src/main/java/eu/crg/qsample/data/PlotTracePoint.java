@@ -1,7 +1,8 @@
 package eu.crg.qsample.data;
 
+import eu.crg.qsample.Threshold.InstrumentStatus;
 import eu.crg.qsample.file.File;
-import eu.crg.qsample.threshold.InstrumentStatus;
+
 
 public class PlotTracePoint {
     private File file;
