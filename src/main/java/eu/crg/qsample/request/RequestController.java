@@ -17,7 +17,7 @@ public class RequestController {
 
     @PreAuthorize("hasRole('INTERNAL')")
     @RequestMapping(value = "")
-    public List<AgendoRequestWrapper> getAll() {
+    public List<MiniRequest> getAll() {
         // return "WORKS!";
         return requestService.getAll();
     }

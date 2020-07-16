@@ -26,8 +26,6 @@ import eu.crg.qsample.security.agendo.AgendoAuthResponse;
 @Service
 public class RestService {
 
-    // TODO: Add this config to a config file
-
     @Value("${agendo.url}")
     private String url;
 
@@ -53,17 +51,17 @@ public class RestService {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public List<AgendoRequestWrapper> getAllRequests() {
-        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
-        messageConverters.add(converter);
-        restTemplate.setMessageConverters(messageConverters);
+    public String getAllRequests() {
+        // converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
+        // messageConverters.add(converter);
+        // restTemplate.setMessageConverters(messageConverters);
         final HttpHeaders headers = new HttpHeaders();
         headers.set("From", agendoFrom);
         headers.set("Authorization", "Basic " + mountBasicAuth(agendoUser, agendoPass));
 
         final HttpEntity entity = new HttpEntity(headers);
-        final ResponseEntity<List<AgendoRequestWrapper>> response = restTemplate.exchange(url + "/requests/facility/10/2020-01-01/2021-06-30",
-                HttpMethod.GET, entity, new ParameterizedTypeReference<List<AgendoRequestWrapper>>() {});
+        final ResponseEntity<String> response = restTemplate.exchange(url + "/requests/facility/10/2020-05-01/2021-06-30",
+                HttpMethod.GET, entity, String.class);
         // System.out.println(response.getBody());
         return response.getBody();
     }

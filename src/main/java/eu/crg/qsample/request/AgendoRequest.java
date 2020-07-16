@@ -4,16 +4,17 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 public class AgendoRequest {
     private long id;
 
     private String group;
 
-    @JsonProperty("class")
+    @SerializedName("class")
     private String classs;
 
-    private Date date_created;
+    private String date_created;
 
     private String status;
 
@@ -59,11 +60,11 @@ public class AgendoRequest {
         this.classs = classs;
     }
 
-    public Date getdate_created() {
+    public String getdate_created() {
         return date_created;
     }
 
-    public void setdate_created(Date date_created) {
+    public void setdate_created(String date_created) {
         this.date_created = date_created;
     }
 
@@ -150,7 +151,7 @@ public class AgendoRequest {
     public AgendoRequest() {
     }
 
-    public AgendoRequest(long id, String group, String classs, Date date_created, String status, String account,
+    public AgendoRequest(long id, String group, String classs, String date_created, String status, String account,
             String total, String delivery_date, String delivery_location, String comment,
             AgendoRequestLastAction last_action, AgendoRequestUser created_by, List<AgendoRequestFieldProduct> fields,
             List<AgendoRequestFieldProduct> products) {

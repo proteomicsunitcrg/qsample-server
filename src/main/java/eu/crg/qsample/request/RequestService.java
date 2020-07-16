@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.google.gson.Gson;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,9 +23,15 @@ public class RequestService {
     @Autowired
     UserRepository userRepo;
 
-	public List<AgendoRequestWrapper> getAll() {
-        List<AgendoRequestWrapper> res = restService.getAllRequests();
-        return res;
+	public List<MiniRequest> getAll() {
+        List <MiniRequest> miniRequests = new ArrayList<>();
+        String ccc = restService.getAllRequests();
+        Gson gson = new Gson();
+        AgendoRequestWrapper response = gson.fromJson(ccc, AgendoRequestWrapper.class);
+        for(AgendoRequest agendoRequest: response.getRequest()) {
+            miniRequests.add(new MiniRequest(agendoRequest.getId(), agendoRequest.getClasss(), agendoRequest.getCreated_by().getEmail(), agendoRequest.getdate_created(), agendoRequest.getLast_action().getAction()));
+        }
+        return miniRequests;
 	}
 
 }

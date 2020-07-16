@@ -9,7 +9,7 @@ public class MiniRequest {
 
     private String creatorMail;
 
-    private Date creationDate;
+    private String creationDate;
 
     private String status;
 
@@ -37,11 +37,11 @@ public class MiniRequest {
         this.creatorMail = creatorMail;
     }
 
-    public Date getCreationDate() {
+    public String getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -56,7 +56,7 @@ public class MiniRequest {
     public MiniRequest() {
     }
 
-    public MiniRequest(long id, String type, String creatorMail, Date creationDate, String status) {
+    public MiniRequest(long id, String type, String creatorMail, String creationDate, String status) {
         this.id = id;
         this.type = type;
         this.creatorMail = creatorMail;

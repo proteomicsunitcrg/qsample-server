@@ -1,11 +1,13 @@
 package eu.crg.qsample.request;
 
+import java.util.List;
+
 public class AgendoRequestWrapper {
     private boolean success;
 
     private long count;
 
-    private AgendoRequest request;
+    private List<AgendoRequest> request;
 
     public boolean isSuccess() {
         return success;
@@ -23,18 +25,18 @@ public class AgendoRequestWrapper {
         this.count = count;
     }
 
-    public AgendoRequest getRequest() {
+    public List<AgendoRequest> getRequest() {
         return request;
     }
 
-    public void setRequest(AgendoRequest request) {
+    public void setRequest(List<AgendoRequest> request) {
         this.request = request;
     }
 
     public AgendoRequestWrapper() {
     }
 
-    public AgendoRequestWrapper(boolean success, long count, AgendoRequest request) {
+    public AgendoRequestWrapper(boolean success, long count, List<AgendoRequest> request) {
         this.success = success;
         this.count = count;
         this.request = request;
