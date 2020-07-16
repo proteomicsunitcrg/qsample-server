@@ -60,13 +60,13 @@ public class AuthController {
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-
+		System.out.println("login try");
 		Optional <User> userOpt = userRepository.findByUsername(loginRequest.getUsername());
 
 
-		if (!agendoAuthService.agendoAuth(loginRequest.getUsername(), loginRequest.getPassword())) {
-			return ResponseEntity.ok(new MessageResponse("UserNotFound"));
-		}
+		// if (!agendoAuthService.agendoAuth(loginRequest.getUsername(), loginRequest.getPassword())) {
+		// 	return ResponseEntity.ok(new MessageResponse("UserNotFound"));
+		// }
 
 
 		Authentication authentication = authenticationManager.authenticate(
@@ -95,8 +95,8 @@ public class AuthController {
 		// Create new user's account
 		User user = new User(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()));
 		UUID userUuid = UUID.randomUUID();
-		user.setFirstname("marc");
-		user.setLastname("marcaca");
+		user.setFirstname("EXTERNAL");
+		user.setLastname("EXTERNAL");
 		user.setApiKey(userUuid);
 
 		Set<Role> roles = new HashSet<>();
@@ -107,8 +107,8 @@ public class AuthController {
 		roles.add(external);
 		Role userRole = roleRepository.findByName(ERole.ROLE_USER)
 				.orElseThrow(() -> new RuntimeException("ROLE not found"));
-		roles.add(internal);
-		roles.add(admin);
+		// roles.add(internal);
+		// roles.add(admin);
 		roles.add(userRole);
 		user.setRoles(roles);
 		userRepository.save(user);

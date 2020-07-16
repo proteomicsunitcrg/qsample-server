@@ -5,7 +5,9 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -16,6 +18,8 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import eu.crg.qsample.request.AgendoRequest;
+import eu.crg.qsample.request.AgendoRequestWrapper;
 import eu.crg.qsample.request.RequestResponse;
 import eu.crg.qsample.security.agendo.AgendoAuthResponse;
 
@@ -24,11 +28,17 @@ public class RestService {
 
     // TODO: Add this config to a config file
 
-    private final String url = "https://api.agendo.science/";
+    @Value("${agendo.url}")
+    private String url;
 
-    private final String agendoUser = "marc.serret@crg.eu";
+    @Value("${agendo.username}")
+    private String agendoUser;
 
-    private final String agendoPass = "*Garu23Pucca69*";
+    @Value("${agendo.password}")
+    private String agendoPass;
+
+    @Value("${agendo.from}")
+    private String agendoFrom;
 
     private final RestTemplate restTemplate;
 
@@ -43,19 +53,19 @@ public class RestService {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public ResponseEntity<String> getAllRequests() {
-        // converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
-        // messageConverters.add(converter);
-        // restTemplate.setMessageConverters(messageConverters);
+    public List<AgendoRequestWrapper> getAllRequests() {
+        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
+        messageConverters.add(converter);
+        restTemplate.setMessageConverters(messageConverters);
         final HttpHeaders headers = new HttpHeaders();
-        headers.set("From", "Y3Jn");
-        headers.set("Authorization", "Basic " + mountBasicAuth("marc.serret@crg.eu", "*Garu23Pucca69*"));
+        headers.set("From", agendoFrom);
+        headers.set("Authorization", "Basic " + mountBasicAuth(agendoUser, agendoPass));
 
         final HttpEntity entity = new HttpEntity(headers);
-        final ResponseEntity<String> response = restTemplate.exchange(url + "/requests/class/26/2018-01-01/2020-06-30",
-                HttpMethod.GET, entity, String.class);
+        final ResponseEntity<List<AgendoRequestWrapper>> response = restTemplate.exchange(url + "/requests/facility/10/2020-01-01/2021-06-30",
+                HttpMethod.GET, entity, new ParameterizedTypeReference<List<AgendoRequestWrapper>>() {});
         // System.out.println(response.getBody());
-        return response;
+        return response.getBody();
     }
 
     public ResponseEntity<AgendoAuthResponse> loginAgendo(String user, String password) {
