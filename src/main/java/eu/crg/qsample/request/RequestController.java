@@ -17,7 +17,7 @@ public class RequestController {
 
     @PreAuthorize("hasRole('INTERNAL')")
     @RequestMapping(value = "")
-    public ResponseEntity<String> getAll() {
+    public List<AgendoRequestWrapper> getAll() {
         // return "WORKS!";
         return requestService.getAll();
     }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import eu.crg.qsample.data.DataRepository;
 import eu.crg.qsample.exceptions.NotFoundException;
 import eu.crg.qsample.file.FileRepository;
+import eu.crg.qsample.file.QCloud2File;
 
 @Service
 public class WetLabService {
