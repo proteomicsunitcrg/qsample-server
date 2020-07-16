@@ -40,3 +40,37 @@ jwt:
     authentication:
         path: api/auth
         refresh: refresh
+
+qcloud2:
+    url: http://localhost:5001/qsample
+    username: qsample
+    password: qsample
+
+agendo:
+    username: marc.serret@crg.eu
+    password: cacaDeVaca1
+    from: Y3Jn
+    url: https://api.agendo.science
+
+---
+
+spring:
+  profiles: test
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/qsampletest?useSSL=false&serverTimezone=UTC
+    username: "admin"
+    password: "CRG4dm1n!"
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: MySQL57InnoDB
+    show-sql: false
+  flyway:
+    enabled: false
+server:
+  port: 8081
+logging:
+  file: qcloud2test.log

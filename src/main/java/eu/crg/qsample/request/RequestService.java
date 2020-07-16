@@ -21,12 +21,8 @@ public class RequestService {
     @Autowired
     UserRepository userRepo;
 
-	public ResponseEntity<String> getAll() {
-        List<Request> allRequests = new ArrayList<>();
-        ResponseEntity<String> res = restService.getAllRequests();
-        if (res.getStatusCode().is2xxSuccessful()) {
-            return res;
-        }
+	public List<AgendoRequestWrapper> getAll() {
+        List<AgendoRequestWrapper> res = restService.getAllRequests();
         return res;
 	}
 
