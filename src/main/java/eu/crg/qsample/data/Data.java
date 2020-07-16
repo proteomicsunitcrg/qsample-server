@@ -15,7 +15,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import eu.crg.qsample.threshold.InstrumentStatus;
+import eu.crg.qsample.Threshold.InstrumentStatus;
 import eu.crg.qsample.context_source.ContextSource;
 import eu.crg.qsample.file.File;
 import eu.crg.qsample.param.Param;

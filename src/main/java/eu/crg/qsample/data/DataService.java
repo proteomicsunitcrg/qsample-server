@@ -97,7 +97,7 @@ public class DataService {
     public void insertDataFromPipeline(DataFromPipeline dataFromPipeline) {
         System.out.println("hola");
         Optional <WetLabFile> file = fileRepo.findOneByChecksum(dataFromPipeline.getFile().getChecksum());
-        if (file.isEmpty()) {
+        if (!file.isPresent()) {
             System.out.println("File not found");
             throw new DataRetrievalFailureException("File not found");
         }
@@ -110,7 +110,7 @@ public class DataService {
             }
             System.out.println("Hasta aqui");
             Optional <Param> param = paramRepo.findById(parameterData.getParameter().getId());
-            if(param.isEmpty()) {
+            if(!param.isPresent()) {
                 System.out.println("Param not found");
                 continue;
             }
@@ -118,7 +118,7 @@ public class DataService {
             for (DataValues dataValue: parameterData.getValues()) {
                 Optional <ContextSource> cs = null;
                 cs = csRepo.findById(dataValue.getContextSource());
-                if (cs.isEmpty()) {
+                if (!cs.isPresent()) {
                     continue;
                 }
 
