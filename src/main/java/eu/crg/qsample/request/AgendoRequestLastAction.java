@@ -6,7 +6,7 @@ public class AgendoRequestLastAction {
 
     private AgendoRequestUser user;
 
-    private Date date;
+    private String date;
 
     private String action;
 
@@ -18,11 +18,11 @@ public class AgendoRequestLastAction {
         this.user = user;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -37,7 +37,7 @@ public class AgendoRequestLastAction {
     public AgendoRequestLastAction() {
     }
 
-    public AgendoRequestLastAction(AgendoRequestUser user, Date date, String action) {
+    public AgendoRequestLastAction(AgendoRequestUser user, String date, String action) {
         this.user = user;
         this.date = date;
         this.action = action;
