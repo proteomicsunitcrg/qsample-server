@@ -1,10 +1,12 @@
 package eu.crg.qsample.request;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,5 +22,14 @@ public class RequestController {
     public List<MiniRequest> getAll() {
         // return "WORKS!";
         return requestService.getAll();
+    }
+
+    @PreAuthorize("hasRole('INTERNAL')")
+    @RequestMapping(value = "{id}")
+    public AgendoRequest getRequestById(@PathVariable Long id) {
+        // return "WORKS!";
+        System.out.println("ID REQUEST AGENDO: " + id);
+        return requestService.getRequestById(id);
+        // return null;
     }
 }

@@ -40,9 +40,8 @@ public class RestService {
 
     private final RestTemplate restTemplate;
 
-
     List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
-        // Add the Jackson Message converter
+    // Add the Jackson Message converter
     MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
 
     String encodedAuth = Base64.getEncoder().encodeToString((agendoUser + ":" + agendoPass).getBytes());
@@ -60,8 +59,8 @@ public class RestService {
         headers.set("Authorization", "Basic " + mountBasicAuth(agendoUser, agendoPass));
 
         final HttpEntity entity = new HttpEntity(headers);
-        final ResponseEntity<String> response = restTemplate.exchange(url + "/requests/facility/10/2020-05-01/2021-06-30",
-                HttpMethod.GET, entity, String.class);
+        final ResponseEntity<String> response = restTemplate
+                .exchange(url + "/requests/facility/10/2020-05-01/2021-06-30", HttpMethod.GET, entity, String.class);
         // System.out.println(response.getBody());
         return response.getBody();
     }
@@ -82,5 +81,20 @@ public class RestService {
 
     public String mountBasicAuth(String user, String password) {
         return Base64.getEncoder().encodeToString((user + ":" + password).getBytes());
+    }
+
+    public String getRequestById(Long id) {
+        // converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
+        // messageConverters.add(converter);
+        // restTemplate.setMessageConverters(messageConverters);
+        final HttpHeaders headers = new HttpHeaders();
+        headers.set("From", agendoFrom);
+        headers.set("Authorization", "Basic " + mountBasicAuth(agendoUser, agendoPass));
+
+        final HttpEntity entity = new HttpEntity(headers);
+        final ResponseEntity<String> response = restTemplate
+                .exchange(url + "/requests/" + id, HttpMethod.GET, entity, String.class);
+        // System.out.println(response.getBody());
+        return response.getBody();
     }
 }
