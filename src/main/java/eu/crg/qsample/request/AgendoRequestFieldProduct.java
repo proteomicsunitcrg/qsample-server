@@ -52,5 +52,10 @@ public class AgendoRequestFieldProduct {
     public AgendoRequestFieldProduct() {
     }
 
+    @Override
+    public String toString() {
+        return "AgendoRequestFieldProduct [id=" + id + ", name=" + name + ", type=" + type + ", value=" + value + "]";
+    }
+
 
 }

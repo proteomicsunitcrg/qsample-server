@@ -1,6 +1,6 @@
 package eu.crg.qsample.data;
 
-import eu.crg.qsample.Threshold.InstrumentStatus;
+import eu.crg.qsample.threshold.InstrumentStatus;
 import eu.crg.qsample.file.File;
 
 

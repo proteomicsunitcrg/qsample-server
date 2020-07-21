@@ -12,7 +12,7 @@ import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import eu.crg.qsample.Threshold.InstrumentStatus;
+import eu.crg.qsample.threshold.InstrumentStatus;
 import eu.crg.qsample.context_source.ContextSourceRepository;
 import eu.crg.qsample.data.Data;
 import eu.crg.qsample.data.DataRepository;
@@ -20,7 +20,7 @@ import eu.crg.qsample.guideset.GuideSetRepository;
 import eu.crg.qsample.param.ParamRepository;
 import eu.crg.qsample.restservice_qcloud2.ResponseFile;
 import eu.crg.qsample.restservice_qcloud2.RestServiceQCloud2;
-import eu.crg.qsample.Threshold.InstrumentStatus;
+import eu.crg.qsample.threshold.InstrumentStatus;
 import eu.crg.qsample.wetlab.WetLab;
 import eu.crg.qsample.wetlab.WetLabFile;
 import eu.crg.qsample.wetlab.WetLabRepository;
