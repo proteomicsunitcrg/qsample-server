@@ -39,4 +39,13 @@ public class DataController {
     public void insertDataFromPipeline(@RequestBody DataFromPipeline dataFromPipeline) {
         dataService.insertDataFromPipeline(dataFromPipeline);
     }
+
+    /**
+     * Method to insert data only from requests(NOT WETLAB DATA)
+     */
+    @RequestMapping(value = "/pipelineRequest", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ADMIN')")
+    public void insertDataFromPipelineRequest(@RequestBody DataFromPipeline dataFromPipeline) {
+        dataService.insertDataFromPipelineRequest(dataFromPipeline);
+    }
 }

@@ -7,15 +7,15 @@ import eu.crg.qsample.wetlab.WetLabFile;
 
 public class DataFromPipeline {
 
-    private WetLabFile file;
+    private File file;
 
     private List<ParameterData> data;
 
-    public WetLabFile getFile() {
+    public File getFile() {
         return file;
     }
 
-    public void setFile(WetLabFile file) {
+    public void setFile(File file) {
         this.file = file;
     }
 
