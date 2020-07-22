@@ -18,11 +18,14 @@ import eu.crg.qsample.data.model.ParameterData;
 import eu.crg.qsample.exceptions.NotFoundException;
 import eu.crg.qsample.file.File;
 import eu.crg.qsample.file.FileRepository;
+import eu.crg.qsample.file.RequestFile;
+import eu.crg.qsample.file.RequestFileRepository;
 import eu.crg.qsample.guideset.GuideSetService;
 import eu.crg.qsample.param.Param;
 import eu.crg.qsample.param.ParamRepository;
 import eu.crg.qsample.plot.Plot;
 import eu.crg.qsample.plot.PlotRepository;
+import eu.crg.qsample.request.Request;
 import eu.crg.qsample.wetlab.WetLab;
 import eu.crg.qsample.wetlab.WetLabFile;
 import eu.crg.qsample.wetlab.WetLabRepository;
@@ -41,6 +44,9 @@ public class DataService {
 
     @Autowired
     FileRepository fileRepo;
+
+    @Autowired
+    RequestFileRepository requestFileRepo;
 
     @Autowired
     ParamRepository paramRepo;
@@ -97,6 +103,44 @@ public class DataService {
     public void insertDataFromPipeline(DataFromPipeline dataFromPipeline) {
         System.out.println("hola");
         Optional <WetLabFile> file = fileRepo.findOneByChecksum(dataFromPipeline.getFile().getChecksum());
+        if (!file.isPresent()) {
+            System.out.println("File not found");
+            throw new DataRetrievalFailureException("File not found");
+        }
+
+        dataFromPipeline.setFile(file.get());
+        for (ParameterData parameterData: dataFromPipeline.getData()) {
+            if (parameterData.getValues().size() == 0) {
+                System.out.println("Parameter = 0");
+                continue;
+            }
+            System.out.println("Hasta aqui");
+            Optional <Param> param = paramRepo.findById(parameterData.getParameter().getId());
+            if(!param.isPresent()) {
+                System.out.println("Param not found");
+                continue;
+            }
+            parameterData.setParameter(param.get());
+            for (DataValues dataValue: parameterData.getValues()) {
+                Optional <ContextSource> cs = null;
+                cs = csRepo.findById(dataValue.getContextSource());
+                if (!cs.isPresent()) {
+                    continue;
+                }
+
+                Data d = new Data(param.get(), cs.get(), file.get());
+                d.setValue(dataValue.getValue());
+                d.setCalculatedValue(dataValue.getValue());
+                d.setStd(dataValue.getStd());
+                dataRepo.save(d);
+            }
+
+        }
+    }
+
+    public void insertDataFromPipelineRequest(DataFromPipeline dataFromPipeline) {
+        System.out.println("adeu");
+        Optional <RequestFile> file = requestFileRepo.findOneByChecksum(dataFromPipeline.getFile().getChecksum());
         if (!file.isPresent()) {
             System.out.println("File not found");
             throw new DataRetrievalFailureException("File not found");

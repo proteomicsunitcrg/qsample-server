@@ -60,12 +60,12 @@ public class FileService {
         return null;
     }
 
-    public Optional<WetLabFile> getWetLabFileByChecksum(String checksum) {
+    public Optional<WetLabFile> getFileByChecksum(String checksum) {
         return fileRepository.findOneByChecksum(checksum);
     }
 
     public WetLabFile insertFile(WetLabFile toInsert, UUID wetLabApiKey) {
-        if (getWetLabFileByChecksum(toInsert.getChecksum()).isPresent()) {
+        if (getFileByChecksum(toInsert.getChecksum()).isPresent()) {
             throw new DataIntegrityViolationException("A file with that checksum already exists!");
         }
         Optional<WetLab> wetlab = wetlabRepo.findOneByApiKey(wetLabApiKey);
@@ -90,6 +90,13 @@ public class FileService {
         List<QCloud2File> res = restQcloud2.getFiles(requestCode);
         System.out.println(res.size());
         return res;
+    }
+
+    public File insertFileRequest(RequestFile file) {
+        // if (getFileByChecksum(file.getChecksum()).isPresent()) {
+        //     throw new DataIntegrityViolationException("A file with that checksum already exists!");
+        // }
+        return fileRepository.save(file);
     }
 
 }

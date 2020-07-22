@@ -63,6 +63,19 @@ public class FileController {
         return fileService.insertFile(file, wetLabApiKey);
     }
 
+    /**
+     * Endpoint 4 pipeline (ONLY REQUESTS FILES)
+     * @param file
+     * @param requestCode
+     * @return
+     */
+    @PostMapping(value = "/insertFromPipelineRequest/{requestCode}")
+    @PreAuthorize("hasRole('INTERNAL')")
+    public File addFileRequest(@RequestBody RequestFile file, @PathVariable String requestCode) {
+        file.setRequestCode(requestCode);
+        return fileService.insertFileRequest(file);
+    }
+
     @ExceptionHandler(DataRetrievalFailureException.class)
     void handleNonConnection(HttpServletResponse response, Exception e) throws IOException {
         response.sendError(HttpStatus.NOT_FOUND.value(), e.getMessage());

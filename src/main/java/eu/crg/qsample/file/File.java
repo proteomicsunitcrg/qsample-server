@@ -9,9 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+import org.hibernate.validator.constraints.UniqueElements;
 
 @Entity
 @Table(name = "file")
@@ -23,7 +26,7 @@ public class File {
     @SequenceGenerator(name = "file_seq", sequenceName = "file_seq", allocationSize = 1)
     private Long id;
 
-    @Column(name = "checksum", length = 50)
+    @Column(name = "checksum", length = 20, unique = true)
     @NotNull
     private String checksum;
 
