@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import eu.crg.qsample.context_source.ContextSource;
 import eu.crg.qsample.file.File;
+import eu.crg.qsample.file.RequestFile;
 import eu.crg.qsample.param.Param;
 import eu.crg.qsample.wetlab.WetLabFile;
 
@@ -17,6 +18,9 @@ public interface DataRepository extends CrudRepository<Data, Long> {
             Long wetLabId);
 
     List<Data> findByFileInAndContextSourceInAndParamId(List <WetLabFile> fileId, List<ContextSource> contextSourceId, Long paramId);
+
+    List<Data> findByFileInAndContextSourceAndParam(List <RequestFile> fileId, ContextSource contextSource, Param param);
+
 
     List<Data> findByFile(WetLabFile file);
 

@@ -25,7 +25,6 @@ import eu.crg.qsample.security.agendo.AgendoAuthResponse;
 @Service
 public class RestServiceQCloud2 {
 
-    // TODO: Add this config to a config file
 
     @Value("${qcloud2.url}")
     private String url;
@@ -39,10 +38,10 @@ public class RestServiceQCloud2 {
     private final RestTemplate restTemplate;
 
 
-    List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+    // List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
 
     // Add the Jackson Message converter
-    MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+    // MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
 
 
     public RestServiceQCloud2(final RestTemplateBuilder restTemplateBuilder) {
@@ -50,6 +49,7 @@ public class RestServiceQCloud2 {
     }
 
     public List<QCloud2File> getFiles(String requestCode) {
+        System.out.println(url + "?requestCode=" + requestCode);
         final HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Basic " + mountBasicAuth(username, password));
         final HttpEntity entity = new HttpEntity(headers);

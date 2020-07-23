@@ -42,7 +42,7 @@ jwt:
         refresh: refresh
 
 qcloud2:
-    url: http://localhost:5001/qsample
+    url: https://api.qcloud2.crg.eu/qsample
     username: qsample
     password: qsample
 

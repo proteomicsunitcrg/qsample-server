@@ -27,9 +27,13 @@ public class RequestController {
     @PreAuthorize("hasRole('INTERNAL')")
     @RequestMapping(value = "{id}")
     public AgendoRequest getRequestById(@PathVariable Long id) {
-        // return "WORKS!";
         System.out.println("ID REQUEST AGENDO: " + id);
         return requestService.getRequestById(id);
-        // return null;
+    }
+
+    @PreAuthorize("hasRole('INTERNAL')")
+    @RequestMapping(value = "getPlotName/{csId}/{paramId}")
+    public String getPlotName(@PathVariable Long csId, @PathVariable Long paramId) {
+        return requestService.getPlotName(csId, paramId);
     }
 }

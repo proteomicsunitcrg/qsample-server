@@ -34,6 +34,12 @@ public class DataController {
         return dataService.getTraceData(startDate, endDate, plotId, wetLabApiKey);
     }
 
+    @GetMapping("/tracesRequest/{csId}/{paramId}/{requestCode}")
+    @PreAuthorize("hasRole('INTERNAL')")
+    public List<PlotTrace> getTraceRequest(@PathVariable Long csId, @PathVariable Long paramId, @PathVariable String requestCode) {
+        return dataService.getTraceDataRequest(csId, paramId, requestCode);
+    }
+
     @RequestMapping(value = "/pipeline", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ADMIN')")
     public void insertDataFromPipeline(@RequestBody DataFromPipeline dataFromPipeline) {
