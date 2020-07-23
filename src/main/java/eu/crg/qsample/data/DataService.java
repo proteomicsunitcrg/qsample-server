@@ -100,29 +100,58 @@ public class DataService {
         return new PlotTracePoint(d.getFile(), d.getCalculatedValue(), d.getStd(), d.getNonConformityStatus());
     }
 
+    public List<PlotTrace> getTraceDataRequest(Long csId, Long paramId, String requestCode) {
+        Optional <ContextSource> cs = csRepo.findById(csId);
+        if (!cs.isPresent()) {
+            throw new NotFoundException("Context Source with id: " + csId + " not found");
+        }
+        Optional <Param> param = paramRepo.findById(paramId);
+        if (!param.isPresent()) {
+            throw new NotFoundException("Param with id: " + csId + " not found");
+        }
+        List<Data> data = new ArrayList<>();
+        TraceHashMap<String, PlotTrace> traces = new TraceHashMap<>();
+        Optional <List<RequestFile>> files = fileRepo.findAllByRequestCodeContains(requestCode);
+        if (!files.isPresent()) {
+            throw new NotFoundException("Files not foudn with request code: " + requestCode);
+        }
+        data = dataRepo.findByFileInAndContextSourceAndParam(files.get(), cs.get(), param.get());
+        for(Data d: data) {
+            if (!traces.containsKey(d.getContextSource().getAbbreviated())) {
+                traces.put(d.getContextSource().getAbbreviated(),
+                        generatePlotTraceFromContextSource(d.getContextSource()));
+            }
+            traces.get(d.getContextSource().getAbbreviated()).getPlotTracePoints()
+                    .add(generatePlotTracePointFromData(d));
+        }
+        List<PlotTrace> plotTracesList = traces.toList();
+        return plotTracesList;
+
+    }
+
     public void insertDataFromPipeline(DataFromPipeline dataFromPipeline) {
         System.out.println("hola");
-        Optional <WetLabFile> file = fileRepo.findOneByChecksum(dataFromPipeline.getFile().getChecksum());
+        Optional<WetLabFile> file = fileRepo.findOneByChecksum(dataFromPipeline.getFile().getChecksum());
         if (!file.isPresent()) {
             System.out.println("File not found");
             throw new DataRetrievalFailureException("File not found");
         }
 
         dataFromPipeline.setFile(file.get());
-        for (ParameterData parameterData: dataFromPipeline.getData()) {
+        for (ParameterData parameterData : dataFromPipeline.getData()) {
             if (parameterData.getValues().size() == 0) {
                 System.out.println("Parameter = 0");
                 continue;
             }
             System.out.println("Hasta aqui");
-            Optional <Param> param = paramRepo.findById(parameterData.getParameter().getId());
-            if(!param.isPresent()) {
+            Optional<Param> param = paramRepo.findById(parameterData.getParameter().getId());
+            if (!param.isPresent()) {
                 System.out.println("Param not found");
                 continue;
             }
             parameterData.setParameter(param.get());
-            for (DataValues dataValue: parameterData.getValues()) {
-                Optional <ContextSource> cs = null;
+            for (DataValues dataValue : parameterData.getValues()) {
+                Optional<ContextSource> cs = null;
                 cs = csRepo.findById(dataValue.getContextSource());
                 if (!cs.isPresent()) {
                     continue;
@@ -140,27 +169,27 @@ public class DataService {
 
     public void insertDataFromPipelineRequest(DataFromPipeline dataFromPipeline) {
         System.out.println("adeu");
-        Optional <RequestFile> file = requestFileRepo.findOneByChecksum(dataFromPipeline.getFile().getChecksum());
+        Optional<RequestFile> file = requestFileRepo.findOneByChecksum(dataFromPipeline.getFile().getChecksum());
         if (!file.isPresent()) {
             System.out.println("File not found");
             throw new DataRetrievalFailureException("File not found");
         }
 
         dataFromPipeline.setFile(file.get());
-        for (ParameterData parameterData: dataFromPipeline.getData()) {
+        for (ParameterData parameterData : dataFromPipeline.getData()) {
             if (parameterData.getValues().size() == 0) {
                 System.out.println("Parameter = 0");
                 continue;
             }
             System.out.println("Hasta aqui");
-            Optional <Param> param = paramRepo.findById(parameterData.getParameter().getId());
-            if(!param.isPresent()) {
+            Optional<Param> param = paramRepo.findById(parameterData.getParameter().getId());
+            if (!param.isPresent()) {
                 System.out.println("Param not found");
                 continue;
             }
             parameterData.setParameter(param.get());
-            for (DataValues dataValue: parameterData.getValues()) {
-                Optional <ContextSource> cs = null;
+            for (DataValues dataValue : parameterData.getValues()) {
+                Optional<ContextSource> cs = null;
                 cs = csRepo.findById(dataValue.getContextSource());
                 if (!cs.isPresent()) {
                     continue;
