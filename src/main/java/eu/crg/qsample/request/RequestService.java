@@ -9,6 +9,8 @@ import com.google.gson.Gson;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import eu.crg.qsample.restservice.RestService;
@@ -57,13 +59,33 @@ public class RequestService {
 
     public String getPlotName(Long csId, Long paramId) {
         System.out.println("hola");
-        Optional <Param> param = paramRepo.findById(paramId);
-        Optional <ContextSource> cs = csRepo.findById(csId);
+        Optional<Param> param = paramRepo.findById(paramId);
+        Optional<ContextSource> cs = csRepo.findById(csId);
         if (cs.isPresent() && param.isPresent()) {
             return param.get().getName() + cs.get().getAbbreviated();
         } else {
             return "Error getting the name";
         }
+    }
+
+    public List<MiniRequest> getAllExternal() {
+        Long userId = getUserFromSecurityContext().getAgendoId();
+        List<MiniRequest> miniRequests = new ArrayList<>();
+        String ccc = restService.getAllRequestsExternal(userId);
+        Gson gson = new Gson();
+        AgendoRequestWrapper response = gson.fromJson(ccc, AgendoRequestWrapper.class);
+        for (AgendoRequest agendoRequest : response.getRequest()) {
+            miniRequests.add(new MiniRequest(agendoRequest.getId(), agendoRequest.getClasss(),
+                    agendoRequest.getCreated_by().getEmail(), agendoRequest.getdate_created(),
+                    agendoRequest.getLast_action().getAction()));
+        }
+        return miniRequests;
+    }
+
+    private User getUserFromSecurityContext() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User u = userRepo.findByUsername(authentication.getName()).get();
+        return u;
     }
 
 }

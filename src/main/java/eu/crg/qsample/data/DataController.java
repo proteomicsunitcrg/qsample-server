@@ -1,23 +1,27 @@
 package eu.crg.qsample.data;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 
 import eu.crg.qsample.data.model.DataFromPipeline;
-
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
+import eu.crg.qsample.exceptions.NotFoundException;
 
 @RestController
 @RequestMapping("/api/data")
@@ -35,7 +39,7 @@ public class DataController {
     }
 
     @GetMapping("/tracesRequest/{csId}/{paramId}/{requestCode}")
-    @PreAuthorize("hasRole('INTERNAL')")
+    @PreAuthorize("hasRole('USER')")
     public List<PlotTrace> getTraceRequest(@PathVariable Long csId, @PathVariable Long paramId, @PathVariable String requestCode) {
         return dataService.getTraceDataRequest(csId, paramId, requestCode);
     }
@@ -54,4 +58,10 @@ public class DataController {
     public void insertDataFromPipelineRequest(@RequestBody DataFromPipeline dataFromPipeline) {
         dataService.insertDataFromPipelineRequest(dataFromPipeline);
     }
+
+    @ExceptionHandler(NotFoundException.class)
+    void handleNotFoundException(HttpServletResponse response, Exception e) throws IOException {
+        response.sendError(HttpStatus.NOT_FOUND.value(), "Nothing found with this parameters");
+    }
+
 }

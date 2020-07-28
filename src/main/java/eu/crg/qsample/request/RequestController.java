@@ -24,14 +24,21 @@ public class RequestController {
         return requestService.getAll();
     }
 
-    @PreAuthorize("hasRole('INTERNAL')")
+    @PreAuthorize("hasRole('EXTERNAL')")
+    @RequestMapping(value = "external")
+    public List<MiniRequest> getAllExternal() {
+        return requestService.getAllExternal();
+    }
+
+
+    @PreAuthorize("hasRole('USER')")
     @RequestMapping(value = "{id}")
     public AgendoRequest getRequestById(@PathVariable Long id) {
         System.out.println("ID REQUEST AGENDO: " + id);
         return requestService.getRequestById(id);
     }
 
-    @PreAuthorize("hasRole('INTERNAL')")
+    @PreAuthorize("hasRole('USER')")
     @RequestMapping(value = "getPlotName/{csId}/{paramId}")
     public String getPlotName(@PathVariable Long csId, @PathVariable Long paramId) {
         return requestService.getPlotName(csId, paramId);
