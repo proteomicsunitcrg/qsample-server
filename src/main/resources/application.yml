@@ -43,14 +43,19 @@ jwt:
 
 qcloud2:
     url: https://api.qcloud2.crg.eu/qsample
+    # url: http://localhost:5001/qsample
     username: qsample
     password: qsample
 
 agendo:
-    username: marc.serret@crg.eu
-    password: cacaDeVaca1
+    # username: marc.serret@crg.eu
+    # password: cacaDeVaca1
+    username: qsample
+    password: qsample
     from: Y3Jn
-    url: https://api.agendo.science
+    # url: https://api.agendo.science
+    url: https://api.qcloud2.crg.eu/mirror?url=https://api.agendo.science
+    facility: 10
 
 ---
 

@@ -38,6 +38,9 @@ public class RestService {
     @Value("${agendo.from}")
     private String agendoFrom;
 
+    @Value("${agendo.facility}")
+    private String facility;
+
     private final RestTemplate restTemplate;
 
     List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
@@ -60,7 +63,23 @@ public class RestService {
 
         final HttpEntity entity = new HttpEntity(headers);
         final ResponseEntity<String> response = restTemplate
-                .exchange(url + "/requests/facility/10/2020-05-01/2021-06-30", HttpMethod.GET, entity, String.class);
+                .exchange(url + "/requests/facility/"+facility+"/2020-05-01/2021-06-30", HttpMethod.GET, entity, String.class);
+        // System.out.println(response.getBody());
+        return response.getBody();
+    }
+
+
+    public String getAllRequestsExternal(Long userId) {
+        // converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
+        // messageConverters.add(converter);
+        // restTemplate.setMessageConverters(messageConverters);
+        final HttpHeaders headers = new HttpHeaders();
+        headers.set("From", agendoFrom);
+        headers.set("Authorization", "Basic " + mountBasicAuth(agendoUser, agendoPass));
+
+        final HttpEntity entity = new HttpEntity(headers);
+        final ResponseEntity<String> response = restTemplate
+                .exchange(url + "/requests/user/"+userId+"/2020-05-01/2021-06-30", HttpMethod.GET, entity, String.class);
         // System.out.println(response.getBody());
         return response.getBody();
     }
