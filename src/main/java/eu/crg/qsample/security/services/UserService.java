@@ -98,7 +98,7 @@ public class UserService {
                     throw new DataIntegrityViolationException("Incorrect assingment");
                 }
             userOpt.get().setRoles(roles);
-            // userRepo.save(userOpt.get());
+            userRepo.save(userOpt.get());
         } else {
             throw new DataIntegrityViolationException("User not found");
         }
