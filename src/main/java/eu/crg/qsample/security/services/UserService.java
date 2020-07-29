@@ -1,10 +1,15 @@
 package eu.crg.qsample.security.services;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,5 +44,64 @@ public class UserService {
         roles.add(ADMNIRole);
         newUser.setRoles(roles);
         return userRepo.save(newUser);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepo.findAll();
+    }
+
+    public Optional<User> getUserByApiKey(UUID apiKey) {
+        return userRepo.findByApiKey(apiKey);
+    }
+
+    private User getUserFromSecurityContext() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User u = userRepo.findByUsername(authentication.getName()).get();
+        return u;
+    }
+
+    public User modifyRole(User user, String to) {
+        Set<Role> roles = new HashSet<>();
+        Role roleExternal = roleRepo.findByName(ERole.ROLE_EXTERNAL).get();
+        Role roleAdmin = roleRepo.findByName(ERole.ROLE_ADMIN).get();
+        Role roleInternal = roleRepo.findByName(ERole.ROLE_INTERNAL).get();
+        Role roleManager = roleRepo.findByName(ERole.ROLE_MANAGER).get();
+        Role roleUser = roleRepo.findByName(ERole.ROLE_USER).get();
+        Optional <User> userOpt = getUserByApiKey(user.getApiKey());
+        User loggedUser = getUserFromSecurityContext();
+        if (userOpt.isPresent()) {
+            if (loggedUser.getId().equals(userOpt.get().getId())) {
+                throw new DataIntegrityViolationException("You cannot modify yourself");
+            }
+            userOpt.get().setRoles(null);
+            switch (to) {
+                case "external":
+                    roles.add(roleUser);
+                    roles.add(roleExternal);
+                break;
+                case "internal":
+                    roles.add(roleUser);
+                    roles.add(roleInternal);
+                break;
+                case "manager":
+                    roles.add(roleUser);
+                    roles.add(roleInternal);
+                    roles.add(roleManager);
+                break;
+                case "admin":
+                    roles.add(roleUser);
+                    roles.add(roleInternal);
+                    roles.add(roleManager);
+                    roles.add(roleAdmin);
+                break;
+                default:
+                    throw new DataIntegrityViolationException("Incorrect assingment");
+                }
+            userOpt.get().setRoles(roles);
+            // userRepo.save(userOpt.get());
+        } else {
+            throw new DataIntegrityViolationException("User not found");
+        }
+        return userOpt.get();
     }
 }
