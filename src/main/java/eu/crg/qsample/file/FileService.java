@@ -35,6 +35,9 @@ public class FileService {
     FileRepository fileRepository;
 
     @Autowired
+    RequestFileRepository requestFileRepo;
+
+    @Autowired
     ParamRepository paramRepo;
 
     @Autowired
@@ -93,9 +96,9 @@ public class FileService {
     }
 
     public File insertFileRequest(RequestFile file) {
-        // if (getFileByChecksum(file.getChecksum()).isPresent()) {
-        //     throw new DataIntegrityViolationException("A file with that checksum already exists!");
-        // }
+        if (requestFileRepo.findOneByChecksum(file.getChecksum()).isPresent()) {
+            throw new DataIntegrityViolationException("A file with that checksum already exists!");
+        }
         return fileRepository.save(file);
     }
 
