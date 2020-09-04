@@ -78,4 +78,7 @@ spring:
 server:
   port: 8081
 logging:
-  file: qcloud2test.log
+  file: qsample.log
+  level:
+    org.springframework:
+    security: ERROR

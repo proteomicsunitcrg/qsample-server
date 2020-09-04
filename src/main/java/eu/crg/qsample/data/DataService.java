@@ -30,8 +30,13 @@ import eu.crg.qsample.wetlab.WetLab;
 import eu.crg.qsample.wetlab.WetLabFile;
 import eu.crg.qsample.wetlab.WetLabRepository;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 @Service
 public class DataService {
+
+    private final Log logger = LogFactory.getLog(this.getClass());
 
     @Autowired
     PlotRepository plotRepo;
@@ -168,9 +173,11 @@ public class DataService {
     }
 
     public void insertDataFromPipelineRequest(DataFromPipeline dataFromPipeline) {
+        logger.info("Trying to insert data for file with checksum: " + dataFromPipeline.getFile().getChecksum());
         System.out.println("adeu");
         Optional<RequestFile> file = requestFileRepo.findOneByChecksum(dataFromPipeline.getFile().getChecksum());
         if (!file.isPresent()) {
+            logger.error("File whit checksum: " + dataFromPipeline.getFile().getChecksum() + " not found in the database");
             System.out.println("File not found");
             throw new DataRetrievalFailureException("File not found");
         }
@@ -184,6 +191,7 @@ public class DataService {
             System.out.println("Hasta aqui");
             Optional<Param> param = paramRepo.findById(parameterData.getParameter().getId());
             if (!param.isPresent()) {
+                logger.error("Parameter with id: " + parameterData.getParameter().getId() + " not found in the database");
                 System.out.println("Param not found");
                 continue;
             }
@@ -199,6 +207,7 @@ public class DataService {
                 d.setValue(dataValue.getValue());
                 d.setCalculatedValue(dataValue.getValue());
                 d.setStd(dataValue.getStd());
+                logger.info("Saving data: " + d.toString());
                 dataRepo.save(d);
             }
 
