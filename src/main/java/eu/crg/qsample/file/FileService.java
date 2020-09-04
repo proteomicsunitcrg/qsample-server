@@ -25,8 +25,13 @@ import eu.crg.qsample.wetlab.WetLab;
 import eu.crg.qsample.wetlab.WetLabFile;
 import eu.crg.qsample.wetlab.WetLabRepository;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 @Service
 public class FileService {
+
+    private final Log logger = LogFactory.getLog(this.getClass());
 
     @Autowired
     WetLabRepository wetlabRepo;
@@ -96,9 +101,11 @@ public class FileService {
     }
 
     public File insertFileRequest(RequestFile file) {
+        System.out.println("trying file: " + file.getChecksum());
         if (requestFileRepo.findOneByChecksum(file.getChecksum()).isPresent()) {
             throw new DataIntegrityViolationException("A file with that checksum already exists!");
         }
+        logger.info("File inserted with checksum: " + file.getChecksum());
         return fileRepository.save(file);
     }
 
