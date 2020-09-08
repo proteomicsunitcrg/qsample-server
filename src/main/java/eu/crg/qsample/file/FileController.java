@@ -76,6 +76,18 @@ public class FileController {
         return fileService.insertFileRequest(file);
     }
 
+    /**
+     * Checks if the file exist in wetlab file and request file
+     * Returns true if the file DOESNT exist and false otherwise
+     * @param checksum to check
+     * @return
+     */
+    @GetMapping(value = "/checkFileExists/{checksum}")
+    @PreAuthorize("hasRole('INTERNAL')")
+    public boolean checkFileExists(@PathVariable String checksum) {
+        return fileService.checkFileExists(checksum);
+    }
+
     @ExceptionHandler(DataRetrievalFailureException.class)
     void handleNonConnection(HttpServletResponse response, Exception e) throws IOException {
         response.sendError(HttpStatus.NOT_FOUND.value(), e.getMessage());
