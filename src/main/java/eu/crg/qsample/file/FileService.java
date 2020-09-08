@@ -109,4 +109,14 @@ public class FileService {
         return fileRepository.save(file);
     }
 
+    public boolean checkFileExists(String checksum) {
+        Optional<WetLabFile> wetlabOpt = fileRepository.findOneByChecksum(checksum);
+        Optional<RequestFile> reqFileOpt = requestFileRepo.findOneByChecksum(checksum);
+        if (!wetlabOpt.isPresent() && !reqFileOpt.isPresent()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
