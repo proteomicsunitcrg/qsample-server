@@ -39,81 +39,64 @@ import eu.crg.qsample.security.repository.UserRepository;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-	@Autowired
-	AuthenticationManager authenticationManager;
+    @Autowired
+    AuthenticationManager authenticationManager;
 
-	@Autowired
-	UserRepository userRepository;
+    @Autowired
+    UserRepository userRepository;
 
-	@Autowired
-	RoleRepository roleRepository;
+    @Autowired
+    RoleRepository roleRepository;
 
-	@Autowired
-	PasswordEncoder encoder;
+    @Autowired
+    PasswordEncoder encoder;
 
-	@Autowired
-	JwtUtils jwtUtils;
+    @Autowired
+    JwtUtils jwtUtils;
 
-	@Autowired
-	AgendoAuthService agendoAuthService;
+    @Autowired
+    AgendoAuthService agendoAuthService;
 
-	@PostMapping("/signin")
-	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    @PostMapping("/signin")
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-		System.out.println("login try");
-		Optional <User> userOpt = userRepository.findByUsername(loginRequest.getUsername());
+        System.out.println("login try");
+        Optional<User> userOpt = userRepository.findByUsername(loginRequest.getUsername());
 
+        if (!userOpt.isPresent()) { // The user doesnt exist, trying signup
+            return registerUser(loginRequest);
+        }
 
-		// if (!agendoAuthService.agendoAuth(loginRequest.getUsername(), loginRequest.getPassword())) {
-		// 	return ResponseEntity.ok(new MessageResponse("UserNotFound"));
-		// }
+        // if (!agendoAuthService.agendoAuth(loginRequest.getUsername(),
+        // loginRequest.getPassword())) {
+        // return ResponseEntity.ok(new MessageResponse("UserNotFound"));
+        // }
 
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
 
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = jwtUtils.generateJwtToken(authentication);
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        System.out.println(userDetails.toString());
+        List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
+                .collect(Collectors.toList());
 
-		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-		if (userDetails.getAuthorities().size() == 0) {
-			System.out.println("POLLA");
-		}
-		System.out.println(userDetails.toString());
-		List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
-				.collect(Collectors.toList());
+        return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), roles));
+    }
 
-		return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), roles));
-	}
+    @PostMapping("/signup")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody LoginRequest signUpRequest) {
+        System.out.println("signup try");
+        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+        }
 
-	@PostMapping("/signup")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-			return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
-		}
+        if(!agendoAuthService.agendoAuth(signUpRequest.getUsername(), signUpRequest.getPassword())) {
+            return ResponseEntity.ok(new MessageResponse("UserNotFound"));
+        }
 
-		// Create new user's account
-		User user = new User(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()));
-		UUID userUuid = UUID.randomUUID();
-		user.setFirstname("EXTERNAL");
-		user.setLastname("EXTERNAL");
-		user.setApiKey(userUuid);
-
-		Set<Role> roles = new HashSet<>();
-		Role external = roleRepository.findByName(ERole.ROLE_EXTERNAL).get();
-		Role admin = roleRepository.findByName(ERole.ROLE_ADMIN).get();
-		Role internal = roleRepository.findByName(ERole.ROLE_INTERNAL)
-				.orElseThrow(() -> new RuntimeException("ROLE not found"));
-		roles.add(external);
-		Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-				.orElseThrow(() -> new RuntimeException("ROLE not found"));
-		// roles.add(internal);
-		// roles.add(admin);
-		roles.add(userRole);
-		user.setRoles(roles);
-		userRepository.save(user);
-		System.out.println(user.getRoles().size());
-
-		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-	}
+        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
 }

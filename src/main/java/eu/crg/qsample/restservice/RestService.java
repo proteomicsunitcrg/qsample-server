@@ -65,6 +65,7 @@ public class RestService {
         final ResponseEntity<String> response = restTemplate
                 .exchange(url + "/requests/facility/"+facility+"/2020-05-01/2021-06-30", HttpMethod.GET, entity, String.class);
         // System.out.println(response.getBody());
+        System.out.println(url + "/requests/facility/"+facility+"/2020-05-01/2021-06-30");
         return response.getBody();
     }
 
@@ -84,16 +85,17 @@ public class RestService {
         return response.getBody();
     }
 
-    public ResponseEntity<AgendoAuthResponse> loginAgendo(String user, String password) {
-        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
-        messageConverters.add(converter);
-        restTemplate.setMessageConverters(messageConverters);
+    public ResponseEntity<AgendoAuthResponse> loginAgendo(String username, String password) {
+        // converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
+        // messageConverters.add(converter);
+        // restTemplate.setMessageConverters(messageConverters);
         final HttpHeaders headers = new HttpHeaders();
         headers.set("From", "Y3Jn");
-        headers.set("Authorization", "Basic " + mountBasicAuth(user, password));
+        headers.set("Authorization", "Basic " + mountBasicAuth(agendoUser, agendoPass));
         final HttpEntity entity = new HttpEntity(headers);
-        final ResponseEntity<AgendoAuthResponse> response = restTemplate.exchange(url + "/auth", HttpMethod.GET, entity,
-                AgendoAuthResponse.class);
+        System.out.println("https://api.qcloud2.crg.eu/mirrorLogin?username={username}&password={password}");
+        final ResponseEntity<AgendoAuthResponse> response = restTemplate.exchange("https://api.qcloud2.crg.eu/mirrorLogin?username={username}&password={password}", HttpMethod.GET, entity,
+                AgendoAuthResponse.class, username, password);
         System.out.println(response.getBody().getUser().getEmail());
         return response;
     }
