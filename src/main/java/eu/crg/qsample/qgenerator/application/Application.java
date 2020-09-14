@@ -19,7 +19,7 @@ public class Application {
     @SequenceGenerator(name = "application_seq", sequenceName = "application_seq", allocationSize = 1)
     private Long id;
 
-    @Column(name = "name", length = 50)
+    @Column(name = "name", length = 200)
     @NotNull
     private String name;
 
