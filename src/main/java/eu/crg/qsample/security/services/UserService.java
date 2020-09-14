@@ -39,9 +39,11 @@ public class UserService {
         Role internalRole = roleRepo.findByName(ERole.ROLE_INTERNAL).get();
         Role userRole = roleRepo.findByName(ERole.ROLE_USER).get();
         Role ADMNIRole = roleRepo.findByName(ERole.ROLE_ADMIN).get();
+        Role managerRole = roleRepo.findByName(ERole.ROLE_MANAGER).get();
         roles.add(internalRole);
         roles.add(userRole);
         roles.add(ADMNIRole);
+        roles.add(managerRole);
         newUser.setRoles(roles);
         return userRepo.save(newUser);
     }
