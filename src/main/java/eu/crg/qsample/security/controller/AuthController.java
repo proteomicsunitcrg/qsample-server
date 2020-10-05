@@ -34,6 +34,7 @@ import eu.crg.qsample.security.payload.responses.JwtResponse;
 import eu.crg.qsample.security.payload.responses.MessageResponse;
 import eu.crg.qsample.security.repository.RoleRepository;
 import eu.crg.qsample.security.repository.UserRepository;
+import eu.crg.qsample.security.services.UserService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -56,6 +57,9 @@ public class AuthController {
 
     @Autowired
     AgendoAuthService agendoAuthService;
+
+    @Autowired
+    UserService userService;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -96,6 +100,23 @@ public class AuthController {
         if(!agendoAuthService.agendoAuth(signUpRequest.getUsername(), signUpRequest.getPassword())) {
             return ResponseEntity.ok(new MessageResponse("UserNotFound"));
         }
+
+        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+
+    /**
+     * Secret endpoint just to setup users for testing withouth asking agendo
+     * @param signUpRequest
+     * @return
+     */
+    @PostMapping("/signupDummyLMAO")
+    public ResponseEntity<?> registerUserDummy(@Valid @RequestBody LoginRequest signUpRequest) {
+        System.out.println("signup try");
+        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+        }
+
+        userService.addUserDummy();
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
