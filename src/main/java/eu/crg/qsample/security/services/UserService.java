@@ -48,6 +48,18 @@ public class UserService {
         return userRepo.save(newUser);
     }
 
+    public User addUserDummy() {
+        Set<Role> roles = new HashSet<>();
+        Role roleAdmin = roleRepo.findByName(ERole.ROLE_ADMIN).get();
+        Role roleInternal = roleRepo.findByName(ERole.ROLE_INTERNAL).get();
+        Role roleManager = roleRepo.findByName(ERole.ROLE_MANAGER).get();
+        Role roleUser = roleRepo.findByName(ERole.ROLE_USER).get();
+        User newUser = new User(null, UUID.randomUUID(), "ADMINDUMMY", "UNIT", "admin@unittest.cat",
+                encoder.encode("unittest"), 942l);
+        newUser.setRoles(roles);
+        return userRepo.save(newUser);
+    }
+
     public List<User> getAllUsers() {
         return userRepo.findAll();
     }
