@@ -26,7 +26,7 @@ import eu.crg.qsample.wetlab.WetLabFile;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("unittest")
-public class DataTest {
+public class DataUnitTest {
 
     @Autowired
     DataService dataService;

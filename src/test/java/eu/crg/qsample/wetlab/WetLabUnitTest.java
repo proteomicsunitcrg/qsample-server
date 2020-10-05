@@ -17,7 +17,7 @@ import org.junit.Assert;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("unittest")
-public class WetLabTest {
+public class WetLabUnitTest {
 
     @Autowired
     WetLabService wetlabService;
