@@ -56,6 +56,10 @@ public class UserService {
         Role roleUser = roleRepo.findByName(ERole.ROLE_USER).get();
         User newUser = new User(null, UUID.randomUUID(), "ADMINDUMMY", "UNIT", "admin@unittest.cat",
                 encoder.encode("unittest"), 942l);
+        roles.add(roleAdmin);
+        roles.add(roleInternal);
+        roles.add(roleManager);
+        roles.add(roleUser);
         newUser.setRoles(roles);
         return userRepo.save(newUser);
     }
