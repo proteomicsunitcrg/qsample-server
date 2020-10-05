@@ -82,3 +82,30 @@ logging:
   level:
     org.springframework:
     security: ERROR
+
+---
+spring:
+  profiles: unittest
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/qsampleunit?useSSL=false&serverTimezone=UTC
+    username: "root"
+    password: "vesperon501"
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: MySQL57InnoDB
+    show-sql: false
+
+  flyway:
+    locations:
+      - classpath:/db/test-migration
+    enabled: true
+server:
+  port: 8082
+logging:
+  file: qsampleUnitTest.log
+
+spring.main.allow-bean-definition-overriding: true
