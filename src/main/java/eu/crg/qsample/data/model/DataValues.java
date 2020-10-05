@@ -44,4 +44,11 @@ public class DataValues {
         this.std = std;
     }
 
+    public DataValues(Long contextSource, Float value, Float calculatedValue, Float std) {
+        this.contextSource = contextSource;
+        this.value = value;
+        this.calculatedValue = calculatedValue;
+        this.std = std;
+    }
+
 }

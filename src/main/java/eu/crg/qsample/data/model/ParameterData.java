@@ -26,4 +26,10 @@ public class ParameterData {
         this.values = values;
     }
 
+    public ParameterData(Long paramId, List<DataValues> values) {
+        this.parameter = new Param();
+        this.parameter.setId(paramId);
+        this.values = values;
+    }
+
 }

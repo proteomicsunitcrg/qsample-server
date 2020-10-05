@@ -27,4 +27,10 @@ public class DataFromPipeline {
         this.data = data;
     }
 
+    public DataFromPipeline(String fileChecksum, List<ParameterData> data) {
+        this.file = new File();
+        this.file.setChecksum(fileChecksum);
+        this.data = data;
+    }
+
 }

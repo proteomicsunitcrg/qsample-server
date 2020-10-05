@@ -134,6 +134,10 @@ public class DataService {
 
     }
 
+    /**
+     * WETLAB
+     * @param dataFromPipeline
+     */
     public void insertDataFromPipeline(DataFromPipeline dataFromPipeline) {
         System.out.println("hola");
         Optional<WetLabFile> file = fileRepo.findOneByChecksum(dataFromPipeline.getFile().getChecksum());
@@ -172,6 +176,10 @@ public class DataService {
         }
     }
 
+    /**
+     * REQUEST
+     * @param dataFromPipeline
+     */
     public void insertDataFromPipelineRequest(DataFromPipeline dataFromPipeline) {
         logger.info("Trying to insert data for file with checksum: " + dataFromPipeline.getFile().getChecksum());
         System.out.println("adeu");

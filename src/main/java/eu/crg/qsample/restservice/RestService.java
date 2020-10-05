@@ -96,7 +96,7 @@ public class RestService {
         System.out.println("https://api.qcloud2.crg.eu/mirrorLogin?username={username}&password={password}");
         final ResponseEntity<AgendoAuthResponse> response = restTemplate.exchange("https://api.qcloud2.crg.eu/mirrorLogin?username={username}&password={password}", HttpMethod.GET, entity,
                 AgendoAuthResponse.class, username, password);
-        System.out.println(response.getBody().getUser().getEmail());
+        // System.out.println(response.getBody().getUser().getEmail());
         return response;
     }
 
