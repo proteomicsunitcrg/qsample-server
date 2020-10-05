@@ -728,7 +728,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (3,24,_binary ',u\�J\�0\r�\�CB','EXTERNAL','EXTERNAL','$2a$10$1pBoTH3EgP10mo5xwPHqcuPyTyoECVWJPnGYQ7rhXXw67TSXyG/Ci','external@external.es'),(10,942,_binary '�4���E�\���2$�','Marc Serret','Marc Serret','$2a$10$fahmUZSeyBQPYbeJvt7YB.280hO2gJZAkpkhAXd504C5MeSHQVGvW','marc.serret@crg.eu');
+INSERT INTO `user` VALUES (3,24,_binary ',u\�J\�0\r�\�CB','EXTERNAL','EXTERNAL','$2a$10$1pBoTH3EgP10mo5xwPHqcuPyTyoECVWJPnGYQ7rhXXw67TSXyG/Ci','external@external.es'),(10,942,_binary '�4���E�\���2$�','Marc Serret','Marc Serret','$2a$10$fahmUZSeyBQPYbeJvt7YB.280hO2gJZAkpkhAXd504C5MeSHQVGvW','marc.serret@crg.eu'),(11,942,_binary '�\�\�g�KG�����ץ4','ADMINDUMMY','UNIT','$2a$10$.eeVFoaUm8WdZZSMQMGlDOnVU/1U3a3BUt5V/FgV/hwSSio5ahbsS','admin@unittest.cat');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -777,7 +777,7 @@ CREATE TABLE `users_roles` (
 
 LOCK TABLES `users_roles` WRITE;
 /*!40000 ALTER TABLE `users_roles` DISABLE KEYS */;
-INSERT INTO `users_roles` VALUES (3,2),(3,5),(10,5),(10,1),(10,4);
+INSERT INTO `users_roles` VALUES (3,2),(3,5),(10,5),(10,1),(10,4),(11,1),(11,3),(11,4),(11,5);
 /*!40000 ALTER TABLE `users_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 
