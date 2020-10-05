@@ -22,7 +22,7 @@ import org.junit.Assert;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("unittest")
-public class GuideSetTest {
+public class GuideSetUnitTest {
 
     @Autowired
     GuideSetService guideSetService;

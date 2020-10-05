@@ -25,7 +25,7 @@ import org.junit.Assert;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("unittest")
-public class FileTest {
+public class FileUnitTest {
 
     @Autowired
     FileService fileService;
