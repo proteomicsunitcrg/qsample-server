@@ -63,18 +63,12 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
         System.out.println("login try");
         Optional<User> userOpt = userRepository.findByUsername(loginRequest.getUsername());
 
         if (!userOpt.isPresent()) { // The user doesnt exist, trying signup
             return registerUser(loginRequest);
         }
-
-        // if (!agendoAuthService.agendoAuth(loginRequest.getUsername(),
-        // loginRequest.getPassword())) {
-        // return ResponseEntity.ok(new MessageResponse("UserNotFound"));
-        // }
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));

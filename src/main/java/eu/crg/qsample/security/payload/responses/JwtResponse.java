@@ -2,7 +2,10 @@ package eu.crg.qsample.security.payload.responses;
 
 import java.util.List;
 
+import com.google.gson.annotations.SerializedName;
+
 public class JwtResponse {
+	@SerializedName("accessToken")
 	private String token;
 	private String type = "Bearer";
 	private Long id;
@@ -50,5 +53,11 @@ public class JwtResponse {
 
 	public List<String> getRoles() {
 		return roles;
+	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Token: " + this.token + "Id: " + this.id + "Username: " + this.username;
 	}
 }

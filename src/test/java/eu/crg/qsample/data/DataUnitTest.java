@@ -67,13 +67,13 @@ public class DataUnitTest {
      */
     @Test(expected = DataIntegrityViolationException.class)
     public void insertDataWetlabRepeatedExpectException() {
-        DataValues dv = new DataValues(csCorrectId, numberFloat, numberFloat, numberFloat);
+        DataValues dv = new DataValues(2l, numberFloat, numberFloat, numberFloat);
         List <DataValues> dvList = new ArrayList<>();
         dvList.add(dv);
         ParameterData pd = new ParameterData(paramCorrectId, dvList);
         List <ParameterData> pdList = new ArrayList<>();
         pdList.add(pd);
-        DataFromPipeline dfp = new DataFromPipeline(fileWetlabCorrectChecksum, pdList);
+        DataFromPipeline dfp = new DataFromPipeline("check1232", pdList);
         dataService.insertDataFromPipeline(dfp);
     }
 
