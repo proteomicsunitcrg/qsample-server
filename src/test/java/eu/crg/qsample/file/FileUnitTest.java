@@ -16,6 +16,7 @@ import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import eu.crg.qsample.utils.UtilTest;
 import eu.crg.qsample.wetlab.WetLab;
 import eu.crg.qsample.wetlab.WetLabFile;
 import eu.crg.qsample.wetlab.WetLabService;
@@ -36,6 +37,8 @@ public class FileUnitTest {
     @Autowired
     RequestFileRepository requestFileRepo;
 
+    // @Autowire
+
     // ISolutionQC
     private UUID wetlabApiKeyCorrect = UUID.fromString("6170694b-6579-3100-0000-000000000000");
     private UUID wetlabApiKeyFake = UUID.fromString("6170694b-6679-3100-0000-000000000000");
@@ -52,18 +55,18 @@ public class FileUnitTest {
     @Test
     public void insertWetLabFileExpectTrue() {
         // WetLab wetlab = wetLabService.getByApiKey(UUID.fromString("6170694b-6579-3100-0000-000000000000"));
-        WetLabFile filerino = new WetLabFile(null, "ChecksumTest1", generateDate("2020-08-10 07:00:00"), "testFilename", null);
+        WetLabFile filerino = new WetLabFile(null, "ChecksumTest2300", generateDate("2020-08-10 07:00:00"), "testFilename", null);
         fileService.insertFile(filerino, wetlabApiKeyCorrect);
-        Optional <WetLabFile> inserted = fileService.getFileByChecksum("ChecksumTest");
+        Optional <WetLabFile> inserted = fileService.getFileByChecksum("ChecksumTest2300");
         Assert.assertEquals(inserted.isPresent(), true);
     }
 
 
-    @Test(expected = DataIntegrityViolationException.class)
-    public void insertWetLabFileNoNewerBuDateExpectException() {
-        WetLabFile filerino = new WetLabFile(null, "ChecksumTest2", generateDate("2015-08-10 07:00:00"), "testFilename", null);
-        fileService.insertFile(filerino, wetlabApiKeyCorrect);
-    }
+    // @Test(expected = DataIntegrityViolationException.class)
+    // public void insertWetLabFileNoNewerBuDateExpectException() {
+    //     WetLabFile filerino = new WetLabFile(null, "ChecksumTest2", generateDate("2015-08-10 07:00:00"), "testFilename", null);
+    //     fileService.insertFile(filerino, wetlabApiKeyCorrect);
+    // }
 
     @Test(expected = DataRetrievalFailureException.class)
     public void insertWetLabFileWetLabDoesntExistExpectException() {
@@ -71,32 +74,29 @@ public class FileUnitTest {
         fileService.insertFile(filerino, wetlabApiKeyFake);
     }
 
-    @Test(expected = DataIntegrityViolationException.class)
-    public void insertWetLabFileWetLabChecksumAlreadyExistsExpectException() {
-        WetLabFile filerino = new WetLabFile(null, "ChecksumTest1", generateDate("2021-08-10 07:00:00"), "testFilename", null);
-        fileService.insertFile(filerino, wetlabApiKeyCorrect);
-    }
-
-
     @Test
     public void insertRequestFileExpectTrue() {
-        RequestFile requestFile = new RequestFile(null, "RequestFileChecksum1", generateDate("2021-08-10 07:00:00"), "requestFilename", "ZX1212");
+        RequestFile requestFile = new RequestFile(null, "RequestFileChecksum31313123", generateDate("2021-08-10 07:00:00"), "requestFilename", "ZX1212");
         fileService.insertFileRequest(requestFile);
-        Optional <RequestFile> inserted = requestFileRepo.findOneByChecksum("RequestFileChecksum1");
+        Optional <RequestFile> inserted = requestFileRepo.findOneByChecksum("RequestFileChecksum31313123");
         Assert.assertEquals(inserted.isPresent(), true);
     }
 
 
     @Test(expected = DataIntegrityViolationException.class)
     public void insertRequestFileChecksumAlreadyExists() {
-        RequestFile requestFile = new RequestFile(null, "RequestFileChecksum1", generateDate("2021-08-10 07:00:00"), "requestFilename", "ZX1212");
+        RequestFile requestFile = new RequestFile(null, "request3", generateDate("2021-08-10 07:00:00"), "requestFilename", "ZX1212");
         fileService.insertFileRequest(requestFile);
     }
 
 
+    @Test(expected = DataIntegrityViolationException.class)
+    public void insertWetLabFileWetLabChecksumAlreadyExistsExpectException() {
+        WetLabFile filerino = new WetLabFile(null, "check1", generateDate("2021-08-10 07:00:00"), "testFilename", null);
+        fileService.insertFile(filerino, wetlabApiKeyCorrect);
+    }
 
-
-    private Date generateDate(String daterino) {
+    public Date generateDate(String daterino) {
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date startDate = null;
     try {
