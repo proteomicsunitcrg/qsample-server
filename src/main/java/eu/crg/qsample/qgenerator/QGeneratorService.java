@@ -7,14 +7,24 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import eu.crg.qsample.qgenerator.application.Application;
+import eu.crg.qsample.qgenerator.application.ApplicationRepository;
 import eu.crg.qsample.qgenerator.injections_conditions.InjectionConditions;
 import eu.crg.qsample.qgenerator.instrument.Instrument;
+import eu.crg.qsample.qgenerator.instrument.InstrumentRepository;
+import eu.crg.qsample.exceptions.NotFoundException;
 
 @Service
 public class QGeneratorService {
 
     @Autowired
     InjectionConditionsRepository injCondRepository;
+
+    @Autowired
+    ApplicationRepository appRepo;
+
+    @Autowired
+    InstrumentRepository instrumentRepo;
 
     public List<Instrument> getInstruentsByAppName(String appName) {
         List<Instrument> instruments = new ArrayList<>();
@@ -28,8 +38,32 @@ public class QGeneratorService {
     }
 
     public InjectionConditions getMethodsByAppNameAndInstrumentId(String appName, Long instrumentId) {
-        Optional<InjectionConditions> injCondOpt =  injCondRepository.findByApplicationNameAndInstrumentId(appName, instrumentId);
-        return injCondOpt.get();
+        Optional<InjectionConditions> injCondOpt = injCondRepository.findByApplicationNameAndInstrumentId(appName,
+                instrumentId);
+        if (injCondOpt.isPresent()) {
+            return injCondOpt.get();
+        } else {
+            return null;
+
+        }
+    }
+
+    public InjectionConditions saveInjectionConditions(InjectionConditions condition) {
+        condition.setApplication(appRepo.findById(condition.getApplication().getId()).get());
+        condition.setInstrument(instrumentRepo.findById(condition.getInstrument().getId()).get());
+        return injCondRepository.save(condition);
+    }
+
+    public boolean deleteInjectionCondition(Long id) {
+        InjectionConditions injCond = injCondRepository.findById(id).get();
+        injCond.setApplication(null);
+        injCond.setInstrument(null);
+        try {
+            injCondRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }
