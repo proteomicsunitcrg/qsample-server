@@ -9,9 +9,15 @@ public class MiniRequest {
 
     private String creatorMail;
 
+    private String creatorName;
+
     private String creationDate;
 
     private String status;
+
+    private String lastField;
+
+
 
     public long getId() {
         return id;
@@ -53,16 +59,45 @@ public class MiniRequest {
         this.status = status;
     }
 
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
+    }
+
+    public String getLastField() {
+        return lastField;
+    }
+
+    public void setLastField(String lastField) {
+        this.lastField = lastField;
+    }
+
     public MiniRequest() {
     }
 
-    public MiniRequest(long id, String type, String creatorMail, String creationDate, String status) {
+    public MiniRequest(long id, String type, String creatorMail, String creatorName,String creationDate, String status) {
         this.id = id;
         this.type = type;
         this.creatorMail = creatorMail;
+        this.creatorName = creatorName;
         this.creationDate = creationDate;
         this.status = status;
     }
+
+    public MiniRequest(long id, String type, String creatorMail, String creatorName, String creationDate, String status,
+            String lastField) {
+        this.id = id;
+        this.type = type;
+        this.creatorMail = creatorMail;
+        this.creatorName = creatorName;
+        this.creationDate = creationDate;
+        this.status = status;
+        this.lastField = lastField;
+    }
+
 
 
 }
