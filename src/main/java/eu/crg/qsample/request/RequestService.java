@@ -1,6 +1,7 @@
 package eu.crg.qsample.request;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -37,17 +38,42 @@ public class RequestService {
     @Autowired
     ParamRepository paramRepo;
 
-    public List<MiniRequest> getAll() {
+    public List<MiniRequest> getAll(boolean showAll) {
         List<MiniRequest> miniRequests = new ArrayList<>();
         String ccc = restService.getAllRequests();
         Gson gson = new Gson();
         AgendoRequestWrapper response = gson.fromJson(ccc, AgendoRequestWrapper.class);
         for (AgendoRequest agendoRequest : response.getRequest()) {
-            miniRequests.add(new MiniRequest(agendoRequest.getId(), agendoRequest.getClasss(),
-                    agendoRequest.getCreated_by().getEmail(), agendoRequest.getdate_created(),
-                    agendoRequest.getLast_action().getAction()));
+            if (!showAll) {
+                if (!agendoRequest.getLast_action().getAction().equals("Rejected")
+                        && !agendoRequest.getLast_action().getAction().equals("Completed")
+                        && !agendoRequest.getLast_action().getAction().equals("Created")
+                        && !agendoRequest.getLast_action().getAction().equals("Cancelled")
+                        && !agendoRequest.getLast_action().getAction().equals("Created as draft")) {
+                    miniRequests.add(new MiniRequest(agendoRequest.getId(), agendoRequest.getClasss(),
+                            agendoRequest.getCreated_by().getEmail(), agendoRequest.getCreated_by().getName(),agendoRequest.getdate_created(),
+                            agendoRequest.getLast_action().getAction(), getRequestCode(agendoRequest.getFields().get(agendoRequest.getFields().size()-1).getValue())));
+                }
+            } else {
+                miniRequests.add(new MiniRequest(agendoRequest.getId(), agendoRequest.getClasss(),
+                            agendoRequest.getCreated_by().getEmail(), agendoRequest.getCreated_by().getName(), agendoRequest.getdate_created(),
+                            agendoRequest.getLast_action().getAction(), getRequestCode(agendoRequest.getFields().get(agendoRequest.getFields().size()-1).getValue())));
+            }
         }
         return miniRequests;
+    }
+
+    // TODO THIS
+    private String getRequestCode(String mierda) {
+        try {
+            Gson gson = new Gson();
+            // mierda = mierda.substring(1, mierda.length() - 1);
+            AgendoFieldWrapper[] fielderinos = gson.fromJson(mierda, AgendoFieldWrapper[].class);
+            List<AgendoFieldWrapper> wrapper = Arrays.asList(fielderinos);
+            return wrapper.get(0).getFields().get(0).getValue();
+        } catch (Exception e) {
+            return mierda;
+        }
     }
 
     public AgendoRequest getRequestById(Long id) {
@@ -76,7 +102,7 @@ public class RequestService {
         AgendoRequestWrapper response = gson.fromJson(ccc, AgendoRequestWrapper.class);
         for (AgendoRequest agendoRequest : response.getRequest()) {
             miniRequests.add(new MiniRequest(agendoRequest.getId(), agendoRequest.getClasss(),
-                    agendoRequest.getCreated_by().getEmail(), agendoRequest.getdate_created(),
+                    agendoRequest.getCreated_by().getEmail(), agendoRequest.getCreated_by().getName(), agendoRequest.getdate_created(),
                     agendoRequest.getLast_action().getAction()));
         }
         return miniRequests;
