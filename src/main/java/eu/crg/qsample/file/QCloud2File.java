@@ -1,6 +1,7 @@
 package eu.crg.qsample.file;
 
 import java.util.Date;
+import java.util.List;
 
 import eu.crg.qsample.data.NonConformityStatus;
 
@@ -8,9 +9,11 @@ public class QCloud2File extends File {
 
     private NonConformityStatus conformity;
 
-    private String conformityError;
+    private List<String> conformityError;
 
     private String ls;
+
+    private String lsApiKey;
 
     public NonConformityStatus getConformity() {
         return conformity;
@@ -33,23 +36,23 @@ public class QCloud2File extends File {
 
     }
 
-    public QCloud2File(NonConformityStatus conformity, String conformityError) {
+    public QCloud2File(NonConformityStatus conformity, List<String> conformityError) {
         this.conformity = conformity;
         this.conformityError = conformityError;
     }
 
     public QCloud2File(Long id, String checksum, Date creation_date, String filename, NonConformityStatus conformity,
-            String conformityError) {
+            List<String> conformityError) {
         super(id, checksum, creation_date, filename);
         this.conformity = conformity;
         this.conformityError = conformityError;
     }
 
-    public String getConformityError() {
+    public List<String> getConformityError() {
         return conformityError;
     }
 
-    public void setConformityError(String conformityError) {
+    public void setConformityError(List<String> conformityError) {
         this.conformityError = conformityError;
     }
 
@@ -61,18 +64,42 @@ public class QCloud2File extends File {
         this.ls = ls;
     }
 
-    public QCloud2File(NonConformityStatus conformity, String conformityError, String ls) {
+    public QCloud2File(NonConformityStatus conformity, List<String> conformityError, String ls) {
         this.conformity = conformity;
         this.conformityError = conformityError;
         this.ls = ls;
     }
 
     public QCloud2File(Long id, String checksum, Date creation_date, String filename, NonConformityStatus conformity,
-            String conformityError, String ls) {
+    List<String> conformityError, String ls) {
         super(id, checksum, creation_date, filename);
         this.conformity = conformity;
         this.conformityError = conformityError;
         this.ls = ls;
+    }
+
+    public String getLsApiKey() {
+        return lsApiKey;
+    }
+
+    public void setLsApiKey(String lsApiKey) {
+        this.lsApiKey = lsApiKey;
+    }
+
+    public QCloud2File(NonConformityStatus conformity, List<String> conformityError, String ls, String lsApiKey) {
+        this.conformity = conformity;
+        this.conformityError = conformityError;
+        this.ls = ls;
+        this.lsApiKey = lsApiKey;
+    }
+
+    public QCloud2File(Long id, String checksum, Date creation_date, String filename, NonConformityStatus conformity,
+    List<String> conformityError, String ls, String lsApiKey) {
+        super(id, checksum, creation_date, filename);
+        this.conformity = conformity;
+        this.conformityError = conformityError;
+        this.ls = ls;
+        this.lsApiKey = lsApiKey;
     }
 
 
