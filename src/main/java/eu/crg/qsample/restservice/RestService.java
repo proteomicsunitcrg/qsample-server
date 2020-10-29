@@ -63,9 +63,9 @@ public class RestService {
 
         final HttpEntity entity = new HttpEntity(headers);
         final ResponseEntity<String> response = restTemplate
-                .exchange(url + "/requests/facility/"+facility+"/2020-05-01/2021-06-30", HttpMethod.GET, entity, String.class);
+                .exchange(url + "/requests/facility/"+facility+"/2020-01-01/2021-06-30", HttpMethod.GET, entity, String.class);
         // System.out.println(response.getBody());
-        System.out.println(url + "/requests/facility/"+facility+"/2020-05-01/2021-06-30");
+        System.out.println(url + "/requests/facility/"+facility+"/2020-01-01/2021-06-30");
         return response.getBody();
     }
 

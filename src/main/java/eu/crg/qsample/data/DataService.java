@@ -1,6 +1,7 @@
 package eu.crg.qsample.data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -76,7 +77,6 @@ public class DataService {
         if (!plot.isPresent()) {
             throw new NotFoundException("Plot doesnt found");
         }
-
         List<WetLabFile> files = fileRepo.findAllByCreationDateBetweenAndTypeId(startDate, endDate,
                 wetlab.get().getId());
         data = dataRepo.findByFileInAndContextSourceInAndParamId(files, plot.get().getContextSource(),
@@ -120,6 +120,8 @@ public class DataService {
         if (!files.isPresent()) {
             throw new NotFoundException("Files not foudn with request code: " + requestCode);
         }
+        List<RequestFile> allFiles = files.get();
+        allFiles = parseFileNameForPlot(allFiles);
         data = dataRepo.findByFileInAndContextSourceAndParam(files.get(), cs.get(), param.get());
         for(Data d: data) {
             if (!traces.containsKey(d.getContextSource().getAbbreviated())) {
@@ -131,7 +133,23 @@ public class DataService {
         }
         List<PlotTrace> plotTracesList = traces.toList();
         return plotTracesList;
+    }
 
+    /**
+     * Remove the request code from the filename
+     * @param files
+     * @return
+     */
+    private List<RequestFile> parseFileNameForPlot(List<RequestFile> files) {
+        for (RequestFile file: files) {
+            List<String> items= new ArrayList<>(Arrays.asList(file.getFilename().split("\\s*_\\s*"))); // https://stackoverflow.com/questions/5755477/java-list-add-unsupportedoperationexception
+            if (items.get(0).equals(file.getRequestCode())) {
+                items.remove(0);
+                items.remove(0);
+                file.setFilename(String.join("_", items));
+            }
+        }
+        return files;
     }
 
     /**
