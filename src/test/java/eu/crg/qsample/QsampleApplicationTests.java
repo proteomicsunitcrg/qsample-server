@@ -26,6 +26,6 @@ import eu.crg.qsample.wetlab.WetLabUnitTest;
 public class QsampleApplicationTests {
     @Test
     public void contextLoads() {
-		JUnitCore.runClasses(QsampleApplicationTests.class);
+		// JUnitCore.runClasses(QsampleApplicationTests.class);
     }
 }
