@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -92,7 +93,7 @@ public class AuthController {
         }
 
         if(!agendoAuthService.agendoAuth(signUpRequest.getUsername(), signUpRequest.getPassword())) {
-            return ResponseEntity.ok(new MessageResponse("UserNotFound"));
+            return new ResponseEntity<String>("User not found", HttpStatus.UNAUTHORIZED);
         }
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
