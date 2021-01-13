@@ -1,7 +1,5 @@
 package eu.crg.qsample.qgenerator.injections_conditions;
 
-import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,37 +7,31 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import eu.crg.qsample.qgenerator.application.Application;
 import eu.crg.qsample.qgenerator.instrument.Instrument;
-import eu.crg.qsample.qgenerator.method.Method;
 
 @Entity
-@Table(name = "injectionConditions")
-public class InjectionConditions {
+@Table(name = "injectionConditionsQC")
+public class InjectionConditionsQC {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "injectionConditions_seq")
-    @SequenceGenerator(name = "injectionConditions_seq", sequenceName = "injectionConditions_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "injectionConditions_qc_seq")
+    @SequenceGenerator(name = "injectionConditions_qc_seq", sequenceName = "injectionConditions_qc_seq", allocationSize = 1)
     private Long id;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "instrument_id", referencedColumnName = "id")
     private Instrument instrument;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "application_id", referencedColumnName = "id")
-    private Application application;
+    @Column(name = "qctype")
+    private String QCtype;
 
-    @Column
-    @ManyToMany
-    List<Method> methods;
+    @Column(name = "method")
+    private String method;
 
     @Column(name = "volume")
     private Float volume;
@@ -60,20 +52,20 @@ public class InjectionConditions {
         this.instrument = instrument;
     }
 
-    public Application getApplication() {
-        return application;
+    public String getQCtype() {
+        return QCtype;
     }
 
-    public void setApplication(Application application) {
-        this.application = application;
+    public void setQCtype(String qCtype) {
+        QCtype = qCtype;
     }
 
-    public List<Method> getMethods() {
-        return methods;
+    public String getMethod() {
+        return method;
     }
 
-    public void setMethod(List<Method> methods) {
-        this.methods = methods;
+    public void setMethod(String method) {
+        this.method = method;
     }
 
     public Float getVolume() {
@@ -84,15 +76,14 @@ public class InjectionConditions {
         this.volume = volume;
     }
 
-    public InjectionConditions() {
-    }
-
-    public InjectionConditions(Long id, Instrument instrument, Application application, List<Method> methods, Float volume) {
+    public InjectionConditionsQC(Long id, Instrument instrument, String qCtype, String method, Float volume) {
         this.id = id;
         this.instrument = instrument;
-        this.application = application;
-        this.methods = methods;
+        this.QCtype = qCtype;
+        this.method = method;
         this.volume = volume;
     }
 
+    public InjectionConditionsQC() {
+    }
 }

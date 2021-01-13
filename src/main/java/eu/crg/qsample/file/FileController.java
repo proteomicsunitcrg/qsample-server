@@ -63,6 +63,13 @@ public class FileController {
         return fileService.insertFile(file, wetLabApiKey);
     }
 
+
+    @GetMapping("/getByRequestCode/{requestCode}")
+    @PreAuthorize("hasRole('INTERNAL')")
+    public List<RequestFile> getAllByRequestCodeContains(@PathVariable String requestCode) {
+        return fileService.getAllByRequestCodeContains(requestCode);
+    }
+
     /**
      * Endpoint 4 pipeline (ONLY REQUESTS FILES)
      * @param file
