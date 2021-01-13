@@ -12,6 +12,8 @@ import eu.crg.qsample.qgenerator.application.ApplicationRepository;
 import eu.crg.qsample.qgenerator.injections_conditions.InjectionConditions;
 import eu.crg.qsample.qgenerator.instrument.Instrument;
 import eu.crg.qsample.qgenerator.instrument.InstrumentRepository;
+import eu.crg.qsample.qgenerator.method.Method;
+import eu.crg.qsample.qgenerator.method.MethodRepository;
 import eu.crg.qsample.exceptions.NotFoundException;
 
 @Service
@@ -25,6 +27,9 @@ public class QGeneratorService {
 
     @Autowired
     InstrumentRepository instrumentRepo;
+
+    @Autowired
+    MethodRepository methodRepo;
 
     public List<Instrument> getInstruentsByAppName(String appName) {
         List<Instrument> instruments = new ArrayList<>();
@@ -49,8 +54,13 @@ public class QGeneratorService {
     }
 
     public InjectionConditions saveInjectionConditions(InjectionConditions condition) {
+        List <Method> methods = new ArrayList<>();
         condition.setApplication(appRepo.findById(condition.getApplication().getId()).get());
         condition.setInstrument(instrumentRepo.findById(condition.getInstrument().getId()).get());
+        for (Method m: condition.getMethods()) {
+            methods.add(methodRepo.findById(m.getId()).get());
+        }
+        condition.setMethod(methods);
         return injCondRepository.save(condition);
     }
 

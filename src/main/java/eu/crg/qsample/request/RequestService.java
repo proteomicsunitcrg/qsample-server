@@ -84,11 +84,10 @@ public class RequestService {
     }
 
     public String getPlotName(Long csId, Long paramId) {
-        System.out.println("hola");
         Optional<Param> param = paramRepo.findById(paramId);
         Optional<ContextSource> cs = csRepo.findById(csId);
         if (cs.isPresent() && param.isPresent()) {
-            return param.get().getName() + cs.get().getAbbreviated();
+            return cs.get().getName();
         } else {
             return "Error getting the name";
         }

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.ws.rs.NotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DataRetrievalFailureException;
@@ -117,6 +119,14 @@ public class FileService {
         } else {
             return false;
         }
+    }
+
+    public List<RequestFile> getAllByRequestCodeContains(String requestCode) {
+        Optional<List<RequestFile>> files = fileRepository.findAllByRequestCodeContains(requestCode);
+        if (!files.isPresent()) {
+            return null;
+        }
+        return files.get();
     }
 
 }
