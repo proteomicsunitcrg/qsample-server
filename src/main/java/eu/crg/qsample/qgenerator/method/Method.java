@@ -19,7 +19,7 @@ public class Method {
     @SequenceGenerator(name = "method_seq", sequenceName = "method_seq", allocationSize = 1)
     private Long id;
 
-    @Column(name = "name", length = 50)
+    @Column(name = "name", length = 300)
     @NotNull
     private String name;
 
