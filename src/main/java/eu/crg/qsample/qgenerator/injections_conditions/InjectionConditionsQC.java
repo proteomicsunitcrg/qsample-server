@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import eu.crg.qsample.qgenerator.instrument.Instrument;
 
 @Entity
-@Table(name = "injectionConditionsQC")
+@Table(name = "injection_conditions_qc")
 public class InjectionConditionsQC {
 
     @Id
@@ -28,7 +28,7 @@ public class InjectionConditionsQC {
     private Instrument instrument;
 
     @Column(name = "qctype")
-    private String QCtype;
+    private String qctype;
 
     @Column(name = "method")
     private String method;
@@ -52,12 +52,12 @@ public class InjectionConditionsQC {
         this.instrument = instrument;
     }
 
-    public String getQCtype() {
-        return QCtype;
+    public String getQctype() {
+        return qctype;
     }
 
-    public void setQCtype(String qCtype) {
-        QCtype = qCtype;
+    public void setQctype(String qctype) {
+        this.qctype = qctype;
     }
 
     public String getMethod() {
@@ -76,10 +76,10 @@ public class InjectionConditionsQC {
         this.volume = volume;
     }
 
-    public InjectionConditionsQC(Long id, Instrument instrument, String qCtype, String method, Float volume) {
+    public InjectionConditionsQC(Long id, Instrument instrument, String qctype, String method, Float volume) {
         this.id = id;
         this.instrument = instrument;
-        this.QCtype = qCtype;
+        this.qctype = qctype;
         this.method = method;
         this.volume = volume;
     }
