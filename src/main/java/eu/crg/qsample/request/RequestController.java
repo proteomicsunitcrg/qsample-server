@@ -1,9 +1,12 @@
 package eu.crg.qsample.request;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,9 +25,10 @@ public class RequestController {
 
     @PreAuthorize("hasRole('INTERNAL')")
     @RequestMapping(value = "")
-    public List<MiniRequest> getAll(@RequestParam boolean showAll) {
-        System.out.println(showAll);
-        return requestService.getAll(showAll);
+    public List<MiniRequest> getAll(@RequestParam boolean showAll,
+            @RequestParam(name = "start_date") @DateTimeFormat(iso = ISO.DATE_TIME) Date startDate,
+            @RequestParam(name = "end_date") @DateTimeFormat(iso = ISO.DATE_TIME) Date endDate) {
+        return requestService.getAll(showAll, startDate, endDate);
     }
 
     @PreAuthorize("hasRole('EXTERNAL')")
@@ -32,7 +36,6 @@ public class RequestController {
     public List<MiniRequest> getAllExternal() {
         return requestService.getAllExternal();
     }
-
 
     @PreAuthorize("hasRole('USER')")
     @RequestMapping(value = "{id}")

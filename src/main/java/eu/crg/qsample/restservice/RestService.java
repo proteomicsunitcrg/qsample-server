@@ -3,6 +3,7 @@ package eu.crg.qsample.restservice;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -53,7 +54,7 @@ public class RestService {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public String getAllRequests() {
+    public String getAllRequests(String dateFrom, String dateTo) {
         // converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
         // messageConverters.add(converter);
         // restTemplate.setMessageConverters(messageConverters);
@@ -63,9 +64,9 @@ public class RestService {
 
         final HttpEntity entity = new HttpEntity(headers);
         final ResponseEntity<String> response = restTemplate
-                .exchange(url + "/requests/facility/"+facility+"/2020-01-01/2021-06-30", HttpMethod.GET, entity, String.class);
+                .exchange(url + "/requests/facility/"+facility+"/"+dateFrom+"/"+dateTo, HttpMethod.GET, entity, String.class);
         // System.out.println(response.getBody());
-        System.out.println(url + "/requests/facility/"+facility+"/2020-01-01/2021-06-30");
+        System.out.println(url + "/requests/facility/"+facility+"/"+dateFrom+"/"+dateTo);
         return response.getBody();
     }
 

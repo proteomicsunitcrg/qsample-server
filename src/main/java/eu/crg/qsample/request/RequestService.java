@@ -1,7 +1,9 @@
 package eu.crg.qsample.request;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,9 +40,9 @@ public class RequestService {
     @Autowired
     ParamRepository paramRepo;
 
-    public List<MiniRequest> getAll(boolean showAll) {
+    public List<MiniRequest> getAll(boolean showAll, Date startDate, Date endDate) {
         List<MiniRequest> miniRequests = new ArrayList<>();
-        String ccc = restService.getAllRequests();
+        String ccc = restService.getAllRequests(convertDateToAgendoFormat(startDate), convertDateToAgendoFormat(endDate));
         Gson gson = new Gson();
         AgendoRequestWrapper response = gson.fromJson(ccc, AgendoRequestWrapper.class);
         for (AgendoRequest agendoRequest : response.getRequest()) {
@@ -61,6 +63,11 @@ public class RequestService {
             }
         }
         return miniRequests;
+    }
+
+    private String convertDateToAgendoFormat(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(date);
     }
 
     // TODO THIS

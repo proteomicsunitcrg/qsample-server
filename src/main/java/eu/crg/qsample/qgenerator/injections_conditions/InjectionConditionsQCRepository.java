@@ -12,6 +12,6 @@ import eu.crg.qsample.qgenerator.injections_conditions.InjectionConditions;
 @Repository
 public interface InjectionConditionsQCRepository extends CrudRepository<InjectionConditionsQC, Long>{
 
-    Optional <List<InjectionConditionsQC>> findByInstrumentIdAndQCtype(Long instrumentId, String qcType);
+    Optional <InjectionConditionsQC> findByInstrumentIdAndQctype(Long instrumentId, String qcType);
 
 }
