@@ -43,4 +43,8 @@ public class InjectionConditionsQCService {
             return false;
         }
     }
+
+    public List<InjectionConditionsQC> getByInstrumentId(Long instrumentId) {
+        return injCondQCRepo.findByInstrumentId(instrumentId);
+    }
 }

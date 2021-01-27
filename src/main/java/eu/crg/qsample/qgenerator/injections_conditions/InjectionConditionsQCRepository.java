@@ -14,4 +14,6 @@ public interface InjectionConditionsQCRepository extends CrudRepository<Injectio
 
     Optional <InjectionConditionsQC> findByInstrumentIdAndQctype(Long instrumentId, String qcType);
 
+    List <InjectionConditionsQC> findByInstrumentId(Long instrumentId);
+
 }

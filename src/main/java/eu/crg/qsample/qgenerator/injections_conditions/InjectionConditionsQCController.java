@@ -22,9 +22,15 @@ public class InjectionConditionsQCController {
     @Autowired InjectionConditionsQCService injCondServ;
 
     @GetMapping("/getByInstrumentIdAndQCType/{instrumentId}/{qcType}")
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('INTERNAL')")
     public InjectionConditionsQC getByInstrumentIdAndQCType(@PathVariable Long instrumentId, @PathVariable String qcType) {
         return injCondServ.getByInstrumentIdAndQCType(instrumentId, qcType);
+    }
+
+    @GetMapping("/findByInstrumentId/{instrumentId}")
+    @PreAuthorize("hasRole('INTERNAL')")
+    public List<InjectionConditionsQC> getByInstrumentId(@PathVariable Long instrumentId) {
+        return injCondServ.getByInstrumentId(instrumentId);
     }
 
     @PostMapping("")
