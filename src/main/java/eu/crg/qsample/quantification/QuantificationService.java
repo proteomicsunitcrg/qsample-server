@@ -1,5 +1,6 @@
 package eu.crg.qsample.quantification;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,14 @@ public class QuantificationService {
     QuantificationRepository quantificationRepository;
 
     public void insertQuantificationFromPipeline(QuantificationFromPipeline quantificationFromPipeline) {
-        Optional<RequestFile> fileOpt = requestFileRepo.findOneByChecksum(quantificationFromPipeline.getFile().getChecksum());
+        Optional<RequestFile> fileOpt = requestFileRepo
+                .findOneByChecksum(quantificationFromPipeline.getFile().getChecksum());
         if (!fileOpt.isPresent()) {
             System.out.println("File not found");
             throw new DataRetrievalFailureException("File not found");
         }
         quantificationFromPipeline.setFile(fileOpt.get());
-        for (Quantification quant: quantificationFromPipeline.getQuant()) {
+        for (Quantification quant : quantificationFromPipeline.getQuant()) {
             Quantification toInsert = new Quantification();
             toInsert.setFile(quantificationFromPipeline.getFile());
             toInsert.setAbundance(quant.getAbundance());
@@ -35,5 +37,10 @@ public class QuantificationService {
             toInsert.setContaminant(quant.isContaminant());
             quantificationRepository.save(toInsert);
         }
+    }
+
+    public List<Quantification> getByChechsumAndContaminant(String checksum, boolean contaminant) {
+        return quantificationRepository.findFirst5ByFileChecksumAndContaminantOrderByAbundanceDesc(checksum, contaminant);
+        // return null;
     }
 }

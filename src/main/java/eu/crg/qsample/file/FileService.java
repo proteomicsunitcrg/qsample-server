@@ -1,5 +1,6 @@
 package eu.crg.qsample.file;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -127,6 +128,15 @@ public class FileService {
             return null;
         }
         return files.get();
+    }
+
+    public RequestFile getRequestFileByChecksum(String checksum) {
+        Optional <RequestFile> optFile = requestFileRepo.findOneByChecksum(checksum);
+        if (optFile.isPresent()) {
+            return optFile.get();
+        }  else {
+            throw new DataRetrievalFailureException("File not found");
+        }
     }
 
 }
