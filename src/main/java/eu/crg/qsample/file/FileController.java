@@ -95,6 +95,12 @@ public class FileController {
         return fileService.checkFileExists(checksum);
     }
 
+    @GetMapping(value = "/getRequestFileByChecksum/{checksum}")
+    @PreAuthorize("hasRole('INTERNAL')")
+    public RequestFile getRequestFileByChecksum(@PathVariable String checksum) {
+        return fileService.getRequestFileByChecksum(checksum);
+    }
+
     @ExceptionHandler(DataRetrievalFailureException.class)
     void handleNonConnection(HttpServletResponse response, Exception e) throws IOException {
         response.sendError(HttpStatus.NOT_FOUND.value(), e.getMessage());
