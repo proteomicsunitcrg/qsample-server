@@ -29,6 +29,10 @@ public class QuantificationService {
         }
         quantificationFromPipeline.setFile(fileOpt.get());
         for (Quantification quant : quantificationFromPipeline.getQuant()) {
+            Optional<Quantification> quantOpt= quantificationRepository.findByFileChecksumAndAccession(quantificationFromPipeline.getFile().getChecksum(), quant.getAccession());
+            if (quantOpt.isPresent()) {
+                continue;
+            }
             Quantification toInsert = new Quantification();
             toInsert.setFile(quantificationFromPipeline.getFile());
             toInsert.setAbundance(quant.getAbundance());
@@ -43,4 +47,5 @@ public class QuantificationService {
         return quantificationRepository.findFirst5ByFileChecksumAndContaminantOrderByAbundanceDesc(checksum, contaminant);
         // return null;
     }
+
 }
