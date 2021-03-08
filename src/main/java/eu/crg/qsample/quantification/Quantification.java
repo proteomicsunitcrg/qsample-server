@@ -9,7 +9,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import eu.crg.qsample.file.File;
 
@@ -26,16 +28,16 @@ public class Quantification {
     @JoinColumn(name = "fileId", insertable = true, updatable = false)
     private File file;
 
-    @NotEmpty
+    @NotBlank
     private String accession;
 
-    @NotEmpty
+    @NotBlank
     private String description;
 
-    @NotEmpty
+    @NotNull
     private Float abundance;
 
-    @NotEmpty
+    @NotNull
     private boolean contaminant;
 
     public Long getId() {
