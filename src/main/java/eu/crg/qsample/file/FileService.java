@@ -99,12 +99,10 @@ public class FileService {
 
     public List<QCloud2File> getQCloud2Files(String requestCode) {
         List<QCloud2File> res = restQcloud2.getFiles(requestCode);
-        System.out.println(res.size());
         return res;
     }
 
     public File insertFileRequest(RequestFile file) {
-        System.out.println("trying file: " + file.getChecksum());
         if (requestFileRepo.findOneByChecksum(file.getChecksum()).isPresent()) {
             throw new DataIntegrityViolationException("A file with that checksum already exists!");
         }
