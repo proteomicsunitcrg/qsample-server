@@ -157,7 +157,6 @@ public class DataService {
      * @param dataFromPipeline
      */
     public void insertDataFromPipeline(DataFromPipeline dataFromPipeline) {
-        System.out.println("hola");
         Optional<WetLabFile> file = fileRepo.findOneByChecksum(dataFromPipeline.getFile().getChecksum());
         if (!file.isPresent()) {
             System.out.println("File not found");
@@ -167,13 +166,10 @@ public class DataService {
         dataFromPipeline.setFile(file.get());
         for (ParameterData parameterData : dataFromPipeline.getData()) {
             if (parameterData.getValues().size() == 0) {
-                System.out.println("Parameter = 0");
                 continue;
             }
-            System.out.println("Hasta aqui");
             Optional<Param> param = paramRepo.findById(parameterData.getParameter().getId());
             if (!param.isPresent()) {
-                System.out.println("Param not found");
                 continue;
             }
             parameterData.setParameter(param.get());

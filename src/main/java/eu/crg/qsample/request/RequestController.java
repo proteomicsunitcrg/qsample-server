@@ -40,7 +40,6 @@ public class RequestController {
     @PreAuthorize("hasRole('USER')")
     @RequestMapping(value = "{id}")
     public AgendoRequest getRequestById(@PathVariable Long id) {
-        System.out.println("ID REQUEST AGENDO: " + id);
         return requestService.getRequestById(id);
     }
 
