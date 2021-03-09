@@ -2,6 +2,7 @@ package eu.crg.qsample.quantification;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import eu.crg.qsample.exceptions.NotFoundException;
+import eu.crg.qsample.file.RequestFile;
 import eu.crg.qsample.quantification.model.QuantificationFromPipeline;
 
 @RestController
@@ -31,8 +33,6 @@ public class QuantificationController {
     @PostMapping(value="/pipeline")
     @PreAuthorize("hasRole('ADMIN')")
     public boolean insertQuantificationFromPipeline(@RequestBody QuantificationFromPipeline quantPipeline) {
-        System.out.println(quantPipeline.getFile().getChecksum());
-        System.out.println(quantPipeline.getQuant().get(0).getAccession());
         quantificationService.insertQuantificationFromPipeline(quantPipeline);
         return true;
     }
@@ -43,6 +43,13 @@ public class QuantificationController {
         System.out.println(contaminant);
         return quantificationService.getByChechsumAndContaminant(checksum, contaminant);
     }
+
+    @GetMapping(value = "/heatMap/{requestcode}")
+    @PreAuthorize("hasRole('INTERNAL')")
+    public List<List<Double>> heatMapTest(@PathVariable(name = "requestcode") String requestCode) {
+        return quantificationService.heatmap(requestCode);
+    }
+
 
 
 

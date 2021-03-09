@@ -35,7 +35,7 @@ public class Quantification {
     private String description;
 
     @NotNull
-    private Float abundance;
+    private double abundance;
 
     @NotNull
     private boolean contaminant;
@@ -72,11 +72,11 @@ public class Quantification {
         this.description = description;
     }
 
-    public Float getAbundance() {
+    public double getAbundance() {
         return abundance;
     }
 
-    public void setAbundance(Float abundance) {
+    public void setAbundance(double abundance) {
         this.abundance = abundance;
     }
 
@@ -91,7 +91,7 @@ public class Quantification {
     public Quantification() {
     }
 
-    public Quantification(Long id, File file, String accession, String description, Float abundance,
+    public Quantification(Long id, File file, String accession, String description, double abundance,
             boolean contaminant) {
         this.id = id;
         this.file = file;
@@ -99,6 +99,12 @@ public class Quantification {
         this.description = description;
         this.abundance = abundance;
         this.contaminant = contaminant;
+    }
+
+    @Override
+    public String toString() {
+        return "Quantification [abundance=" + abundance + ", accession=" + accession + ", contaminant=" + contaminant
+                + ", description=" + description + ", file=" + file + ", id=" + id + "]";
     }
 
 
