@@ -11,4 +11,6 @@ public interface QuantificationRepository extends CrudRepository<Quantification,
 
     Optional<Quantification> findByFileChecksumAndAccession(String checksum, String accession);
 
+    Optional <List<Quantification>> findByFileChecksumOrderByIdDesc(String checksum);
+
 }

@@ -6,7 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
-public class RequestFile extends File {
+public class RequestFile extends File implements Comparable<RequestFile>{
 
     private String requestCode;
 
@@ -30,6 +30,11 @@ public class RequestFile extends File {
 
     public RequestFile() {
 
+    }
+
+    @Override
+    public int compareTo(RequestFile o) {
+        return (int)(this.getId() - o.getId());
     }
 
 
