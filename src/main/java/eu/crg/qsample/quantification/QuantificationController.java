@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import eu.crg.qsample.exceptions.ConsensusException;
 import eu.crg.qsample.exceptions.NotFoundException;
 import eu.crg.qsample.file.RequestFile;
 import eu.crg.qsample.quantification.model.QuantificationFromPipeline;
@@ -46,8 +47,8 @@ public class QuantificationController {
 
     @GetMapping(value = "/heatMap/{requestcode}")
     @PreAuthorize("hasRole('INTERNAL')")
-    public List<List<Double>> heatMapTest(@PathVariable(name = "requestcode") String requestCode) {
-        return quantificationService.heatmap(requestCode);
+    public List<List<Double>> heatMapTest(@PathVariable(name = "requestcode") String requestCode, @RequestParam(name = "checksums[]") List <String> checksums) {
+        return quantificationService.heatmap(requestCode, checksums);
     }
 
 
@@ -61,6 +62,12 @@ public class QuantificationController {
     @ExceptionHandler(DataRetrievalFailureException.class)
     void handleRetrievalFailure(HttpServletResponse response, Exception e) throws IOException {
         response.sendError(HttpStatus.NOT_FOUND.value(), "Nothing found with this file checksum");
+    }
+
+
+    @ExceptionHandler(ConsensusException.class)
+    void handleConsensusException(HttpServletResponse response, Exception e) throws IOException {
+        response.sendError(HttpStatus.NO_CONTENT.value(), "Consensus 1 or 0");
     }
 
 

@@ -20,4 +20,7 @@ public interface FileRepository extends CrudRepository<File, Long> {
     public Optional<WetLabFile> findOneByCreationDateGreaterThanAndTypeApiKey(Date creationDate, UUID apiKey);
 
     public Optional <List<RequestFile>> findAllByRequestCodeContains(String requestCode);
+
+    public Optional <List<RequestFile>> findAllByRequestCodeContainsAndChecksumIn(String requestCode, List<String> checksum);
+
 }
