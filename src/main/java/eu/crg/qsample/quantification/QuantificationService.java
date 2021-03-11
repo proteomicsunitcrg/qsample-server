@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.stereotype.Service;
 
+import eu.crg.qsample.exceptions.ConsensusException;
 import eu.crg.qsample.file.FileRepository;
 import eu.crg.qsample.file.FileService;
 import eu.crg.qsample.file.RequestFile;
@@ -72,10 +73,14 @@ public class QuantificationService {
         return doublePrimitivePapa;
     }
 
-    public List<List<Double>> heatmap(String requestCode) {
-        SortedMap<RequestFile, List<Double>> fileWithConsensusQuantificationsMap = consensus(requestCode);
+    public List<List<Double>> heatmap(String requestCode, List<String> checksums) {
+        SortedMap<RequestFile, List<Double>> fileWithConsensusQuantificationsMap = consensus(requestCode, checksums);
         List <List<Double>> finalCorrelationList = new ArrayList<>();
         fileWithConsensusQuantificationsMap.forEach((kpapa, vpapa) -> {
+            System.out.println("Consensued prots: " + vpapa.size());
+            if (vpapa.size() <= 1) {
+                throw new ConsensusException("Consensus 1 or 0");
+            }
             List <Double> correlationsList = new ArrayList<>();
             double[] xList = convertListOfDoublesToPrimitiveArray(vpapa);
             correlationsList.clear();
@@ -94,8 +99,8 @@ public class QuantificationService {
      * @param requestCode
      * @return
      */
-    private SortedMap<RequestFile, List<Double>> consensus(String requestCode) {
-        Optional<List<RequestFile>> files = fileRepository.findAllByRequestCodeContains(requestCode); // We get all request files
+    private SortedMap<RequestFile, List<Double>> consensus(String requestCode, List<String> checksums) {
+        Optional<List<RequestFile>> files = fileRepository.findAllByRequestCodeContainsAndChecksumIn(requestCode, checksums); // We get all request files that his checksum is in the list
         SortedMap<RequestFile, List<Double>> fileMap = new TreeMap<>(); // Data struct to store the file with his quantification abundance
         if (files.isPresent()) {
             for (RequestFile file : files.get()) {
