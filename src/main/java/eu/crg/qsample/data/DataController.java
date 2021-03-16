@@ -7,6 +7,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
@@ -63,5 +64,11 @@ public class DataController {
     void handleNotFoundException(HttpServletResponse response, Exception e) throws IOException {
         response.sendError(HttpStatus.NOT_FOUND.value(), "Nothing found with this parameters");
     }
+
+    @ExceptionHandler(DataRetrievalFailureException.class)
+    void handleDataRetrievalFailureException(HttpServletResponse response, Exception e) throws IOException {
+        response.sendError(HttpStatus.NOT_FOUND.value(), "File not found");
+    }
+
 
 }
