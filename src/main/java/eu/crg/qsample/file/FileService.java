@@ -120,8 +120,8 @@ public class FileService {
         }
     }
 
-    public List<RequestFile> getAllByRequestCodeContains(String requestCode) {
-        Optional<List<RequestFile>> files = fileRepository.findAllByRequestCodeContains(requestCode);
+    public List<RequestFile> findAllByRequestCode(String requestCode) {
+        Optional<List<RequestFile>> files = fileRepository.findAllByRequestCodeOrderByFilename(requestCode);
         if (!files.isPresent()) {
             return null;
         }
