@@ -3,6 +3,7 @@ package eu.crg.qsample.quantification;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -45,10 +46,16 @@ public class QuantificationController {
         return quantificationService.getByChechsumAndContaminant(checksum, contaminant);
     }
 
+    // @GetMapping(value = "/heatMap/{requestcode}")
+    // @PreAuthorize("hasRole('INTERNAL')")
+    // public List<List<Double>> heatMapTest(@PathVariable(name = "requestcode") String requestCode, @RequestParam(name = "checksums[]") List <String> checksums) {
+    //     return quantificationService.heatmap(requestCode, checksums);
+    // }
+
     @GetMapping(value = "/heatMap/{requestcode}")
     @PreAuthorize("hasRole('INTERNAL')")
     public List<List<Double>> heatMapTest(@PathVariable(name = "requestcode") String requestCode, @RequestParam(name = "checksums[]") List <String> checksums) {
-        return quantificationService.heatmap(requestCode, checksums);
+        return quantificationService.heatmap2(requestCode, checksums);
     }
 
 
