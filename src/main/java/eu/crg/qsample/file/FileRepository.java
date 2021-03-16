@@ -21,6 +21,8 @@ public interface FileRepository extends CrudRepository<File, Long> {
 
     public Optional <List<RequestFile>> findAllByRequestCodeContains(String requestCode);
 
-    public Optional <List<RequestFile>> findAllByRequestCodeContainsAndChecksumIn(String requestCode, List<String> checksum);
+    public Optional <List<RequestFile>> findAllByRequestCodeOrderByFilename(String requestCode);
+
+    public Optional <List<RequestFile>> findAllByRequestCodeContainsAndChecksumInOrderByFilename(String requestCode, List<String> checksum);
 
 }

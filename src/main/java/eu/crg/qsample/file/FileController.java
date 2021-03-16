@@ -66,8 +66,8 @@ public class FileController {
 
     @GetMapping("/getByRequestCode/{requestCode}")
     @PreAuthorize("hasRole('INTERNAL')")
-    public List<RequestFile> getAllByRequestCodeContains(@PathVariable String requestCode) {
-        return fileService.getAllByRequestCodeContains(requestCode);
+    public List<RequestFile> findAllByRequestCode(@PathVariable String requestCode) {
+        return fileService.findAllByRequestCode(requestCode);
     }
 
     /**

@@ -76,7 +76,7 @@ public class QuantificationService {
     }
 
     public List<List<Double>> heatmap2(String requestCode, List<String> checksums) {
-        Optional<List<RequestFile>> files = fileRepository.findAllByRequestCodeContainsAndChecksumIn(requestCode,
+        Optional<List<RequestFile>> files = fileRepository.findAllByRequestCodeContainsAndChecksumInOrderByFilename(requestCode,
                 checksums); // We get all request files that his checksum is in the list
         List<List<Double>> finalCorrelationList = new ArrayList<>();
         if (files.isPresent()) {

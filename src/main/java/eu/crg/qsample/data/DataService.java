@@ -116,13 +116,13 @@ public class DataService {
         }
         List<Data> data = new ArrayList<>();
         TraceHashMap<String, PlotTrace> traces = new TraceHashMap<>();
-        Optional <List<RequestFile>> files = fileRepo.findAllByRequestCodeContains(requestCode);
+        Optional <List<RequestFile>> files = fileRepo.findAllByRequestCodeOrderByFilename(requestCode);
         if (!files.isPresent()) {
             throw new NotFoundException("Files not foudn with request code: " + requestCode);
         }
         List<RequestFile> allFiles = files.get();
         allFiles = parseFileNameForPlot(allFiles);
-        data = dataRepo.findByFileInAndContextSourceAndParam(files.get(), cs.get(), param.get());
+        data = dataRepo.findByFileInAndContextSourceAndParamOrderByFileFilename(files.get(), cs.get(), param.get());
         for(Data d: data) {
             if (!traces.containsKey(d.getContextSource().getAbbreviated())) {
                 traces.put(d.getContextSource().getAbbreviated(),
