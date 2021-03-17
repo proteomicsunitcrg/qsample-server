@@ -75,7 +75,7 @@ public class QuantificationService {
         return doublePrimitivePapa;
     }
 
-    public List<List<Double>> heatmap2(String requestCode, List<String> checksums) {
+    public List<List<Double>> heatmap2(String requestCode, List<String> checksums, int consensus) {
         Optional<List<RequestFile>> files = fileRepository.findAllByRequestCodeContainsAndChecksumInOrderByFilename(requestCode,
                 checksums); // We get all request files that his checksum is in the list
         List<List<Double>> finalCorrelationList = new ArrayList<>();
@@ -83,7 +83,7 @@ public class QuantificationService {
             for (RequestFile file : files.get()) {
                 List<Double> correlationsList = new ArrayList<>();
                 for (RequestFile fileMini : files.get()) {
-                    correlationsList.add(calc(file, fileMini));
+                    correlationsList.add(calc(file, fileMini, consensus));
                 }
                 finalCorrelationList.add(correlationsList);
             }
@@ -92,7 +92,7 @@ public class QuantificationService {
         return null;
     }
 
-    public double calc(RequestFile file1, RequestFile file2) {
+    public double calc(RequestFile file1, RequestFile file2, int consensus) {
         Optional<List<Quantification>> quantificationListOpt = quantificationRepository // Obtain the current file loop
                                                                                         // quantification
                 .findByFileChecksumOrderByIdDesc(file1.getChecksum());
@@ -114,6 +114,9 @@ public class QuantificationService {
                         }
                     }
                 }
+            }
+            if (consensued.size() < consensus) {
+                return 0;
             }
             double correlation = new PearsonsCorrelation().correlation(convertListOfDoublesToPrimitiveArray(consensued),
                     convertListOfDoublesToPrimitiveArray(consensued2)); // Do de math
