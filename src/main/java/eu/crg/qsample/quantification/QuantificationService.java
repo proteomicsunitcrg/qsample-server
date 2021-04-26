@@ -75,24 +75,35 @@ public class QuantificationService {
         return doublePrimitivePapa;
     }
 
-    public List<List<Double>> heatmap2(String requestCode, List<String> checksums, int consensus) {
+    public HeatmapData heatmap2(String requestCode, List<String> checksums, int consensus) {
+        HeatmapData heatmapData = new HeatmapData();
+        List<String> filenames = new ArrayList<>();
         Optional<List<RequestFile>> files = fileRepository.findAllByRequestCodeContainsAndChecksumInOrderByFilename(requestCode,
                 checksums); // We get all request files that his checksum is in the list
         List<List<Double>> finalCorrelationList = new ArrayList<>();
         if (files.isPresent()) {
             for (RequestFile file : files.get()) {
                 List<Double> correlationsList = new ArrayList<>();
-                for (RequestFile fileMini : files.get()) {
-                    correlationsList.add(calc(file, fileMini, consensus));
+                Optional<List<Quantification>> quantificationListOpt = quantificationRepository.findByFileChecksumOrderByIdDesc(file.getChecksum());
+                if (quantificationListOpt.isPresent()) {
+                    for (RequestFile fileMini : files.get()) {
+                        Double calRes = calc(file, fileMini, consensus);
+                        if (calRes != null) {
+                            correlationsList.add(calc(file, fileMini, consensus));
+                        }
+                    }
+                    filenames.add(file.getFilename());
+                    finalCorrelationList.add(correlationsList);
                 }
-                finalCorrelationList.add(correlationsList);
             }
-            return finalCorrelationList;
+            heatmapData.setData(finalCorrelationList);
+            heatmapData.setNames(filenames);
+            return heatmapData;
         }
         return null;
     }
 
-    public double calc(RequestFile file1, RequestFile file2, int consensus) {
+    public Double calc(RequestFile file1, RequestFile file2, int consensus) {
         Optional<List<Quantification>> quantificationListOpt = quantificationRepository // Obtain the current file loop
                                                                                         // quantification
                 .findByFileChecksumOrderByIdDesc(file1.getChecksum());
@@ -103,7 +114,7 @@ public class QuantificationService {
         List<Double> consensued2 = new ArrayList<>();
         if (quantificationListOpt.isPresent() && quantificationListOpt2.isPresent()) {
             if (file1.getId().equals(file2.getId())) { // Both are the same file, the consensus is total
-                return 1;
+                return 1d;
             } else {
                 for (Quantification quant1 : quantificationListOpt.get()) {
                     for (Quantification quant2 : quantificationListOpt2.get()) {
@@ -116,13 +127,13 @@ public class QuantificationService {
                 }
             }
             if (consensued.size() < consensus) {
-                return 0;
+                return 0d;
             }
             double correlation = new PearsonsCorrelation().correlation(convertListOfDoublesToPrimitiveArray(consensued),
                     convertListOfDoublesToPrimitiveArray(consensued2)); // Do de math
             return correlation;
         } else {
-            return 0;
+            return null;
         }
     }
 
