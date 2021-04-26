@@ -54,7 +54,7 @@ public class QuantificationController {
 
     @GetMapping(value = "/heatMap/{requestcode}")
     @PreAuthorize("hasRole('INTERNAL')")
-    public List<List<Double>> heatMapTest(@PathVariable(name = "requestcode") String requestCode, @RequestParam(name = "checksums[]") List <String> checksums, @RequestParam int consensus) {
+    public HeatmapData heatMapTest(@PathVariable(name = "requestcode") String requestCode, @RequestParam(name = "checksums[]") List <String> checksums, @RequestParam int consensus) {
         return quantificationService.heatmap2(requestCode, checksums, consensus);
     }
 
