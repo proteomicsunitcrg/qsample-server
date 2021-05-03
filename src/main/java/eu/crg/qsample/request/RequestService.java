@@ -47,6 +47,9 @@ public class RequestService {
         AgendoRequestWrapper response = gson.fromJson(ccc, AgendoRequestWrapper.class);
         for (AgendoRequest agendoRequest : response.getRequest()) {
             if (!showAll) {
+                if (agendoRequest.getLast_action().getAction().equals("Completed")) {
+                    System.out.println(agendoRequest.getFields().get(agendoRequest.getFields().size()-1).getValue());
+                }
                 if (!agendoRequest.getLast_action().getAction().equals("Rejected")
                         && !agendoRequest.getLast_action().getAction().equals("Completed")
                         && !agendoRequest.getLast_action().getAction().equals("Created")
