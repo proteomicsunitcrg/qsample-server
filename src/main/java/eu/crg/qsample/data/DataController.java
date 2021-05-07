@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -41,8 +42,8 @@ public class DataController {
 
     @GetMapping("/tracesRequest/{csId}/{paramId}/{requestCode}")
     @PreAuthorize("hasRole('USER')")
-    public List<PlotTrace> getTraceRequest(@PathVariable Long csId, @PathVariable Long paramId, @PathVariable String requestCode) {
-        return dataService.getTraceDataRequest(csId, paramId, requestCode);
+    public List<PlotTrace> getTraceRequest(@PathVariable Long csId, @PathVariable Long paramId, @PathVariable String requestCode, @RequestParam(defaultValue = "filename") String order) {
+        return dataService.getTraceDataRequest(csId, paramId, requestCode, order);
     }
 
     @RequestMapping(value = "/pipeline", method = RequestMethod.POST)
