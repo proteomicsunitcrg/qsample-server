@@ -7,6 +7,7 @@ import java.util.SortedMap;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.math3.linear.EigenDecomposition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.http.HttpStatus;
@@ -54,10 +55,16 @@ public class QuantificationController {
 
     @GetMapping(value = "/heatMap/{requestcode}")
     @PreAuthorize("hasRole('INTERNAL')")
-    public HeatmapData heatMapTest(@PathVariable(name = "requestcode") String requestCode, @RequestParam(name = "checksums[]") List <String> checksums, @RequestParam int consensus) {
-        return quantificationService.heatmap2(requestCode, checksums, consensus);
+    public HeatmapData heatMap(@PathVariable(name = "requestcode") String requestCode, @RequestParam(name = "checksums[]") List <String> checksums, @RequestParam int consensus, @RequestParam String order) {
+        return quantificationService.heatmap2(requestCode, checksums, consensus, order);
     }
 
+    @GetMapping(value = "/PCA/{requestcode}")
+    @PreAuthorize("hasRole('INTERNAL')")
+    public EigenDecomposition getPCA(@PathVariable(name = "requestcode") String requestCode, @RequestParam(name = "checksums[]") List <String> checksums) {
+        System.out.println(checksums.size());
+        return quantificationService.pca(requestCode, checksums);
+    }
 
 
 
