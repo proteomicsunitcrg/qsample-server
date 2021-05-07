@@ -1,14 +1,25 @@
 package eu.crg.qsample.quantification;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.apache.commons.math3.linear.EigenDecomposition;
+import org.apache.commons.math3.linear.MatrixUtils;
+import org.apache.commons.math3.linear.RealMatrix;
+import org.apache.commons.math3.stat.correlation.Covariance;
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
+import org.nd4j.linalg.api.buffer.DataType;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.dimensionalityreduction.PCA;
+import org.nd4j.linalg.factory.Nd4j;
+import org.nd4j.list.NDArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.stereotype.Service;
@@ -20,6 +31,7 @@ import eu.crg.qsample.file.RequestFile;
 import eu.crg.qsample.file.RequestFileRepository;
 import eu.crg.qsample.quantification.model.QuantificationFromPipeline;
 import net.bytebuddy.TypeCache.Sort;
+
 
 @Service
 public class QuantificationService {
@@ -75,16 +87,27 @@ public class QuantificationService {
         return doublePrimitivePapa;
     }
 
-    public HeatmapData heatmap2(String requestCode, List<String> checksums, int consensus) {
+    public HeatmapData heatmap2(String requestCode, List<String> checksums, int consensus, String order) {
         HeatmapData heatmapData = new HeatmapData();
         List<String> filenames = new ArrayList<>();
-        Optional<List<RequestFile>> files = fileRepository.findAllByRequestCodeContainsAndChecksumInOrderByFilename(requestCode,
-                checksums); // We get all request files that his checksum is in the list
+        Optional<List<RequestFile>> files = Optional.of(new ArrayList<RequestFile>());
+        switch (order) {
+            case "filename":
+                files = fileRepository.findAllByRequestCodeOrderByFilename(requestCode);
+                break;
+            case "date":
+                files = fileRepository.findAllByRequestCodeOrderByCreationDate(requestCode);
+                break;
+            default:
+                files = fileRepository.findAllByRequestCodeOrderByFilename(requestCode);
+                break;
+        }
         List<List<Double>> finalCorrelationList = new ArrayList<>();
         if (files.isPresent()) {
             for (RequestFile file : files.get()) {
                 List<Double> correlationsList = new ArrayList<>();
-                Optional<List<Quantification>> quantificationListOpt = quantificationRepository.findByFileChecksumOrderByIdDesc(file.getChecksum());
+                Optional<List<Quantification>> quantificationListOpt = quantificationRepository
+                        .findByFileChecksumOrderByIdDesc(file.getChecksum());
                 if (quantificationListOpt.isPresent()) {
                     for (RequestFile fileMini : files.get()) {
                         Double calRes = calc(file, fileMini, consensus);
@@ -137,92 +160,131 @@ public class QuantificationService {
         }
     }
 
+    public EigenDecomposition pca(String requestCode, List<String> checksums) {
+        SortedMap<RequestFile, List<Quantification>> caca = consensus(requestCode, checksums);
+        List<List<Double>> listPAPA = new ArrayList<>();
+        caca.forEach((key, value) -> {
+            List<Double> listerine = new ArrayList<>();
+            for (Quantification quant : value) {
+                listerine.add(quant.getAbundance());
+            }
+            listPAPA.add(listerine);
+        });
+        double arrays[][] = new double[11][10]; // just like this,but you must change it with your code
+        for (int i = 0; i < listPAPA .size(); i++) {
+            List<Double> list = listPAPA.get(i);
+            for (int j = 0; j < list.size(); j++) {
+                arrays[i][j] = list.get(j);
+            }
+        }
+        // return arrays;
+
+
+        RealMatrix realMatrix = MatrixUtils.createRealMatrix(arrays);
+        Covariance covariance = new Covariance(realMatrix);
+        RealMatrix covarianceMatrix = covariance.getCovarianceMatrix();
+        EigenDecomposition ed = new EigenDecomposition(covarianceMatrix);
+        return ed;
+    }
 
     /**
-     * OTHER HEATMAP WITH FULL CONSENSUS TRACES
-     * I DONT WANT TO DELETE IT BECAUSE WE KNOW CRISTINA AND EDUARD <3
+     * OTHER HEATMAP WITH FULL CONSENSUS TRACES I DONT WANT TO DELETE IT BECAUSE WE
+     * KNOW CRISTINA AND EDUARD <3
      */
 
-
-    // public List<List<Double>> heatmap(String requestCode, List<String> checksums) {
-    //     SortedMap<RequestFile, List<Double>> fileWithConsensusQuantificationsMap = consensus(requestCode, checksums);
-    //     List<List<Double>> finalCorrelationList = new ArrayList<>();
-    //     fileWithConsensusQuantificationsMap.forEach((kpapa, vpapa) -> {
-    //         System.out.println("Consensued prots: " + vpapa.size());
-    //         if (vpapa.size() <= 1) {
-    //             throw new ConsensusException("Consensus 1 or 0");
-    //         }
-    //         List<Double> correlationsList = new ArrayList<>();
-    //         double[] xList = convertListOfDoublesToPrimitiveArray(vpapa);
-    //         correlationsList.clear();
-    //         fileWithConsensusQuantificationsMap.forEach((k, v) -> {
-    //             double[] yList = convertListOfDoublesToPrimitiveArray(v);
-    //             double correlation = new PearsonsCorrelation().correlation(xList, yList); // Do de math
-    //             correlationsList.add(correlation); // add the result to the list
-    //         });
-    //         finalCorrelationList.add(correlationsList); // add the list inside the list
-    //     });
-    //     return finalCorrelationList;
+    // public List<List<Double>> heatmap(String requestCode, List<String> checksums)
+    // {
+    // SortedMap<RequestFile, List<Double>> fileWithConsensusQuantificationsMap =
+    // consensus(requestCode);
+    // List<List<Double>> finalCorrelationList = new ArrayList<>();
+    // fileWithConsensusQuantificationsMap.forEach((kpapa, vpapa) -> {
+    // System.out.println("Consensued prots: " + vpapa.size());
+    // if (vpapa.size() <= 1) {
+    // throw new ConsensusException("Consensus 1 or 0");
+    // }
+    // List<Double> correlationsList = new ArrayList<>();
+    // double[] xList = convertListOfDoublesToPrimitiveArray(vpapa);
+    // correlationsList.clear();
+    // fileWithConsensusQuantificationsMap.forEach((k, v) -> {
+    // double[] yList = convertListOfDoublesToPrimitiveArray(v);
+    // double correlation = new PearsonsCorrelation().correlation(xList, yList); //
+    // do the math
+    // correlationsList.add(correlation); // add the result to the list
+    // });
+    // finalCorrelationList.add(correlationsList); // add the list inside the list
+    // });
+    // return finalCorrelationList;
     // }
 
-    // /**
-    //  *
-    //  * @param requestCode
-    //  * @return
-    //  */
-    // private SortedMap<RequestFile, List<Double>> consensus(String requestCode, List<String> checksums) {
-    //     Optional<List<RequestFile>> files = fileRepository.findAllByRequestCodeContainsAndChecksumIn(requestCode,
-    //             checksums); // We get all request files that his checksum is in the list
-    //     SortedMap<RequestFile, List<Double>> fileMap = new TreeMap<>(); // Data struct to store the file with his
-    //                                                                     // quantification abundance
-    //     if (files.isPresent()) {
-    //         for (RequestFile file : files.get()) {
-    //             List<Double> quantInAllFiles = new ArrayList<>(); // List to store the consensued file quantification
-    //             List<RequestFile> filesCopy = new ArrayList<>(files.get()); // Clone withouth the current loop element
-    //             filesCopy.remove(file); // Remove the current file loop element
-    //             Optional<List<Quantification>> quantificationListOpt = quantificationRepository // Obtain the current
-    //                                                                                             // file loop
-    //                                                                                             // quantification
-    //                     .findByFileChecksumOrderByIdDesc(file.getChecksum());
-    //             if (quantificationListOpt.isPresent()) {
-    //                 for (Quantification quant : quantificationListOpt.get()) { // Loop the file quantification
-    //                     if (checkIfQuantificationInAllFiles(quant, filesCopy)) {
-    //                         quantInAllFiles.add(quant.getAbundance()); // If all the files have the quantification we
-    //                                                                    // push it to the list
-    //                     }
-    //                 }
-    //             }
-    //             fileMap.put(file, quantInAllFiles); // Push the element to the map
-    //         }
-    //     }
-    //     return fileMap;
-    // }
+    /**
+     *
+     * @param requestCode
+     * @return
+     */
+    private SortedMap<RequestFile, List<Quantification>> consensus(String requestCode, List<String> checksums) {
+        Optional<List<RequestFile>> files = fileRepository
+                .findAllByRequestCodeContainsAndChecksumInOrderByFilename(requestCode, checksums); // We get all
+        // request files
+        // that his
+        // checksum is in
+        // the list
+        SortedMap<RequestFile, List<Quantification>> fileMap = new TreeMap<>(); // Data
+        // struct to store the file with his
+        // quantification abundance
+        if (files.isPresent()) {
+            System.out.println("I have files");
+            for (RequestFile file : files.get()) {
+                List<Quantification> quantInAllFiles = new ArrayList<>(); // List to store the
+                // consensued file quantification
+                List<RequestFile> filesCopy = new ArrayList<>(files.get()); // Clone withouth
+                // the current loop element
+                filesCopy.remove(file); // Remove the current file loop element
+                Optional<List<Quantification>> quantificationListOpt = quantificationRepository // Obtain the current
+                        // file loop
+                        // quantification
+                        .findByFileChecksumOrderByIdDesc(file.getChecksum());
+                if (quantificationListOpt.isPresent()) {
+                    // System.out.println(quantificationListOpt.get().size());
+                    for (Quantification quant : quantificationListOpt.get()) { // Loop the file
+                        // quantification
+                        if (checkIfQuantificationInAllFiles(quant, filesCopy)) {
+                            quantInAllFiles.add(quant); // If all the files have the
+                            // quantification we
+                            // push it to the list
+                        }
+                    }
+                }
+                fileMap.put(file, quantInAllFiles); // Push the element to the map
+            }
+        }
+        return fileMap;
+    }
 
-    // /**
-    //  * Returns true if a quantification
-    //  *
-    //  * @param quant
-    //  * @param files
-    //  * @return
-    //  */
-    // public boolean checkIfQuantificationInAllFiles(Quantification quant, List<RequestFile> files) {
-    //     for (RequestFile file : files) {
-    //         boolean inList = false;
-    //         Optional<List<Quantification>> quantListOpt = quantificationRepository
-    //                 .findByFileChecksumOrderByIdDesc(file.getChecksum());
-    //         if (!quantListOpt.isPresent()) {
-    //             return false; // A file doesnt have quantifications
-    //         }
-    //         for (Quantification quantItem : quantListOpt.get()) {
-    //             if (quantItem.getAccession().equals(quant.getAccession())) {
-    //                 inList = true;
-    //             }
-    //         }
-    //         if (!inList) {
-    //             return false;
-    //         }
-    //     }
-    //     return true;
-    // }
+    /**
+     * Returns true if a quantification
+     *
+     * @param quant
+     * @param files
+     * @return
+     */
+    public boolean checkIfQuantificationInAllFiles(Quantification quant, List<RequestFile> files) {
+        for (RequestFile file : files) {
+            boolean inList = false;
+            Optional<List<Quantification>> quantListOpt = quantificationRepository
+                    .findByFileChecksumOrderByIdDesc(file.getChecksum());
+            if (!quantListOpt.isPresent()) {
+                return false; // A file doesnt have quantifications
+            }
+            for (Quantification quantItem : quantListOpt.get()) {
+                if (quantItem.getAccession().equals(quant.getAccession())) {
+                    inList = true;
+                }
+            }
+            if (!inList) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

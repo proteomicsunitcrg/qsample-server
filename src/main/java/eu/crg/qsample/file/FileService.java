@@ -120,8 +120,19 @@ public class FileService {
         }
     }
 
-    public List<RequestFile> findAllByRequestCode(String requestCode) {
-        Optional<List<RequestFile>> files = fileRepository.findAllByRequestCodeOrderByFilename(requestCode);
+    public List<RequestFile> findAllByRequestCode(String requestCode, String order) {
+        Optional<List<RequestFile>> files = Optional.of(new ArrayList<RequestFile>());
+        switch (order) {
+            case "filename":
+            files = fileRepository.findAllByRequestCodeOrderByFilename(requestCode);
+                break;
+            case "date":
+            files = fileRepository.findAllByRequestCodeOrderByCreationDate(requestCode);
+                break;
+            default:
+            files = fileRepository.findAllByRequestCodeOrderByFilename(requestCode);
+                break;
+        }
         if (!files.isPresent()) {
             return null;
         }

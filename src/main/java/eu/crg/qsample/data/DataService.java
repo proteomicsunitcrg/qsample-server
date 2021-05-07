@@ -105,25 +105,49 @@ public class DataService {
         return new PlotTracePoint(d.getFile(), d.getCalculatedValue(), d.getStd(), d.getNonConformityStatus());
     }
 
-    public List<PlotTrace> getTraceDataRequest(Long csId, Long paramId, String requestCode) {
-        Optional <ContextSource> cs = csRepo.findById(csId);
+    public List<PlotTrace> getTraceDataRequest(Long csId, Long paramId, String requestCode, String order) {
+        Optional<ContextSource> cs = csRepo.findById(csId);
         if (!cs.isPresent()) {
             throw new NotFoundException("Context Source with id: " + csId + " not found");
         }
-        Optional <Param> param = paramRepo.findById(paramId);
+        Optional<Param> param = paramRepo.findById(paramId);
         if (!param.isPresent()) {
             throw new NotFoundException("Param with id: " + csId + " not found");
         }
         List<Data> data = new ArrayList<>();
         TraceHashMap<String, PlotTrace> traces = new TraceHashMap<>();
-        Optional <List<RequestFile>> files = fileRepo.findAllByRequestCodeOrderByFilename(requestCode);
+        Optional<List<RequestFile>> files = Optional.of(new ArrayList<RequestFile>());
+        switch (order) {
+            case "filename":
+                files = fileRepo.findAllByRequestCodeOrderByFilename(requestCode);
+                break;
+            case "date":
+                files = fileRepo.findAllByRequestCodeOrderByCreationDate(requestCode);
+                break;
+            default:
+                files = fileRepo.findAllByRequestCodeOrderByFilename(requestCode);
+                break;
+        }
         if (!files.isPresent()) {
             throw new NotFoundException("Files not foudn with request code: " + requestCode);
         }
         List<RequestFile> allFiles = files.get();
         allFiles = parseFileNameForPlot(allFiles);
-        data = dataRepo.findByFileInAndContextSourceAndParamOrderByFileFilename(files.get(), cs.get(), param.get());
-        for(Data d: data) {
+        switch (order) {
+            case "filename":
+                data = dataRepo.findByFileInAndContextSourceAndParamOrderByFileFilename(files.get(), cs.get(),
+                        param.get());
+                break;
+            case "date":
+                data = dataRepo.findByFileInAndContextSourceAndParamOrderByFileCreationDate(files.get(), cs.get(),
+                        param.get());
+                break;
+            default:
+                data = dataRepo.findByFileInAndContextSourceAndParamOrderByFileFilename(files.get(), cs.get(),
+                        param.get());
+                break;
+        }
+        for (Data d : data) {
             if (!traces.containsKey(d.getContextSource().getAbbreviated())) {
                 traces.put(d.getContextSource().getAbbreviated(),
                         generatePlotTraceFromContextSource(d.getContextSource()));
@@ -137,12 +161,13 @@ public class DataService {
 
     /**
      * Remove the request code from the filename
+     *
      * @param files
      * @return
      */
     private List<RequestFile> parseFileNameForPlot(List<RequestFile> files) {
-        for (RequestFile file: files) {
-            List<String> items= new ArrayList<>(Arrays.asList(file.getFilename().split("\\s*_\\s*"))); // https://stackoverflow.com/questions/5755477/java-list-add-unsupportedoperationexception
+        for (RequestFile file : files) {
+            List<String> items = new ArrayList<>(Arrays.asList(file.getFilename().split("\\s*_\\s*"))); // https://stackoverflow.com/questions/5755477/java-list-add-unsupportedoperationexception
             if (items.get(0).equals(file.getRequestCode())) {
                 items.remove(0);
                 items.remove(0);
@@ -154,6 +179,7 @@ public class DataService {
 
     /**
      * WETLAB
+     *
      * @param dataFromPipeline
      */
     public void insertDataFromPipeline(DataFromPipeline dataFromPipeline) {
@@ -192,6 +218,7 @@ public class DataService {
 
     /**
      * REQUEST
+     *
      * @param dataFromPipeline
      */
     public void insertDataFromPipelineRequest(DataFromPipeline dataFromPipeline) {
@@ -199,7 +226,8 @@ public class DataService {
         System.out.println("adeu");
         Optional<RequestFile> file = requestFileRepo.findOneByChecksum(dataFromPipeline.getFile().getChecksum());
         if (!file.isPresent()) {
-            logger.error("File whit checksum: " + dataFromPipeline.getFile().getChecksum() + " not found in the database");
+            logger.error(
+                    "File whit checksum: " + dataFromPipeline.getFile().getChecksum() + " not found in the database");
             System.out.println("File not found");
             throw new DataRetrievalFailureException("File not found");
         }
@@ -213,7 +241,8 @@ public class DataService {
             System.out.println("Hasta aqui");
             Optional<Param> param = paramRepo.findById(parameterData.getParameter().getId());
             if (!param.isPresent()) {
-                logger.error("Parameter with id: " + parameterData.getParameter().getId() + " not found in the database");
+                logger.error(
+                        "Parameter with id: " + parameterData.getParameter().getId() + " not found in the database");
                 System.out.println("Param not found");
                 continue;
             }
