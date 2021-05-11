@@ -154,7 +154,7 @@ public class QuantificationService {
             }
             double correlation = new PearsonsCorrelation().correlation(convertListOfDoublesToPrimitiveArray(consensued),
                     convertListOfDoublesToPrimitiveArray(consensued2)); // Do de math
-            return correlation;
+            return Math.pow(correlation, 2);
         } else {
             return null;
         }
