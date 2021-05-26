@@ -24,8 +24,11 @@ public class FileInfoService {
             System.out.println("File not found");
             throw new DataRetrievalFailureException("File not found");
         }
-
         fileOpt.get().setFileInfo(fileInfoRepository.save(fileInfoPipeline.getInfo()));
         fileRepository.save(fileOpt.get());
+    }
+
+    public void deleteFileInfo(FileInfo fileInfo) {
+        fileInfoRepository.delete(fileInfo);
     }
 }
