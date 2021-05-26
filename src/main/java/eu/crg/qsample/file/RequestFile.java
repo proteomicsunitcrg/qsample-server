@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -25,7 +26,7 @@ public class RequestFile extends File implements Comparable<RequestFile>{
     @OneToMany(mappedBy = "file")
     private Set<ModificationFile> modification = new HashSet<ModificationFile>();
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private FileInfo fileInfo;
 
     public FileInfo getFileInfo() {
