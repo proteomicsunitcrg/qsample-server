@@ -87,6 +87,11 @@ public class FileService {
             throw new DataIntegrityViolationException(
                     "Can not insert this file because it is not the last file! | Checksum: " + toInsert.getChecksum());
         }
+        Optional <WetLabFile> checker = fileRepository.findOneBytypeApiKeyAndWeekAndYearAndReplicate(wetLabApiKey, toInsert.getWeek(), toInsert.getYear(), toInsert.getReplicate());
+        if (checker.isPresent()) {
+            throw new DataIntegrityViolationException(
+                "Can not insert this file a file in this wetlab exists with this replicate, week and year | Checksum: " + toInsert.getChecksum());
+        }
         toInsert.setType(wetlab.get());
         fileRepository.save(toInsert);
         return toInsert;

@@ -46,8 +46,6 @@ public class Data {
 
     private Float calculatedValue;
 
-    private Float std;
-
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(255) default 'OK'")
     private InstrumentStatus nonConformityStatus = InstrumentStatus.OK;
@@ -146,24 +144,5 @@ public class Data {
         this.id = id;
     }
 
-    public Float getStd() {
-        return std;
-    }
-
-    public void setStd(Float std) {
-        this.std = std;
-    }
-
-    public Data(Long id, Param param, ContextSource contextSource, File file, Float value, Float calculatedValue,
-            Float std, InstrumentStatus nonConformityStatus) {
-        this.id = id;
-        this.param = param;
-        this.contextSource = contextSource;
-        this.file = file;
-        this.value = value;
-        this.calculatedValue = calculatedValue;
-        this.std = std;
-        this.nonConformityStatus = nonConformityStatus;
-    }
 
 }
