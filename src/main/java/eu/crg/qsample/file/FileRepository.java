@@ -19,6 +19,8 @@ public interface FileRepository extends CrudRepository<File, Long> {
 
     public Optional<WetLabFile> findOneByCreationDateGreaterThanAndTypeApiKey(Date creationDate, UUID apiKey);
 
+    public Optional <WetLabFile> findOneBytypeApiKeyAndWeekAndYearAndReplicate(UUID apiKey, int week, int year, int replicate);
+
     public Optional <List<RequestFile>> findAllByRequestCodeContains(String requestCode);
 
     public Optional <List<RequestFile>> findAllByRequestCodeOrderByFilename(String requestCode);

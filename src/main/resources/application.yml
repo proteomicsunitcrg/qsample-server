@@ -53,7 +53,6 @@ agendo:
     username: qsample
     password: qsample
     from: Y3Jn
-    # url: https://api.agendo.science
     url: https://api.qcloud2.crg.eu/mirror?url=https://api.agendo.science
     facility: 10
 
