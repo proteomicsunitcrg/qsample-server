@@ -102,7 +102,7 @@ public class DataService {
     }
 
     private PlotTracePoint generatePlotTracePointFromData(Data d) {
-        return new PlotTracePoint(d.getFile(), d.getCalculatedValue(), d.getStd(), d.getNonConformityStatus());
+        return new PlotTracePoint(d.getFile(), d.getCalculatedValue(), d.getNonConformityStatus());
     }
 
     public List<PlotTrace> getTraceDataRequest(Long csId, Long paramId, String requestCode, String order) {
@@ -209,7 +209,6 @@ public class DataService {
                 Data d = new Data(param.get(), cs.get(), file.get());
                 d.setValue(dataValue.getValue());
                 d.setCalculatedValue(dataValue.getValue());
-                d.setStd(dataValue.getStd());
                 dataRepo.save(d);
             }
 
@@ -257,7 +256,6 @@ public class DataService {
                 Data d = new Data(param.get(), cs.get(), file.get());
                 d.setValue(dataValue.getValue());
                 d.setCalculatedValue(dataValue.getValue());
-                d.setStd(dataValue.getStd());
                 logger.info("Saving data: " + d.toString());
                 dataRepo.save(d);
             }
