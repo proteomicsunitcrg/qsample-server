@@ -43,7 +43,6 @@ public class QuantificationController {
     @GetMapping(value = "/getByChecksum/{checksum}")
     @PreAuthorize("hasRole('INTERNAL')")
     public List<Quantification> getByChechsumAndContaminant(@PathVariable String checksum, @RequestParam boolean contaminant) {
-        System.out.println(contaminant);
         return quantificationService.getByChechsumAndContaminant(checksum, contaminant);
     }
 
