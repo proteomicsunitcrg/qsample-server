@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import eu.crg.qsample.file.RequestFile;
 
 @Entity
@@ -40,6 +42,7 @@ public class ModificationFile {
         this.modification = modification;
     }
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     public RequestFile getFile() {
         return file;
