@@ -19,6 +19,9 @@ public interface DataRepository extends CrudRepository<Data, Long> {
 
     List<Data> findByFileInAndContextSourceInAndParamId(List <WetLabFile> fileId, List<ContextSource> contextSourceId, Long paramId);
 
+    List<Data> findByFileInAndContextSourceIdAndParamId(List <WetLabFile> fileId, Long contextSourceId, Long paramId);
+
+
     List<Data> findByFileInAndContextSourceAndParamOrderByFileFilename(List <RequestFile> fileId, ContextSource contextSource, Param param);
 
     List<Data> findByFileInAndContextSourceAndParamOrderByFileCreationDate(List <RequestFile> fileId, ContextSource contextSource, Param param);

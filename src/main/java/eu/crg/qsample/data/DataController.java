@@ -34,9 +34,11 @@ public class DataController {
 
     @GetMapping("/traces/{startDate}/{endDate}/{plotId}/{wetLabApiKey}")
     @PreAuthorize("hasRole('INTERNAL')")
-    public List<PlotTrace> getTrace(@PathVariable @DateTimeFormat(iso = ISO.DATE_TIME) java.util.Date startDate,
+    public List<PlotTraceWetlab> getTrace(@PathVariable @DateTimeFormat(iso = ISO.DATE_TIME) java.util.Date startDate,
             @PathVariable @DateTimeFormat(iso = ISO.DATE_TIME) java.util.Date endDate, @PathVariable Long plotId,
             @PathVariable UUID wetLabApiKey) {
+                System.out.println(startDate);
+                System.out.println(endDate);
         return dataService.getTraceData(startDate, endDate, plotId, wetLabApiKey);
     }
 

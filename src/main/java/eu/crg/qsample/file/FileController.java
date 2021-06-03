@@ -59,8 +59,6 @@ public class FileController {
     @PostMapping(value = "/insertFromPipeline/{wetLabApiKey}")
     @PreAuthorize("hasRole('INTERNAL')")
     public File addFileSpecial(@RequestBody WetLabFile file, @PathVariable UUID wetLabApiKey) {
-        System.out.println(file.getChecksum());
-        System.out.println(wetLabApiKey);
         return fileService.insertFile(file, wetLabApiKey);
     }
 

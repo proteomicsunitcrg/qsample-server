@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalDouble;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import eu.crg.qsample.param.ParamRepository;
 import eu.crg.qsample.plot.Plot;
 import eu.crg.qsample.plot.PlotRepository;
 import eu.crg.qsample.request.Request;
+import eu.crg.qsample.threshold.InstrumentStatus;
 import eu.crg.qsample.wetlab.WetLab;
 import eu.crg.qsample.wetlab.WetLabFile;
 import eu.crg.qsample.wetlab.WetLabRepository;
@@ -63,13 +65,12 @@ public class DataService {
     @Autowired
     GuideSetService guideSetService;
 
-    public List<PlotTrace> getTraceData(Date startDate, Date endDate, Long plotId, UUID wetLabApiKey) {
+    public List<PlotTraceWetlab> getTraceData(Date startDate, Date endDate, Long plotId, UUID wetLabApiKey) {
         Optional<Plot> plot = plotRepo.findById(plotId);
         Optional<WetLab> wetlab = wetLabRepo.findOneByApiKey(wetLabApiKey);
-        List<ContextSource> contextSources = new ArrayList<>();
         List<Data> data = new ArrayList<>();
 
-        TraceHashMap<String, PlotTrace> traces = new TraceHashMap<>();
+        TraceHashMap<String, PlotTraceWetlab> traces = new TraceHashMap<>();
 
         if (!wetlab.isPresent()) {
             throw new NotFoundException("Wetlab doesnt found");
@@ -79,18 +80,45 @@ public class DataService {
         }
         List<WetLabFile> files = fileRepo.findAllByCreationDateBetweenAndTypeId(startDate, endDate,
                 wetlab.get().getId());
-        data = dataRepo.findByFileInAndContextSourceInAndParamId(files, plot.get().getContextSource(),
-                plot.get().getParam().getId());
-        for (Data d : data) {
-            if (!traces.containsKey(d.getContextSource().getAbbreviated())) {
-                traces.put(d.getContextSource().getAbbreviated(),
-                        generatePlotTraceFromContextSource(d.getContextSource()));
+
+        for (WetLabFile wlFile: files) { // TODO impriove this
+            List<WetLabFile> triplicats = new ArrayList<>();
+            triplicats.add(wlFile);
+            for (WetLabFile wlFile2: files) {
+                if (wlFile.getWeek() == wlFile2.getWeek() && wlFile.getYear() == wlFile2.getYear() && wlFile.getChecksum() != wlFile2.getChecksum()) {
+                    System.out.println(wlFile.getChecksum() + " WITH " + wlFile2.getChecksum());
+                    triplicats.add(wlFile2);
+                }
             }
-            traces.get(d.getContextSource().getAbbreviated()).getPlotTracePoints()
-                    .add(generatePlotTracePointFromData(d));
+            for(WetLabFile dada: triplicats) {
+                System.out.println(dada.getChecksum());
+            }
+
+            for (ContextSource cs : plot.get().getContextSource()) {
+
+                data = dataRepo.findByFileInAndContextSourceIdAndParamId(triplicats, cs.getId(), plot.get().getParam().getId());
+                List<Float> res = new ArrayList<>();
+                for (Data d : data) {
+                    res.add(d.getCalculatedValue());
+                }
+                double average = getAverage(res);
+                System.out.println(average);
+                if (!traces.containsKey(cs.getAbbreviated())) {
+                    traces.put(cs.getAbbreviated(), generatePlotTraceFromContextSourceWetlab(cs));
+                }
+                traces.get(cs.getAbbreviated()).getPlotTracePoints().add(generatePlotTracePointFromDataWetlab(wlFile, average));
+
+            }
         }
-        List<PlotTrace> plotTracesList = traces.toList();
+        List<PlotTraceWetlab> plotTracesList = traces.toList();
+
         return plotTracesList;
+    }
+
+    private double getAverage(List<Float> list) {
+        OptionalDouble average = list.stream().mapToDouble(a -> a).average();
+        return average.isPresent() ? average.getAsDouble() : 0;
+
     }
 
     private PlotTrace generatePlotTraceFromContextSource(ContextSource contextSource) {
@@ -101,9 +129,22 @@ public class DataService {
         return plotTrace;
     }
 
+    private PlotTraceWetlab generatePlotTraceFromContextSourceWetlab(ContextSource contextSource) {
+        PlotTraceWetlab plotTrace = new PlotTraceWetlab();
+        plotTrace.setAbbreviated(contextSource.getAbbreviated());
+        plotTrace.setTraceColor(contextSource.getTraceColor());
+        plotTrace.setPlotTracePoints(new ArrayList<>());
+        return plotTrace;
+    }
+
     private PlotTracePoint generatePlotTracePointFromData(Data d) {
         return new PlotTracePoint(d.getFile(), d.getCalculatedValue(), d.getNonConformityStatus());
     }
+
+    private PlotTracePointWetlab generatePlotTracePointFromDataWetlab(WetLabFile wf, double value) {
+        return new PlotTracePointWetlab("W" + wf.getWeek() + "Y" + wf.getYear(), value);
+    }
+
 
     public List<PlotTrace> getTraceDataRequest(Long csId, Long paramId, String requestCode, String order) {
         Optional<ContextSource> cs = csRepo.findById(csId);
