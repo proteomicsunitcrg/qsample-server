@@ -39,10 +39,6 @@ public class ThresholdService {
                 return null;
             }
             Optional <Threshold> threshold = thresholdRepository.findOneByThresholdParamsContextSourceAndParamAndWetLab(plot.getContextSource().get(0), plot.getParam(), wetlab.get());
-            System.out.println("CSID: " + plot.getContextSource().get(0).getId());
-            System.out.println("Param id: " + plot.getParam().getId());
-            System.out.println("wetlab: " + wetlab.get().getId());
-            System.out.println(threshold.isPresent());
             if (threshold.isPresent()) {
                 for (ThresholdParams param: threshold.get().getThresholdParams()) {
                     if(param.getContextSource().getApiKey().equals(plot.getContextSource().get(0).getApiKey())) {
