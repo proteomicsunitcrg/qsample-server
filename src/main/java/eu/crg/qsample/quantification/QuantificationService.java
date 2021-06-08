@@ -93,13 +93,13 @@ public class QuantificationService {
         Optional<List<RequestFile>> files = Optional.of(new ArrayList<RequestFile>());
         switch (order) {
             case "filename":
-                files = fileRepository.findAllByRequestCodeOrderByFilename(requestCode);
+                files = fileRepository.findAllByRequestCodeAndChecksumInOrderByFilename(requestCode, checksums);
                 break;
             case "date":
-                files = fileRepository.findAllByRequestCodeOrderByCreationDate(requestCode);
+                files = fileRepository.findAllByRequestCodeAndChecksumInOrderByCreationDate(requestCode, checksums);
                 break;
             default:
-                files = fileRepository.findAllByRequestCodeOrderByFilename(requestCode);
+                files = fileRepository.findAllByRequestCodeAndChecksumInOrderByFilename(requestCode, checksums);
                 break;
         }
         List<List<Double>> finalCorrelationList = new ArrayList<>();
