@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -22,6 +24,17 @@ public class Application {
     @Column(name = "name", length = 200)
     @NotNull
     private String name;
+
+    @ManyToOne()
+    private ApplicationConstraint applicationConstraint;
+
+    public ApplicationConstraint getApplicationConstraint() {
+        return applicationConstraint;
+    }
+
+    public void setApplicationConstraint(ApplicationConstraint applicationConstraint) {
+        this.applicationConstraint = applicationConstraint;
+    }
 
     public Long getId() {
         return id;

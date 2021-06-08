@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ApplicationRepository extends CrudRepository<Application, Long>{
 
+    public Application findOneByName(String name);
+
 }
