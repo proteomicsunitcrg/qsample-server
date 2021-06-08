@@ -50,7 +50,6 @@ public class FileIntegrationTest {
         getAdminLoginToken();
         RequestFile rf = new RequestFile();
         rf.setChecksum("integrationTest1");
-        rf.setCreation_date(generateDate("2021-08-10 07:00:00"));
         rf.setFilename("integrationTest1");
         RequestBuilder rb = MockMvcRequestBuilders.post("/api/file/insertFromPipelineRequest/{requestCode}", "ZF434").content(objectMapper.writeValueAsString(rf)).header("Authorization", "Bearer " + getAdminLoginToken()).contentType("application/json");
         mockMvc.perform(rb).andExpect(status().isOk());
