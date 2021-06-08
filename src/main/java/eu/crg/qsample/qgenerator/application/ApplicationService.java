@@ -39,4 +39,8 @@ public class ApplicationService {
         }
     }
 
+    public Application getByName(String name) {
+        return applicationRepo.findOneByName(name);
+    }
+
 }
