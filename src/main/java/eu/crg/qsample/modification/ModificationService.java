@@ -36,9 +36,12 @@ public class ModificationService {
                 Modification saved = modRepo.save(mod.getModification());
                 modFile.setModification(saved);
             }
-            modFile.setFile(rFileOpt.get());
-            modFile.setValue(mod.getValue());
-            modFileRepo.save(modFile);
+            if (!modFileRepo.findOneByFileAndModification(rFileOpt.get(), mod.getModification()).isPresent()) {
+                modFile.setFile(rFileOpt.get());
+                modFile.setValue(mod.getValue());
+                modFileRepo.save(modFile);
+            }
+
         }
     }
 }
