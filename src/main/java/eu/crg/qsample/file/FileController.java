@@ -66,7 +66,6 @@ public class FileController {
     @GetMapping("/getByRequestCode/{requestCode}")
     @PreAuthorize("hasRole('INTERNAL')")
     public List<RequestFile> findAllByRequestCode(@PathVariable String requestCode, @RequestParam(defaultValue = "filename") String order) {
-        System.out.println(order);
         return fileService.findAllByRequestCode(requestCode, order);
     }
 
