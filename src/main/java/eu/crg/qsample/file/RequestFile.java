@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import eu.crg.qsample.file.fileinfo.FileInfo;
 import eu.crg.qsample.modification.ModificationFile;
 
@@ -24,10 +26,15 @@ public class RequestFile extends File implements Comparable<RequestFile>{
     }
 
     @OneToMany(mappedBy = "file")
-    private Set<ModificationFile> modification = new HashSet<ModificationFile>();
+    private Set<ModificationFile> modificationRelation = new HashSet<ModificationFile>();
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private FileInfo fileInfo;
+
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	@Column(name = "creation_date", columnDefinition = "DATETIME")
+    private Date creationDate;
 
     public FileInfo getFileInfo() {
         return fileInfo;
@@ -35,7 +42,7 @@ public class RequestFile extends File implements Comparable<RequestFile>{
 
     public RequestFile(String requestCode, Set<ModificationFile> modification, FileInfo fileInfo) {
         this.requestCode = requestCode;
-        this.modification = modification;
+        this.modificationRelation = modification;
         this.fileInfo = fileInfo;
     }
 
@@ -43,7 +50,7 @@ public class RequestFile extends File implements Comparable<RequestFile>{
             Set<ModificationFile> modification, FileInfo fileInfo) {
         super(id, checksum, creation_date, filename);
         this.requestCode = requestCode;
-        this.modification = modification;
+        this.modificationRelation = modification;
         this.fileInfo = fileInfo;
     }
 
@@ -70,22 +77,22 @@ public class RequestFile extends File implements Comparable<RequestFile>{
 
     public RequestFile(String requestCode, Set<ModificationFile> modification) {
         this.requestCode = requestCode;
-        this.modification = modification;
+        this.modificationRelation = modification;
     }
 
     public RequestFile(Long id, String checksum, Date creation_date, String filename, String requestCode,
             Set<ModificationFile> modification) {
         super(id, checksum, creation_date, filename);
         this.requestCode = requestCode;
-        this.modification = modification;
+        this.modificationRelation = modification;
     }
 
-    public Set<ModificationFile> getModification() {
-        return modification;
+    public Set<ModificationFile> getModificationRelation() {
+        return modificationRelation;
     }
 
     public void setModification(Set<ModificationFile> modification) {
-        this.modification = modification;
+        this.modificationRelation = modification;
     }
 
     @Override
