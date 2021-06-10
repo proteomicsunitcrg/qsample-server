@@ -78,7 +78,7 @@ public class DataService {
         if (!plot.isPresent()) {
             throw new NotFoundException("Plot doesnt found");
         }
-        List<WetLabFile> files = fileRepo.findAllByCreationDateBetweenAndTypeId(startDate, endDate,
+        List<WetLabFile> files = fileRepo.findAllByCreationDateBetweenAndTypeIdOrderByCreationDate(startDate, endDate,
                 wetlab.get().getId());
 
         for (WetLabFile wlFile: files) { // TODO impriove this
@@ -86,14 +86,9 @@ public class DataService {
             triplicats.add(wlFile);
             for (WetLabFile wlFile2: files) {
                 if (wlFile.getWeek() == wlFile2.getWeek() && wlFile.getYear() == wlFile2.getYear() && wlFile.getChecksum() != wlFile2.getChecksum()) {
-                    System.out.println(wlFile.getChecksum() + " WITH " + wlFile2.getChecksum());
                     triplicats.add(wlFile2);
                 }
             }
-            for(WetLabFile dada: triplicats) {
-                System.out.println(dada.getChecksum());
-            }
-
             for (ContextSource cs : plot.get().getContextSource()) {
 
                 data = dataRepo.findByFileInAndContextSourceIdAndParamId(triplicats, cs.getId(), plot.get().getParam().getId());
