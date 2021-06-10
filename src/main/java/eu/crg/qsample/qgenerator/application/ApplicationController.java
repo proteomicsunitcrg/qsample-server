@@ -35,6 +35,12 @@ public class ApplicationController {
         return applicationService.getById(id);
     }
 
+    @GetMapping("name/{name}")
+    @PreAuthorize("hasRole('USER')")
+    public Application getByName(@PathVariable String name) {
+        return applicationService.getByName(name);
+    }
+
     @PostMapping
     @PreAuthorize("hasRole('MANAGER')")
     public Application save(@RequestBody Application instrument) {
