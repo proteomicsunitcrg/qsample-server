@@ -31,11 +31,6 @@ public class RequestFile extends File implements Comparable<RequestFile>{
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private FileInfo fileInfo;
 
-
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-	@Column(name = "creation_date", columnDefinition = "DATETIME")
-    private Date creationDate;
-
     public FileInfo getFileInfo() {
         return fileInfo;
     }

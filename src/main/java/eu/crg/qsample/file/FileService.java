@@ -98,7 +98,7 @@ public class FileService {
     }
 
     private boolean isLastFile(WetLabFile file, WetLab wetlab) {
-        return fileRepository.findByCreationDateGreaterThanAndTypeApiKey(file.getCreation_date(), wetlab.getApiKey())
+        return fileRepository.findByCreationDateGreaterThanAndTypeApiKey(file.getCreationDate(), wetlab.getApiKey())
                 .isPresent();
     }
 
