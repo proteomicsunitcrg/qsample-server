@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.hibernate.validator.constraints.UniqueElements;
 
@@ -31,7 +32,6 @@ public class File {
     @NotNull
     private String checksum;
 
-    @JsonAlias({ "creation_date" })
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	@Column(name = "creation_date", columnDefinition = "DATETIME")
     private Date creationDate;
@@ -56,6 +56,8 @@ public class File {
         this.checksum = checksum;
     }
 
+    @JsonAlias({ "creation_date" })
+    @JsonProperty("creation_date")	
     public Date getCreationDate() {
         return creationDate;
     }
