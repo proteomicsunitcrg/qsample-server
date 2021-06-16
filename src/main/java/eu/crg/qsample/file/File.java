@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import org.hibernate.validator.constraints.UniqueElements;
@@ -30,6 +31,7 @@ public class File {
     @NotNull
     private String checksum;
 
+    @JsonAlias({ "creation_date" })
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	@Column(name = "creation_date", columnDefinition = "DATETIME")
     private Date creationDate;
