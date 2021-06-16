@@ -1,5 +1,6 @@
 package eu.crg.qsample.request.favorite_request;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
@@ -13,6 +14,8 @@ public interface FavoriteRequestRepository extends CrudRepository<FavoriteReques
     Optional<FavoriteRequest> findOneByAgendoIdAndUsers(Long agendoId, User u);
 
     Optional<FavoriteRequest>findOneByAgendoId(Long agendoId);
+
+    Optional<List<FavoriteRequest>> findAllByUsers(User u);
 
 
 }
