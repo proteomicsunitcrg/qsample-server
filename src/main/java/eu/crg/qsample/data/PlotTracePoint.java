@@ -32,7 +32,7 @@ public class PlotTracePoint {
     public PlotTracePoint(File file, Float value, InstrumentStatus nonConformityStatus) {
         this.file = new File();
         this.file.setFilename(file.getFilename());
-        this.file.setCreation_date(file.getCreation_date());
+        this.file.setCreationDate(file.getCreationDate());
         this.file.setChecksum(file.getChecksum());
         this.value = value;
         this.nonConformityStatus = nonConformityStatus;
