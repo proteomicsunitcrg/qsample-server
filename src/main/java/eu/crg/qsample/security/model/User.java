@@ -1,6 +1,7 @@
 package eu.crg.qsample.security.model;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
