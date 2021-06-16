@@ -54,12 +54,12 @@ public class File {
         this.checksum = checksum;
     }
 
-    public Date getCreation_date() {
+    public Date getCreationDate() {
         return creationDate;
     }
 
-    public void setCreation_date(Date creation_date) {
-        this.creationDate = creation_date;
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     public String getFilename() {
@@ -73,10 +73,10 @@ public class File {
     public File() {
     }
 
-    public File(Long id, String checksum, Date creation_date, String filename) {
+    public File(Long id, String checksum, Date creationDate, String filename) {
         this.id = id;
         this.checksum = checksum;
-        this.creationDate = creation_date;
+        this.creationDate = creationDate;
         this.filename = filename;
     }
 
