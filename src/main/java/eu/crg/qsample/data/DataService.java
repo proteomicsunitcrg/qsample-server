@@ -2,12 +2,18 @@ package eu.crg.qsample.data;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.stereotype.Service;
@@ -18,7 +24,6 @@ import eu.crg.qsample.data.model.DataFromPipeline;
 import eu.crg.qsample.data.model.DataValues;
 import eu.crg.qsample.data.model.ParameterData;
 import eu.crg.qsample.exceptions.NotFoundException;
-import eu.crg.qsample.file.File;
 import eu.crg.qsample.file.FileRepository;
 import eu.crg.qsample.file.RequestFile;
 import eu.crg.qsample.file.RequestFileRepository;
@@ -27,14 +32,9 @@ import eu.crg.qsample.param.Param;
 import eu.crg.qsample.param.ParamRepository;
 import eu.crg.qsample.plot.Plot;
 import eu.crg.qsample.plot.PlotRepository;
-import eu.crg.qsample.request.Request;
-import eu.crg.qsample.threshold.InstrumentStatus;
 import eu.crg.qsample.wetlab.WetLab;
 import eu.crg.qsample.wetlab.WetLabFile;
 import eu.crg.qsample.wetlab.WetLabRepository;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 @Service
 public class DataService {
@@ -81,39 +81,69 @@ public class DataService {
         List<WetLabFile> files = fileRepo.findAllByCreationDateBetweenAndTypeIdOrderByCreationDate(startDate, endDate,
                 wetlab.get().getId());
 
-        for (WetLabFile wlFile: files) { // TODO impriove this
+        for (WetLabFile wlFile : files) { // TODO impriove this
             List<WetLabFile> triplicats = new ArrayList<>();
             triplicats.add(wlFile);
-            for (WetLabFile wlFile2: files) {
-                if (wlFile.getWeek() == wlFile2.getWeek() && wlFile.getYear() == wlFile2.getYear() && wlFile.getChecksum() != wlFile2.getChecksum()) {
+            for (WetLabFile wlFile2 : files) {
+                if (wlFile.getWeek() == wlFile2.getWeek() && wlFile.getYear() == wlFile2.getYear()
+                        && wlFile.getChecksum() != wlFile2.getChecksum()) {
                     triplicats.add(wlFile2);
                 }
             }
             for (ContextSource cs : plot.get().getContextSource()) {
-
-                data = dataRepo.findByFileInAndContextSourceIdAndParamId(triplicats, cs.getId(), plot.get().getParam().getId());
+                data = dataRepo.findByFileInAndContextSourceIdAndParamId(triplicats, cs.getId(),
+                        plot.get().getParam().getId());
                 List<Float> res = new ArrayList<>();
                 for (Data d : data) {
                     res.add(d.getCalculatedValue());
                 }
                 double average = getAverage(res);
-                System.out.println(average);
+                double std = calculateSD(res);
                 if (!traces.containsKey(cs.getAbbreviated())) {
                     traces.put(cs.getAbbreviated(), generatePlotTraceFromContextSourceWetlab(cs));
                 }
-                traces.get(cs.getAbbreviated()).getPlotTracePoints().add(generatePlotTracePointFromDataWetlab(wlFile, average));
+                traces.get(cs.getAbbreviated()).getPlotTracePoints()
+                        .add(generatePlotTracePointFromDataWetlab(wlFile, average, std));
 
             }
         }
         List<PlotTraceWetlab> plotTracesList = traces.toList();
 
-        return plotTracesList;
+        return removeDuplicatedTraces(plotTracesList);
     }
 
     private double getAverage(List<Float> list) {
         OptionalDouble average = list.stream().mapToDouble(a -> a).average();
         return average.isPresent() ? average.getAsDouble() : 0;
 
+    }
+
+    private static double calculateSD(List<Float> numArray) {
+        double sum = 0.0, standardDeviation = 0.0;
+        int length = numArray.size();
+
+        for (Float num : numArray) {
+            sum += num;
+        }
+
+        double mean = sum / length;
+
+        for (Float num : numArray) {
+            standardDeviation += Math.pow(num - mean, 2);
+        }
+
+        return Math.sqrt(standardDeviation / length);
+    }
+
+    private List<PlotTraceWetlab> removeDuplicatedTraces (List <PlotTraceWetlab> toConvert) {
+        for (PlotTraceWetlab trace: toConvert) {
+            Set<PlotTracePointWetlab> test = trace.getPlotTracePoints().stream().collect(Collectors.toCollection(
+                () -> new TreeSet<>(Comparator.comparing(PlotTracePointWetlab::getName))
+            ));
+            List<PlotTracePointWetlab> lmao = new ArrayList<>(test);
+            trace.setPlotTracePoints(lmao);
+        }
+        return toConvert;
     }
 
     private PlotTrace generatePlotTraceFromContextSource(ContextSource contextSource) {
@@ -136,10 +166,9 @@ public class DataService {
         return new PlotTracePoint(d.getFile(), d.getCalculatedValue(), d.getNonConformityStatus());
     }
 
-    private PlotTracePointWetlab generatePlotTracePointFromDataWetlab(WetLabFile wf, double value) {
-        return new PlotTracePointWetlab("W" + wf.getWeek() + "Y" + wf.getYear(), value);
+    private PlotTracePointWetlab generatePlotTracePointFromDataWetlab(WetLabFile wf, double value, double std) {
+        return new PlotTracePointWetlab("W" + wf.getWeek() + "Y" + wf.getYear(), value, std);
     }
-
 
     public List<PlotTrace> getTraceDataRequest(Long csId, Long paramId, String requestCode, String order) {
         Optional<ContextSource> cs = csRepo.findById(csId);

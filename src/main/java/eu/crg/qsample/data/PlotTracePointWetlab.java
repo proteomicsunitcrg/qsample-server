@@ -9,7 +9,7 @@ public class PlotTracePointWetlab {
 
     private double value;
 
-    private Float std;
+    private double std;
 
 
 
@@ -21,7 +21,7 @@ public class PlotTracePointWetlab {
         this.name = name;
     }
 
-    public PlotTracePointWetlab(String name, double value, Float std) {
+    public PlotTracePointWetlab(String name, double value, double std) {
         this.name = name;
         this.value = value;
         this.std = std;
@@ -42,11 +42,11 @@ public class PlotTracePointWetlab {
 
 
 
-    public Float getStd() {
+    public double getStd() {
         return std;
     }
 
-    public void setStd(Float std) {
+    public void setStd(double std) {
         this.std = std;
     }
 
