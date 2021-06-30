@@ -1,5 +1,8 @@
 package eu.crg.qsample.security.services;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -13,10 +16,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import eu.crg.qsample.mail.MailService;
 import eu.crg.qsample.security.agendo.AgendoAuthUser;
 import eu.crg.qsample.security.model.ERole;
+import eu.crg.qsample.security.model.PasswordResetToken;
 import eu.crg.qsample.security.model.Role;
 import eu.crg.qsample.security.model.User;
+import eu.crg.qsample.security.repository.PasswordResetRespository;
 import eu.crg.qsample.security.repository.RoleRepository;
 import eu.crg.qsample.security.repository.UserRepository;
 
@@ -31,6 +37,15 @@ public class UserService {
 
     @Autowired
     PasswordEncoder encoder;
+
+    @Autowired
+    PasswordResetRespository resetRespository;
+
+    @Autowired
+    PasswordResetService resetService;
+
+    @Autowired
+    MailService mailService;
 
     public User addUserAgendo(String username, String password, AgendoAuthUser user) {
         User newUser = new User(null, UUID.randomUUID(), user.getName(), user.getName(), username,
@@ -121,5 +136,29 @@ public class UserService {
             throw new DataIntegrityViolationException("User not found");
         }
         return userOpt.get();
+    }
+
+    public void recoverPassword(String email) {
+        Optional <User> userOpt = userRepo.findByUsername(email);
+        if (userOpt.isPresent()) {
+            String token = UUID.randomUUID().toString();
+            PasswordResetToken tokenObj = createPasswordResetTokenForUser(userOpt.get(), token);
+            resetService.sendPasswordResetHtmlEmail(tokenObj);
+
+        }
+    }
+
+    public PasswordResetToken createPasswordResetTokenForUser(User user, String token) {
+        ZoneId defaultZoneId = ZoneId.systemDefault();
+        LocalDate today = LocalDate.now();
+        LocalDate plusOne = today.plusDays(2);
+        Date date = Date.from(plusOne.atStartOfDay(defaultZoneId).toInstant());
+
+        PasswordResetToken myToken = new PasswordResetToken(token, user, date);
+        Optional <PasswordResetToken> pwdRTokenOpt = resetRespository.findOneByUser(user);
+        if (pwdRTokenOpt.isPresent()) {
+            resetRespository.delete(pwdRTokenOpt.get());
+        }
+        return resetRespository.save(myToken);
     }
 }
