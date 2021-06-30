@@ -115,4 +115,13 @@ public class AuthController {
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
+
+    @PostMapping("/recovery")
+    public ResponseEntity<?> recoverPassword(@RequestBody LoginRequest email) {
+        if (!userRepository.existsByUsername(email.getUsername())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Email doesnt exist"));
+        }
+        userService.recoverPassword(email.getUsername());
+        return null;
+    }
 }

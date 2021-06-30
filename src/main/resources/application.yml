@@ -6,6 +6,11 @@ server:
 application:
     version: dev
 
+email-conf:
+  address: qcloud@crg.eu
+  admin-email: marc.serret@crg.eu
+  app-url: "http://localhost:4200"
+
 spring:
     jackson:
         time-zone: Europe/Madrid
@@ -17,7 +22,20 @@ spring:
         username: "root"
         password: "***REMOVED***"
         driver-class-name: com.mysql.cj.jdbc.Driver
-
+    mail:
+      default-encoding: UTF-8
+      host: smtp.crg.eu
+      username: proteomics
+      password: ***REMOVED***
+      port: 587
+      properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+              enable: true
+        protocol: smtp
+        test-connection: false
     h2:
         console:
             enabled: false
@@ -76,6 +94,10 @@ spring:
     enabled: false
 server:
   port: 8081
+email-conf:
+  address: qcloud@crg.eu
+  admin-email: marc.serret@crg.eu
+  app-url: "qsample.crg.eu"
 logging:
   file: qsample.log
   level:
