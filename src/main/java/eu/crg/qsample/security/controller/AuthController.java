@@ -1,5 +1,6 @@
 package eu.crg.qsample.security.controller;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -7,6 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +20,18 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import eu.crg.qsample.exceptions.NotFoundException;
 import eu.crg.qsample.security.UserDetailsImpl;
 import eu.crg.qsample.security.agendo.AgendoAuthService;
 import eu.crg.qsample.security.jwt.JwtUtils;
 import eu.crg.qsample.security.model.ERole;
+import eu.crg.qsample.security.model.PasswordResetToken;
 import eu.crg.qsample.security.model.Role;
 import eu.crg.qsample.security.model.User;
 import eu.crg.qsample.security.payload.requests.LoginRequest;
@@ -123,5 +128,28 @@ public class AuthController {
         }
         userService.recoverPassword(email.getUsername());
         return null;
+    }
+
+    @PostMapping("/getToken")
+    public PasswordResetToken getToken(@RequestBody String token) {
+        return userService.getToken(token, true);
+    }
+
+    @PostMapping("/changePassword")
+    public User changePassword(@RequestBody LoginRequest email) {
+        return userService.changePassword(email.getUsername(), email.getPassword());
+    }
+
+
+
+    /**
+     * Return bad request instead of not found per security purposes
+     * @param response
+     * @param e
+     * @throws IOException
+     */
+    @ExceptionHandler(NotFoundException.class)
+    void handleNotFoundException(HttpServletResponse response, Exception e) throws IOException {
+        response.sendError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
     }
 }
