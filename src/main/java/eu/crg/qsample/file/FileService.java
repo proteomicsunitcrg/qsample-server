@@ -20,7 +20,9 @@ import eu.crg.qsample.context_source.ContextSourceRepository;
 import eu.crg.qsample.data.Data;
 import eu.crg.qsample.data.DataRepository;
 import eu.crg.qsample.guideset.GuideSetRepository;
+import eu.crg.qsample.mail.MailService;
 import eu.crg.qsample.param.ParamRepository;
+import eu.crg.qsample.request.favorite_request.FavoriteRequestRepository;
 import eu.crg.qsample.restservice_qcloud2.ResponseFile;
 import eu.crg.qsample.restservice_qcloud2.RestServiceQCloud2;
 import eu.crg.qsample.threshold.InstrumentStatus;
@@ -59,6 +61,11 @@ public class FileService {
 
     @Autowired
     RestServiceQCloud2 restQcloud2;
+
+    @Autowired
+    MailService mailService;
+
+    FavoriteRequestRepository favoriteRequestRepository;
 
     public File insertDummyFileData() {
         System.out.println(csRepo.findById(1l).get().toString());
@@ -112,8 +119,14 @@ public class FileService {
             throw new DataIntegrityViolationException("A file with that checksum already exists!");
         }
         logger.info("File inserted with checksum: " + file.getChecksum());
+        
+        // mailService.sendManualEmail(mail);
         return fileRepository.save(file);
     }
+
+    // public void sendEmail(RequestFile file) {
+    //     favoriteRequestRepository.
+    // }
 
     public boolean checkFileExists(String checksum) {
         Optional<WetLabFile> wetlabOpt = fileRepository.findOneByChecksum(checksum);
