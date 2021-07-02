@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+import eu.crg.qsample.exceptions.NotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
@@ -100,7 +102,7 @@ public class UserService {
         Role roleInternal = roleRepo.findByName(ERole.ROLE_INTERNAL).get();
         Role roleManager = roleRepo.findByName(ERole.ROLE_MANAGER).get();
         Role roleUser = roleRepo.findByName(ERole.ROLE_USER).get();
-        Optional <User> userOpt = getUserByApiKey(user.getApiKey());
+        Optional<User> userOpt = getUserByApiKey(user.getApiKey());
         User loggedUser = getUserFromSecurityContext();
         if (userOpt.isPresent()) {
             if (loggedUser.getId().equals(userOpt.get().getId())) {
@@ -111,25 +113,25 @@ public class UserService {
                 case "external":
                     roles.add(roleUser);
                     roles.add(roleExternal);
-                break;
+                    break;
                 case "internal":
                     roles.add(roleUser);
                     roles.add(roleInternal);
-                break;
+                    break;
                 case "manager":
                     roles.add(roleUser);
                     roles.add(roleInternal);
                     roles.add(roleManager);
-                break;
+                    break;
                 case "admin":
                     roles.add(roleUser);
                     roles.add(roleInternal);
                     roles.add(roleManager);
                     roles.add(roleAdmin);
-                break;
+                    break;
                 default:
                     throw new DataIntegrityViolationException("Incorrect assingment");
-                }
+            }
             userOpt.get().setRoles(roles);
             userRepo.save(userOpt.get());
         } else {
@@ -139,7 +141,7 @@ public class UserService {
     }
 
     public void recoverPassword(String email) {
-        Optional <User> userOpt = userRepo.findByUsername(email);
+        Optional<User> userOpt = userRepo.findByUsername(email);
         if (userOpt.isPresent()) {
             String token = UUID.randomUUID().toString();
             PasswordResetToken tokenObj = createPasswordResetTokenForUser(userOpt.get(), token);
@@ -155,10 +157,33 @@ public class UserService {
         Date date = Date.from(plusOne.atStartOfDay(defaultZoneId).toInstant());
 
         PasswordResetToken myToken = new PasswordResetToken(token, user, date);
-        Optional <PasswordResetToken> pwdRTokenOpt = resetRespository.findOneByUser(user);
+        Optional<PasswordResetToken> pwdRTokenOpt = resetRespository.findOneByUser(user);
         if (pwdRTokenOpt.isPresent()) {
             resetRespository.delete(pwdRTokenOpt.get());
         }
         return resetRespository.save(myToken);
+    }
+
+    public PasswordResetToken getToken(String token, boolean delete) {
+        Optional<PasswordResetToken> pwdTokenOpt = resetRespository.findOneByToken(token);
+        if (pwdTokenOpt.isPresent()) {
+            if (delete) {
+                resetRespository.delete(pwdTokenOpt.get());
+            }
+            return pwdTokenOpt.get();
+        } else {
+            throw new NotFoundException("Token doesnt found");
+        }
+    }
+
+    public User changePassword(String username, String password) {
+        Optional <User> useropt = userRepo.findByUsername(username);
+        String encodedPassword = encoder.encode(password);
+        if (useropt.isPresent()) {
+            useropt.get().setPassword(encodedPassword);
+            return userRepo.save(useropt.get());
+        } else {
+            throw new NotFoundException("User doesnt found");
+        }
     }
 }
