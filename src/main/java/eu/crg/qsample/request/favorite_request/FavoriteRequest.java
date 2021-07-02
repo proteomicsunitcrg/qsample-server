@@ -1,18 +1,11 @@
 package eu.crg.qsample.request.favorite_request;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import eu.crg.qsample.security.model.User;
 
 @Entity
 public class FavoriteRequest {
@@ -27,12 +20,6 @@ public class FavoriteRequest {
 
     @Column
     private Long agendoId;
-
-    @ManyToMany
-    @JsonIgnore
-    private List<User> users;
-
-    
 
     public Long getId() {
         return id;
@@ -67,20 +54,4 @@ public class FavoriteRequest {
         this.agendoId = agendoId;
     }
 
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
-
-    @Override
-    public String toString() {
-        return "FavoriteRequest [agendoId=" + agendoId + ", id=" + id + ", requestCode=" + requestCode + ", users="
-                + users + "]";
-    }
-
-
-    
 }
