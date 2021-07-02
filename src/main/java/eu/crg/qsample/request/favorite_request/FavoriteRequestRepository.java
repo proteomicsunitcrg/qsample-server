@@ -11,11 +11,13 @@ import eu.crg.qsample.security.model.User;
 @Repository
 public interface FavoriteRequestRepository extends CrudRepository<FavoriteRequest, Long>{
 
-    Optional<FavoriteRequest> findOneByAgendoIdAndUsers(Long agendoId, User u);
+    // Optional<FavoriteRequest> findOneByAgendoIdAndUsers(Long agendoId, User u);
 
     Optional<FavoriteRequest>findOneByAgendoId(Long agendoId);
 
-    Optional<List<FavoriteRequest>> findAllByUsers(User u);
+    // Optional<List<FavoriteRequest>> findAllByUsers(User u);
+
+    // Optional <List<FavoriteRequest>>findAllByRequestCode(String requestCode);
 
 
 }
