@@ -16,4 +16,6 @@ public interface FavoriteRequestUsersRepository extends CrudRepository <Favorite
     public Optional<List<FavoriteRequestsUsers>> findByAndUser(User user);
 
     public Optional <List<FavoriteRequestsUsers>> findByFavoriteRequestAgendoId(Long agendoId);
+
+    public List<FavoriteRequestsUsers> findByFavoriteRequestRequestCodeAndNotify(String requestCode, boolean notify);
 }
