@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import eu.crg.qsample.exceptions.NotFoundException;
 import eu.crg.qsample.request.AgendoFieldWrapper;
 import eu.crg.qsample.request.AgendoRequest;
 import eu.crg.qsample.request.MiniRequest;
@@ -73,41 +74,39 @@ public class FavoriteRequestService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User u = userRepository.findByUsername(authentication.getName()).get();
         Optional<FavoriteRequestsUsers> optReq = favoriteRequestUsersRepository.findOneByFavoriteRequestAgendoIdAndUser(favRequest.getAgendoId(), u);
-        if (optReq.isPresent()) {
+        if (optReq.isPresent()) { // delete the relation
             favoriteRequestUsersRepository.delete(optReq.get());
+        } else {
+            return false; // if not found means that something is wrong
         }
-        // if (toDelete.isPresent()) {
-        //     toDelete.get().getUsers().remove(u);
-        //     if (toDelete.get().getUsers().size() == 0) {
-        //         favoriteRequestRepository.delete(toDelete.get());
-        //     } else {
-        //         favoriteRequestRepository.save(toDelete.get());
-        //     }
-        //     return true;
-        // } else {
-        //     return false;
-        // }
+        Optional <List<FavoriteRequestsUsers>> optCheckLast = favoriteRequestUsersRepository.findByFavoriteRequestAgendoId(favRequest.getAgendoId()); // get all the relations
+        if (!optCheckLast.isPresent()) { // if no relations means that the favrequest doesnt have any user
+            Optional<FavoriteRequest> favRequestOpt = favoriteRequestRepository.findOneByAgendoId(favRequest.getAgendoId());
+            if (favRequestOpt.isPresent()) { // so we find it and then delete it
+                favoriteRequestRepository.delete(favRequestOpt.get());
+            }
+        }
+        return true;
     }
 
     public List<MiniRequest> getFavAgendo() {
-        return null;
-        // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        // User u = userRepository.findByUsername(authentication.getName()).get();
-        // Optional <List<FavoriteRequest>> favListOpt = favoriteRequestRepository.findAllByUsers(u);
-        // List<AgendoRequest> agendoRequests = new ArrayList<>();
-        // List<MiniRequest> miniRequests = new ArrayList<>();
-        // if (favListOpt.isPresent()) {
-        //     for (FavoriteRequest request : favListOpt.get()) {
-        //         agendoRequests.add(requestService.getRequestById(request.getAgendoId()));
-        //     }
-        //     for (AgendoRequest agendoRequest: agendoRequests) {
-        //         miniRequests.add(new MiniRequest(agendoRequest.getId(), agendoRequest.getClasss(),
-        //                     agendoRequest.getCreated_by().getEmail(), agendoRequest.getCreated_by().getName(), agendoRequest.getdate_created(),
-        //                     agendoRequest.getLast_action().getAction(), getRequestCode(agendoRequest.getFields().get(agendoRequest.getFields().size()-1).getValue())));
-        //     }
-        // }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User u = userRepository.findByUsername(authentication.getName()).get();
+        Optional <List<FavoriteRequestsUsers>> favListOpt = favoriteRequestUsersRepository.findByAndUser(u);
+        List<AgendoRequest> agendoRequests = new ArrayList<>();
+        List<MiniRequest> miniRequests = new ArrayList<>();
+        if (favListOpt.isPresent()) {
+            for (FavoriteRequestsUsers request : favListOpt.get()) {
+                agendoRequests.add(requestService.getRequestById(request.getFavoriteRequest().getAgendoId()));
+            }
+            for (AgendoRequest agendoRequest: agendoRequests) {
+                miniRequests.add(new MiniRequest(agendoRequest.getId(), agendoRequest.getClasss(),
+                            agendoRequest.getCreated_by().getEmail(), agendoRequest.getCreated_by().getName(), agendoRequest.getdate_created(),
+                            agendoRequest.getLast_action().getAction(), getRequestCode(agendoRequest.getFields().get(agendoRequest.getFields().size()-1).getValue())));
+            }
+        }
 
-        // return miniRequests;
+        return miniRequests;
     }
 
         // TODO THIS
@@ -120,6 +119,29 @@ public class FavoriteRequestService {
                 return wrapper.get(0).getFields().get(0).getValue();
             } catch (Exception e) {
                 return mierda;
+            }
+        }
+
+        public FavoriteRequestsUsers getFavoriteRequestRelationByAgendoId(Long agendoId) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            User u = userRepository.findByUsername(authentication.getName()).get();
+            Optional<FavoriteRequestsUsers> favRequestOpt = favoriteRequestUsersRepository.findOneByFavoriteRequestAgendoIdAndUser(agendoId, u);
+            if (favRequestOpt.isPresent()) {
+                return favRequestOpt.get();
+            } else {
+                return null;
+            }
+        }
+
+        public FavoriteRequestsUsers setNotify(FavoriteRequest favRequest, boolean action) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            User u = userRepository.findByUsername(authentication.getName()).get();
+            Optional<FavoriteRequestsUsers> favRequestOpt = favoriteRequestUsersRepository.findOneByFavoriteRequestAgendoIdAndUser(favRequest.getAgendoId(), u);
+            if (favRequestOpt.isPresent()) {
+                favRequestOpt.get().setNotify(action);
+                return favoriteRequestUsersRepository.save(favRequestOpt.get());
+            } else {
+                throw new NotFoundException("Fav request not found");
             }
         }
 }
