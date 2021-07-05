@@ -41,7 +41,7 @@ public class FavoriteRequestService {
         Optional<FavoriteRequest> favrequest = favoriteRequestRepository
                 .findOneByAgendoId(favoriteRequest.getAgendoId());
         if (favrequest.isPresent()) {
-            FavoriteRequestsUsers newRelation = new FavoriteRequestsUsers(null, favoriteRequest, u, false);
+            FavoriteRequestsUsers newRelation = new FavoriteRequestsUsers(null, favrequest.get(), u, false);
             favoriteRequestUsersRepository.save(newRelation);
             return favrequest.get();
         } else {
