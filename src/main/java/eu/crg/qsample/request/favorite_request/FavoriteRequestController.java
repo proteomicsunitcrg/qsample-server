@@ -44,5 +44,18 @@ public class FavoriteRequestController {
         return favoriteRequestService.getFavAgendo();
     }
 
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping(value = "/get/{agendoId}")
+    public FavoriteRequestsUsers getFavoriteRequestRelationByAgendoId(@PathVariable Long agendoId) {
+        return favoriteRequestService.getFavoriteRequestRelationByAgendoId(agendoId);
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping(value = "/notify/{action}")
+    public FavoriteRequestsUsers setNotifyTrue(@RequestBody FavoriteRequest favRequest, @PathVariable boolean action) {
+        return favoriteRequestService.setNotify(favRequest, action);
+    }
+
+
 
 }
