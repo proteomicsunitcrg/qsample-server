@@ -20,11 +20,15 @@ import eu.crg.qsample.context_source.ContextSourceRepository;
 import eu.crg.qsample.data.Data;
 import eu.crg.qsample.data.DataRepository;
 import eu.crg.qsample.guideset.GuideSetRepository;
+import eu.crg.qsample.mail.Mail;
 import eu.crg.qsample.mail.MailService;
 import eu.crg.qsample.param.ParamRepository;
 import eu.crg.qsample.request.favorite_request.FavoriteRequestRepository;
+import eu.crg.qsample.request.favorite_request.FavoriteRequestService;
+import eu.crg.qsample.request.favorite_request.FavoriteRequestsUsers;
 import eu.crg.qsample.restservice_qcloud2.ResponseFile;
 import eu.crg.qsample.restservice_qcloud2.RestServiceQCloud2;
+import eu.crg.qsample.security.model.User;
 import eu.crg.qsample.threshold.InstrumentStatus;
 import eu.crg.qsample.wetlab.WetLab;
 import eu.crg.qsample.wetlab.WetLabFile;
@@ -64,6 +68,9 @@ public class FileService {
 
     @Autowired
     MailService mailService;
+
+    @Autowired
+    FavoriteRequestService favoriteRequestService;
 
     FavoriteRequestRepository favoriteRequestRepository;
 
@@ -119,14 +126,22 @@ public class FileService {
             throw new DataIntegrityViolationException("A file with that checksum already exists!");
         }
         logger.info("File inserted with checksum: " + file.getChecksum());
-        
-        // mailService.sendManualEmail(mail);
-        return fileRepository.save(file);
+        RequestFile fileInserted = fileRepository.save(file);
+        notifyToFavRequest(fileInserted);
+        return fileInserted;
     }
 
-    // public void sendEmail(RequestFile file) {
-    //     favoriteRequestRepository.
-    // }
+    public void notifyToFavRequest(RequestFile file) {
+        List <FavoriteRequestsUsers> favRequestList = favoriteRequestService.getByRequestCodeAndNotify(file.getRequestCode(), true);
+        if (favRequestList.size() != 0) {
+            List <User> users = new ArrayList<>();
+            for (FavoriteRequestsUsers rel: favRequestList) {
+                users.add(rel.getUser());
+            }
+            Mail mail = mailService.createFilePipelineNotifyMail(users, file);
+            mailService.sendManualEmail(mail);
+        }
+    }
 
     public boolean checkFileExists(String checksum) {
         Optional<WetLabFile> wetlabOpt = fileRepository.findOneByChecksum(checksum);
