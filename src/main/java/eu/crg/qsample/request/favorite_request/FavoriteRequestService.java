@@ -144,4 +144,8 @@ public class FavoriteRequestService {
                 throw new NotFoundException("Fav request not found");
             }
         }
+
+        public List <FavoriteRequestsUsers> getByRequestCodeAndNotify(String requestCode, boolean notify) {
+            return favoriteRequestUsersRepository.findByFavoriteRequestRequestCodeAndNotify(requestCode, notify);
+        }
 }
