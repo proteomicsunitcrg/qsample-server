@@ -97,10 +97,10 @@ public class FileService {
         if (!wetlab.isPresent()) {
             throw new DataRetrievalFailureException("WetLab not found");
         }
-        if (isLastFile(toInsert, wetlab.get())) {
-            throw new DataIntegrityViolationException(
-                    "Can not insert this file because it is not the last file! | Checksum: " + toInsert.getChecksum());
-        }
+        // if (isLastFile(toInsert, wetlab.get())) {
+        //     throw new DataIntegrityViolationException(
+        //             "Can not insert this file because it is not the last file! | Checksum: " + toInsert.getChecksum());
+        // }
         Optional <List<WetLabFile>> checker = fileRepository.findOneBytypeApiKeyAndWeekAndYearAndReplicate(wetLabApiKey, toInsert.getWeek(), toInsert.getYear(), toInsert.getReplicate());
         if (checker.isPresent()) {
             throw new DataIntegrityViolationException(
