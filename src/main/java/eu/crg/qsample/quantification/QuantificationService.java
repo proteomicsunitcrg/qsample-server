@@ -160,31 +160,10 @@ public class QuantificationService {
         }
     }
 
-    public EigenDecomposition pca(String requestCode, List<String> checksums) {
-        SortedMap<RequestFile, List<Quantification>> caca = consensus(requestCode, checksums);
-        List<List<Double>> listPAPA = new ArrayList<>();
-        caca.forEach((key, value) -> {
-            List<Double> listerine = new ArrayList<>();
-            for (Quantification quant : value) {
-                listerine.add(quant.getAbundance());
-            }
-            listPAPA.add(listerine);
-        });
-        double arrays[][] = new double[11][10]; // just like this,but you must change it with your code
-        for (int i = 0; i < listPAPA .size(); i++) {
-            List<Double> list = listPAPA.get(i);
-            for (int j = 0; j < list.size(); j++) {
-                arrays[i][j] = list.get(j);
-            }
-        }
-        // return arrays;
-
-
-        RealMatrix realMatrix = MatrixUtils.createRealMatrix(arrays);
-        Covariance covariance = new Covariance(realMatrix);
-        RealMatrix covarianceMatrix = covariance.getCovarianceMatrix();
-        EigenDecomposition ed = new EigenDecomposition(covarianceMatrix);
-        return ed;
+    public List<List<Double>> pca(String requestCode, List<String> checksums) {
+        HeatmapData heatmapData = heatmap2(requestCode, checksums, 20, "filename");
+        System.out.println(heatmapData.getData().toString());
+        return heatmapData.getData();
     }
 
     /**
