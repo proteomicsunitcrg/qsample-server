@@ -8,7 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +24,7 @@ import eu.crg.qsample.security.model.User;
 import eu.crg.qsample.security.repository.UserRepository;
 import eu.crg.qsample.context_source.ContextSource;
 import eu.crg.qsample.context_source.ContextSourceRepository;
+import eu.crg.qsample.file.FileRepository;
 import eu.crg.qsample.param.Param;
 import eu.crg.qsample.param.ParamRepository;
 import eu.crg.qsample.request.AgendoRequestWrapperOneRequest;
@@ -40,12 +44,22 @@ public class RequestService {
     @Autowired
     ParamRepository paramRepo;
 
+    @Autowired
+    FileRepository fileRepository;
+
     public List<MiniRequest> getAll(boolean showAll, Date startDate, Date endDate) {
         List<MiniRequest> miniRequests = new ArrayList<>();
         String ccc = restService.getAllRequests(convertDateToAgendoFormat(startDate), convertDateToAgendoFormat(endDate));
         Gson gson = new Gson();
         AgendoRequestWrapper response = gson.fromJson(ccc, AgendoRequestWrapper.class);
         for (AgendoRequest agendoRequest : response.getRequest()) {
+
+            String requestCode = getRequestCode(agendoRequest.getFields().get(agendoRequest.getFields().size()-1).getValue());
+            boolean hasData = false;
+            // if (requestCode != "0" && requestCode != "none") {
+            //     // System.out.println(requestCode);
+            //     hasData = fileRepository.findAllByRequestCodeOrderByFilename(requestCode).isPresent();
+            // }
             if (!showAll) {
                 if (!agendoRequest.getLast_action().getAction().equals("Rejected")
                         && !agendoRequest.getLast_action().getAction().equals("Completed")
@@ -54,12 +68,12 @@ public class RequestService {
                         && !agendoRequest.getLast_action().getAction().equals("Created as draft")) {
                     miniRequests.add(new MiniRequest(agendoRequest.getId(), agendoRequest.getClasss(),
                             agendoRequest.getCreated_by().getEmail(), agendoRequest.getCreated_by().getName(),agendoRequest.getdate_created(),
-                            agendoRequest.getLast_action().getAction(), getRequestCode(agendoRequest.getFields().get(agendoRequest.getFields().size()-1).getValue())));
+                            agendoRequest.getLast_action().getAction(), requestCode, hasData));
                 }
             } else {
                 miniRequests.add(new MiniRequest(agendoRequest.getId(), agendoRequest.getClasss(),
                             agendoRequest.getCreated_by().getEmail(), agendoRequest.getCreated_by().getName(), agendoRequest.getdate_created(),
-                            agendoRequest.getLast_action().getAction(), getRequestCode(agendoRequest.getFields().get(agendoRequest.getFields().size()-1).getValue())));
+                            agendoRequest.getLast_action().getAction(), requestCode, hasData));
             }
         }
         return miniRequests;
