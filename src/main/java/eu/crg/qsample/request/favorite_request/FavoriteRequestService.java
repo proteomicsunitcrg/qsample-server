@@ -102,7 +102,7 @@ public class FavoriteRequestService {
             for (AgendoRequest agendoRequest: agendoRequests) {
                 miniRequests.add(new MiniRequest(agendoRequest.getId(), agendoRequest.getClasss(),
                             agendoRequest.getCreated_by().getEmail(), agendoRequest.getCreated_by().getName(), agendoRequest.getdate_created(),
-                            agendoRequest.getLast_action().getAction(), getRequestCode(agendoRequest.getFields().get(agendoRequest.getFields().size()-1).getValue())));
+                            agendoRequest.getLast_action().getAction(), getRequestCode(agendoRequest.getFields().get(agendoRequest.getFields().size()-1).getValue()), false));
             }
         }
 

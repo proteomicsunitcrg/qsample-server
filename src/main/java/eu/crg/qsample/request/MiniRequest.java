@@ -17,6 +17,8 @@ public class MiniRequest {
 
     private String lastField;
 
+    private boolean hasData;
+
 
 
     public long getId() {
@@ -75,6 +77,14 @@ public class MiniRequest {
         this.lastField = lastField;
     }
 
+    public boolean isHasData() {
+        return hasData;
+    }
+
+    public void setHasData(boolean hasData) {
+        this.hasData = hasData;
+    }
+
     public MiniRequest() {
     }
 
@@ -88,7 +98,7 @@ public class MiniRequest {
     }
 
     public MiniRequest(long id, String type, String creatorMail, String creatorName, String creationDate, String status,
-            String lastField) {
+            String lastField, boolean hasData) {
         this.id = id;
         this.type = type;
         this.creatorMail = creatorMail;
@@ -96,6 +106,7 @@ public class MiniRequest {
         this.creationDate = creationDate;
         this.status = status;
         this.lastField = lastField;
+        this.hasData= hasData;
     }
 
 
