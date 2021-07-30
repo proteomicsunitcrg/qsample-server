@@ -10,6 +10,8 @@ import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import com.google.gson.JsonObject;
+
 import org.apache.commons.math3.linear.EigenDecomposition;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
@@ -30,6 +32,8 @@ import eu.crg.qsample.file.FileService;
 import eu.crg.qsample.file.RequestFile;
 import eu.crg.qsample.file.RequestFileRepository;
 import eu.crg.qsample.quantification.model.QuantificationFromPipeline;
+import eu.crg.qsample.restservice_neon.DendogramBody;
+import eu.crg.qsample.restservice_neon.RestServiceNeon;
 import net.bytebuddy.TypeCache.Sort;
 
 
@@ -47,6 +51,9 @@ public class QuantificationService {
 
     @Autowired
     FileRepository fileRepository;
+
+    @Autowired
+    RestServiceNeon restNeon;
 
     public void insertQuantificationFromPipeline(QuantificationFromPipeline quantificationFromPipeline) {
         Optional<RequestFile> fileOpt = requestFileRepo
@@ -264,6 +271,14 @@ public class QuantificationService {
             }
         }
         return true;
+    }
+
+    public byte[] dendogram(String requestCode, List<String> checksums, String theme) {
+        HeatmapData heatmapData = heatmap2(requestCode, checksums, 20, "filename");
+        DendogramBody dendo = new DendogramBody(heatmapData.getData(), heatmapData.getNames(), theme);
+        byte[] imgbyte= restNeon.getFiles(dendo);
+
+        return imgbyte;
     }
 
 }
