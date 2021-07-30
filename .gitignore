@@ -33,3 +33,5 @@ build/
 src/main/resources/static
 *.log
 *.gz
+
+src/main/resources/application.yml
