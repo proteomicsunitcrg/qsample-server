@@ -18,9 +18,9 @@ spring:
         INDENT_OUTPUT: true
     datasource:
         ## MYSQL
-        url: jdbc:mysql://127.0.0.1:3306/qsample?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+        url: jdbc:mysql://127.0.0.1:3306/qsample?useSSL=false&serverTimezone=UTC
         username: "root"
-        password: "qCloud1*2"
+        password: "***REMOVED***"
         driver-class-name: com.mysql.cj.jdbc.Driver
     mail:
       default-encoding: UTF-8
@@ -64,6 +64,9 @@ qcloud2:
     # url: http://localhost:5001/qsample
     username: qsample
     password: qsample
+
+neon-stats:
+    url: http://localhost:5001/
 
 agendo:
     # username: marc.serret@crg.eu
