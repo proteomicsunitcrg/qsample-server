@@ -66,7 +66,13 @@ qcloud2:
     password: qsample
 
 neon-stats:
-    url: http://localhost:5001/
+    url: http://neon.crg.eu/
+
+twitter:
+    consumer-key:
+    consumer-secret:
+    access-token:
+    access-token-secret:
 
 agendo:
     # username: marc.serret@crg.eu
