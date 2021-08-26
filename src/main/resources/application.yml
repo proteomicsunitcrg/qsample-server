@@ -68,12 +68,6 @@ qcloud2:
 neon-stats:
     url: http://neon.crg.eu/
 
-twitter:
-    consumer-key:
-    consumer-secret:
-    access-token:
-    access-token-secret:
-
 agendo:
     # username: marc.serret@crg.eu
     # password: cacaDeVaca1
