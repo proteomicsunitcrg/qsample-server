@@ -46,6 +46,9 @@ public class ApplicationConstraint {
     @NotNull
     private boolean showModificationsPlot;
 
+    @Column(columnDefinition = "bit(1) default false")
+    @NotNull
+    private boolean showDendogram;
 
     public Long getId() {
         return id;
@@ -133,6 +136,34 @@ public class ApplicationConstraint {
     public void setName(String name) {
         this.name = name;
     }
+
+
+    public boolean isShowDendogram() {
+        return showDendogram;
+    }
+
+
+    public void setShowDendogram(boolean showDendogram) {
+        this.showDendogram = showDendogram;
+    }
+
+
+    public ApplicationConstraint(Long id, @NotNull String name, @NotNull boolean showQuantificationHeatMap,
+            @NotNull boolean showQuantificationAndContaminantList, @NotNull boolean showIdentifiedProteinsPlot,
+            @NotNull boolean showIdentifiedPeptidesPlot, @NotNull boolean showFileInfoPlot,
+            @NotNull boolean showModificationsPlot, @NotNull boolean showDendogram) {
+        this.id = id;
+        this.name = name;
+        this.showQuantificationHeatMap = showQuantificationHeatMap;
+        this.showQuantificationAndContaminantList = showQuantificationAndContaminantList;
+        this.showIdentifiedProteinsPlot = showIdentifiedProteinsPlot;
+        this.showIdentifiedPeptidesPlot = showIdentifiedPeptidesPlot;
+        this.showFileInfoPlot = showFileInfoPlot;
+        this.showModificationsPlot = showModificationsPlot;
+        this.showDendogram = showDendogram;
+    }
+
+
 
 
 }
