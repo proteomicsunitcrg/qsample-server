@@ -2,6 +2,7 @@ package eu.crg.qsample.quantification;
 
 import java.io.IOException;
 import java.net.ConnectException;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
@@ -101,6 +102,11 @@ public class QuantificationController {
     @ExceptionHandler(ConnectException.class)
     void handleNeonServerConnectException(HttpServletResponse response, Exception e) throws IOException {
         response.sendError(HttpStatus.NOT_FOUND.value(), "Neon API endpoint down, contact the admins (Marc) to check the case");
+    }
+
+    @ExceptionHandler(UnknownHostException.class)
+    void handleUnknownHostException(HttpServletResponse responsem, Exception e) throws IOException {
+        responsem.sendError(HttpStatus.NOT_FOUND.value(), "Neon API endpoint down, contact the admins (Marc) to check the case");
     }
 
 
