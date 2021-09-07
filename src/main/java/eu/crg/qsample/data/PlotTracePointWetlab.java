@@ -11,7 +11,7 @@ public class PlotTracePointWetlab {
 
     private double std;
 
-
+    private int order;
 
     public String getName() {
         return name;
@@ -32,6 +32,14 @@ public class PlotTracePointWetlab {
         this.value = value;
     }
 
+
+    public PlotTracePointWetlab(String name, double value, double std, int order) {
+        this.name = name;
+        this.value = value;
+        this.std = std;
+        this.order = order;
+    }
+
     public double getValue() {
         return value;
     }
@@ -49,6 +57,16 @@ public class PlotTracePointWetlab {
     public void setStd(double std) {
         this.std = std;
     }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+
 
 
 }
