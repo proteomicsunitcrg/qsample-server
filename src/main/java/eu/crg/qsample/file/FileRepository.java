@@ -11,7 +11,7 @@ import eu.crg.qsample.wetlab.WetLabFile;
 
 public interface FileRepository extends CrudRepository<File, Long> {
 
-    public List <WetLabFile> findAllByCreationDateBetweenAndTypeIdOrderByCreationDate(Date startDate, Date endDate, Long wetLabId);
+    public List <WetLabFile> findAllByCreationDateBetweenAndTypeIdOrderByWeekAscYearAsc(Date startDate, Date endDate, Long wetLabId);
 
     public List <WetLabFile> findAllByTypeApiKey(UUID apiKey);
 

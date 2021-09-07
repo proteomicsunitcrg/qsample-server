@@ -69,6 +69,7 @@ public class DataService {
         Optional<Plot> plot = plotRepo.findById(plotId);
         Optional<WetLab> wetlab = wetLabRepo.findOneByApiKey(wetLabApiKey);
         List<Data> data = new ArrayList<>();
+        int order = 1;
 
         TraceHashMap<String, PlotTraceWetlab> traces = new TraceHashMap<>();
 
@@ -78,9 +79,8 @@ public class DataService {
         if (!plot.isPresent()) {
             throw new NotFoundException("Plot doesnt found");
         }
-        List<WetLabFile> files = fileRepo.findAllByCreationDateBetweenAndTypeIdOrderByCreationDate(startDate, endDate,
+        List<WetLabFile> files = fileRepo.findAllByCreationDateBetweenAndTypeIdOrderByWeekAscYearAsc(startDate, endDate,
                 wetlab.get().getId());
-
         for (WetLabFile wlFile : files) { // TODO impriove this
             List<WetLabFile> triplicats = new ArrayList<>();
             triplicats.add(wlFile);
@@ -103,8 +103,8 @@ public class DataService {
                     traces.put(cs.getAbbreviated(), generatePlotTraceFromContextSourceWetlab(cs));
                 }
                 traces.get(cs.getAbbreviated()).getPlotTracePoints()
-                        .add(generatePlotTracePointFromDataWetlab(wlFile, average, std));
-
+                        .add(generatePlotTracePointFromDataWetlab(wlFile, average, std, order));
+                order = order + 1;
             }
         }
         List<PlotTraceWetlab> plotTracesList = traces.toList();
@@ -166,8 +166,8 @@ public class DataService {
         return new PlotTracePoint(d.getFile(), d.getCalculatedValue(), d.getNonConformityStatus());
     }
 
-    private PlotTracePointWetlab generatePlotTracePointFromDataWetlab(WetLabFile wf, double value, double std) {
-        return new PlotTracePointWetlab("W" + wf.getWeek() + "Y" + wf.getYear(), value, std);
+    private PlotTracePointWetlab generatePlotTracePointFromDataWetlab(WetLabFile wf, double value, double std, int order) {
+        return new PlotTracePointWetlab("W" + wf.getWeek() + "Y" + wf.getYear(), value, std, order);
     }
 
     public List<PlotTrace> getTraceDataRequest(Long csId, Long paramId, String requestCode, String order) {
@@ -287,7 +287,6 @@ public class DataService {
      */
     public void insertDataFromPipelineRequest(DataFromPipeline dataFromPipeline) {
         logger.info("Trying to insert data for file with checksum: " + dataFromPipeline.getFile().getChecksum());
-        System.out.println("adeu");
         Optional<RequestFile> file = requestFileRepo.findOneByChecksum(dataFromPipeline.getFile().getChecksum());
         if (!file.isPresent()) {
             logger.error(
