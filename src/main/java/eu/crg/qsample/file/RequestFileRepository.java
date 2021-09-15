@@ -11,4 +11,7 @@ import eu.crg.qsample.wetlab.WetLabFile;
 
 public interface RequestFileRepository extends CrudRepository<File, Long> {
     public Optional<RequestFile> findOneByChecksum(String checksum);
+
+    public List<RequestFile> findAllByCreationDateBetweenAndRequestCodeContainsAndFilenameContainsOrderByCreationDateDesc(Date startDate, Date endDate, String requestCode, String filename);
+
 }
