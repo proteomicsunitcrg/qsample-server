@@ -12,6 +12,8 @@ import javax.ws.rs.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DataRetrievalFailureException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -179,6 +181,19 @@ public class FileService {
         }  else {
             throw new DataRetrievalFailureException("File not found");
         }
+    }
+
+    public List<RequestFile> getRequestFileDashboard(Date startDate, Date endDate, String filename, String code) {
+        return requestFileRepo.findAllByCreationDateBetweenAndRequestCodeContainsAndFilenameContainsOrderByCreationDateDesc(endDate, startDate, filename, code);
+        // return fileRepository.findAllByRequestCodeContainsAndFilenameContainsOrderByFilename(filename, code);
+    }
+
+    public List<WetLabFile> getWetlabFileDashboard(Date startDate, Date endDate, String filename, Long wetlabId) {
+        System.out.println(wetlabId);
+        if (wetlabId == 0l) {
+            return fileRepository.findAllByCreationDateBetweenAndFilenameContainsOrderByCreationDateDesc(endDate, startDate, filename);
+        }
+        return fileRepository.findAllByCreationDateBetweenAndFilenameContainsAndTypeIdOrderByCreationDateDesc(endDate, startDate, filename, wetlabId);
     }
 
 }
