@@ -3,6 +3,7 @@ package eu.crg.qsample.file;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.UnknownHostException;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,6 +13,10 @@ import org.aspectj.apache.bcel.classfile.Unknown;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DataRetrievalFailureException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -99,6 +104,21 @@ public class FileController {
     public RequestFile getRequestFileByChecksum(@PathVariable String checksum) {
         return fileService.getRequestFileByChecksum(checksum);
     }
+
+    @GetMapping(value = "/getRequestFilesDashboard")
+    @PreAuthorize("hasRole('INTERNAL')")
+    public List<RequestFile> getRequestFileDashboard(@DateTimeFormat(iso = ISO.DATE_TIME) Date startDate, @DateTimeFormat(iso = ISO.DATE_TIME) Date endDate,
+            String filename, String code) {
+        return fileService.getRequestFileDashboard(startDate, endDate, filename, code);
+    }
+
+    @GetMapping(value = "/getWetlabFilesDashboard")
+    @PreAuthorize("hasRole('INTERNAL')")
+    public List<WetLabFile> getWetlabFileDashboard(@DateTimeFormat(iso = ISO.DATE_TIME) Date startDate, @DateTimeFormat(iso = ISO.DATE_TIME) Date endDate,
+            String filename, Long wetlabId) {
+        return fileService.getWetlabFileDashboard(startDate, endDate, filename, wetlabId);
+    }
+
 
     @ExceptionHandler(DataRetrievalFailureException.class)
     void handleNonConnection(HttpServletResponse response, Exception e) throws IOException {
