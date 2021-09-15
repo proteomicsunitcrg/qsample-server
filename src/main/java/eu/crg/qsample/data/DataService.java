@@ -103,7 +103,7 @@ public class DataService {
                     traces.put(cs.getAbbreviated(), generatePlotTraceFromContextSourceWetlab(cs));
                 }
                 traces.get(cs.getAbbreviated()).getPlotTracePoints()
-                        .add(generatePlotTracePointFromDataWetlab(wlFile, average, std, order));
+                        .add(generatePlotTracePointFromDataWetlab(wlFile, average, std, triplicats));
                 order = order + 1;
             }
         }
@@ -166,8 +166,8 @@ public class DataService {
         return new PlotTracePoint(d.getFile(), d.getCalculatedValue(), d.getNonConformityStatus());
     }
 
-    private PlotTracePointWetlab generatePlotTracePointFromDataWetlab(WetLabFile wf, double value, double std, int order) {
-        return new PlotTracePointWetlab("W" + wf.getWeek() + "Y" + wf.getYear(), value, std, order);
+    private PlotTracePointWetlab generatePlotTracePointFromDataWetlab(WetLabFile wf, double value, double std, List<WetLabFile> triplicats) {
+        return new PlotTracePointWetlab("W" + wf.getWeek() + "Y" + wf.getYear(), value, std, wf.getWeek(), wf.getYear(), triplicats);
     }
 
     public List<PlotTrace> getTraceDataRequest(Long csId, Long paramId, String requestCode, String order) {

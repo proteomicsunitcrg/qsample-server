@@ -1,8 +1,11 @@
 package eu.crg.qsample.data;
 
 import eu.crg.qsample.threshold.InstrumentStatus;
-import eu.crg.qsample.file.File;
+import eu.crg.qsample.wetlab.WetLabFile;
 
+import java.util.List;
+
+import eu.crg.qsample.file.File;
 
 public class PlotTracePointWetlab {
     private String name;
@@ -11,7 +14,11 @@ public class PlotTracePointWetlab {
 
     private double std;
 
-    private int order;
+    private int week;
+
+    private int year;
+
+    private List<WetLabFile> triplicats;
 
     public String getName() {
         return name;
@@ -32,12 +39,29 @@ public class PlotTracePointWetlab {
         this.value = value;
     }
 
-
     public PlotTracePointWetlab(String name, double value, double std, int order) {
         this.name = name;
         this.value = value;
         this.std = std;
-        this.order = order;
+        this.week = order;
+    }
+
+    public PlotTracePointWetlab(String name, double value, double std, int week, int year,
+            List<WetLabFile> triplicats) {
+        this.name = name;
+        this.value = value;
+        this.std = std;
+        this.week = week;
+        this.year = year;
+        this.triplicats = triplicats;
+    }
+
+    public PlotTracePointWetlab(String name, double value, double std, int week, int year) {
+        this.name = name;
+        this.value = value;
+        this.std = std;
+        this.week = week;
+        this.year = year;
     }
 
     public double getValue() {
@@ -48,8 +72,6 @@ public class PlotTracePointWetlab {
         this.value = value;
     }
 
-
-
     public double getStd() {
         return std;
     }
@@ -58,15 +80,28 @@ public class PlotTracePointWetlab {
         this.std = std;
     }
 
-    public int getOrder() {
-        return order;
+    public int getWeek() {
+        return week;
     }
 
-    public void setOrder(int order) {
-        this.order = order;
+    public void setWeek(int week) {
+        this.week = week;
     }
 
+    public int getYear() {
+        return year;
+    }
 
+    public void setYear(int year) {
+        this.year = year;
+    }
 
+    public List<WetLabFile> getTriplicats() {
+        return triplicats;
+    }
+
+    public void setTriplicats(List<WetLabFile> triplicats) {
+        this.triplicats = triplicats;
+    }
 
 }
