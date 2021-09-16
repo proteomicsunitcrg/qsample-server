@@ -119,6 +119,11 @@ public class FileController {
         return fileService.getWetlabFileDashboard(startDate, endDate, filename, wetlabId);
     }
 
+    @GetMapping(value = "/workflow")
+    @PreAuthorize("hasRole('INTERNAL')")
+    public String getNextflowWorkflow() {
+        return fileService.getNextflowWorkflow();
+    }
 
     @ExceptionHandler(DataRetrievalFailureException.class)
     void handleNonConnection(HttpServletResponse response, Exception e) throws IOException {
@@ -142,7 +147,7 @@ public class FileController {
 
     @ExceptionHandler(HttpClientErrorException.Unauthorized.class)
     void handleUnauthorizedException(HttpServletResponse response, Exception e) throws IOException {
-        response.sendError(HttpStatus.UNAUTHORIZED.value(), "QCloud2 API unauthorized");
+        response.sendError(HttpStatus.UNAUTHORIZED.value(), "QCloud2 API or Nextflow tower unauthorized");
     }
 
     @ExceptionHandler(HttpClientErrorException.BadRequest.class)
