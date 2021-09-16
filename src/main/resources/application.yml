@@ -68,6 +68,10 @@ qcloud2:
 neon-stats:
     url: http://neon.crg.eu/
 
+nextflow-tower:
+    token: eyJ0aWQiOiAzOTM3fS42Mjc0MjQ0YzI3NjBmZmU3ZmQxNTc4Y2M1OGE0YzM5NjA0MjkxZWI3
+    url: https://api.tower.nf/
+
 agendo:
     # username: marc.serret@crg.eu
     # password: cacaDeVaca1

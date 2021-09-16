@@ -28,6 +28,7 @@ import eu.crg.qsample.param.ParamRepository;
 import eu.crg.qsample.request.favorite_request.FavoriteRequestRepository;
 import eu.crg.qsample.request.favorite_request.FavoriteRequestService;
 import eu.crg.qsample.request.favorite_request.FavoriteRequestsUsers;
+import eu.crg.qsample.restservice_nextflow.RestServiceNextflow;
 import eu.crg.qsample.restservice_qcloud2.ResponseFile;
 import eu.crg.qsample.restservice_qcloud2.RestServiceQCloud2;
 import eu.crg.qsample.security.model.User;
@@ -73,6 +74,9 @@ public class FileService {
 
     @Autowired
     FavoriteRequestService favoriteRequestService;
+
+    @Autowired
+    RestServiceNextflow restServiceNextflow;
 
     FavoriteRequestRepository favoriteRequestRepository;
 
@@ -194,6 +198,10 @@ public class FileService {
             return fileRepository.findAllByCreationDateBetweenAndFilenameContainsOrderByCreationDateDesc(endDate, startDate, filename);
         }
         return fileRepository.findAllByCreationDateBetweenAndFilenameContainsAndTypeIdOrderByCreationDateDesc(endDate, startDate, filename, wetlabId);
+    }
+
+    public String getNextflowWorkflow() {
+        return restServiceNextflow.getWorkflows();
     }
 
 }
