@@ -125,6 +125,12 @@ public class FileController {
         return fileService.getNextflowWorkflow();
     }
 
+    @GetMapping(value = "/isWorkflowEnabled")
+    @PreAuthorize("hasRole('INTERNAL')")
+    public boolean isWorkflowEnabled() {
+        return fileService.isWorkflowEnabled();
+    }
+
     @ExceptionHandler(DataRetrievalFailureException.class)
     void handleNonConnection(HttpServletResponse response, Exception e) throws IOException {
         response.sendError(HttpStatus.NOT_FOUND.value(), e.getMessage());

@@ -75,6 +75,12 @@ public class QuantificationController {
         return quantificationService.dendogram(requestCode, checksums, theme);
     }
 
+    @GetMapping(value = "/showNeonStats")
+    @PreAuthorize("hasRole('INTERNAL')")
+    public boolean showNeonStats() {
+        return quantificationService.showNeonStats();
+    }
+
 
 
 

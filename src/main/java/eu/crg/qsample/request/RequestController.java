@@ -48,4 +48,10 @@ public class RequestController {
     public String getPlotName(@PathVariable Long csId, @PathVariable Long paramId) {
         return requestService.getPlotName(csId, paramId);
     }
+
+    @PreAuthorize("hasRole('INTERNAL')")
+    @RequestMapping(value = "isQCloud2FilesEnabled")
+    public boolean isQCloud2FilesEnabled() {
+        return requestService.isQCloud2FilesEnabled();
+    }
 }
