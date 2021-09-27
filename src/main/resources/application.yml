@@ -48,7 +48,9 @@ spring:
             format_sql: true
         show-sql: false
     flyway:
-        enabled: false
+      locations:
+        - classpath:/db/migration
+      enabled: false
 
 jwt:
     header: Authorization
@@ -60,15 +62,18 @@ jwt:
         refresh: refresh
 
 qcloud2:
+    disable: true
     url: https://api.qcloud2.crg.eu/qsample
     # url: http://localhost:5001/qsample
     username: qsample
     password: qsample
 
 neon-stats:
+    disable: true
     url: http://neon.crg.eu/
 
 nextflow-tower:
+    disable: true
     token: eyJ0aWQiOiAzOTM3fS42Mjc0MjQ0YzI3NjBmZmU3ZmQxNTc4Y2M1OGE0YzM5NjA0MjkxZWI3
     url: https://api.tower.nf/
 
@@ -98,6 +103,8 @@ spring:
         dialect: MySQL57InnoDB
     show-sql: false
   flyway:
+    locations:
+      - classpath:/db/migration
     enabled: false
 server:
   port: 8081
