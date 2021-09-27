@@ -79,8 +79,8 @@ public class FileService {
     @Autowired
     RestServiceNextflow restServiceNextflow;
 
-    // @Value("${qcloud2.disable}")
-    // boolean qcloud2Disabled;
+    @Value("${qcloud2.disable}")
+    boolean qcloud2Disabled;
 
     public File insertDummyFileData() {
         System.out.println(csRepo.findById(1l).get().toString());
@@ -207,7 +207,7 @@ public class FileService {
     }
 
     public boolean isWorkflowEnabled() {
-        return false;
+        return qcloud2Disabled;
     }
 
 }
