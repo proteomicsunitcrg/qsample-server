@@ -10,6 +10,7 @@ import java.util.UUID;
 import javax.ws.rs.NotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.data.domain.Page;
@@ -78,7 +79,8 @@ public class FileService {
     @Autowired
     RestServiceNextflow restServiceNextflow;
 
-    FavoriteRequestRepository favoriteRequestRepository;
+    // @Value("${qcloud2.disable}")
+    // boolean qcloud2Disabled;
 
     public File insertDummyFileData() {
         System.out.println(csRepo.findById(1l).get().toString());
@@ -202,6 +204,10 @@ public class FileService {
 
     public String getNextflowWorkflow() {
         return restServiceNextflow.getWorkflows();
+    }
+
+    public boolean isWorkflowEnabled() {
+        return false;
     }
 
 }

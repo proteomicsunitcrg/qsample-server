@@ -14,6 +14,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,6 +47,9 @@ public class RequestService {
 
     @Autowired
     FileRepository fileRepository;
+
+    @Value("${qcloud2.disable}")
+    boolean disableQCloudFiles;
 
     public List<MiniRequest> getAll(boolean showAll, Date startDate, Date endDate) {
         List<MiniRequest> miniRequests = new ArrayList<>();
@@ -132,6 +136,10 @@ public class RequestService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User u = userRepo.findByUsername(authentication.getName()).get();
         return u;
+    }
+
+    public boolean isQCloud2FilesEnabled() {
+        return disableQCloudFiles;
     }
 
 }
