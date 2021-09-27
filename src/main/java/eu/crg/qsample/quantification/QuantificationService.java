@@ -23,6 +23,7 @@ import org.nd4j.linalg.dimensionalityreduction.PCA;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.list.NDArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +55,9 @@ public class QuantificationService {
 
     @Autowired
     RestServiceNeon restNeon;
+
+    @Value("${neon-stats.disable}")
+    boolean disableNeonStats;
 
     public void insertQuantificationFromPipeline(QuantificationFromPipeline quantificationFromPipeline) {
         Optional<RequestFile> fileOpt = requestFileRepo
@@ -279,6 +283,10 @@ public class QuantificationService {
         byte[] imgbyte= restNeon.getFiles(dendo);
 
         return imgbyte;
+    }
+
+    public boolean showNeonStats() {
+        return disableNeonStats;
     }
 
 }
