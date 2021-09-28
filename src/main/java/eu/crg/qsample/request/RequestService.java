@@ -58,6 +58,9 @@ public class RequestService {
     @Value("${local-requests}")
     boolean localRequests;
 
+    @Value("${qcloud2.disable}")
+    boolean disableQCloudFiles;
+
     public List<MiniRequest> getAll(boolean showAll, Date startDate, Date endDate) {
         if (localRequests) {
             return getAllLocal(showAll, startDate, endDate);
@@ -187,6 +190,10 @@ public class RequestService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User u = userRepo.findByUsername(authentication.getName()).get();
         return u;
+    }
+
+    public boolean isQCloud2FilesEnabled() {
+        return disableQCloudFiles;
     }
 
 }
