@@ -15,9 +15,13 @@ public class MiniRequest {
 
     private String status;
 
-    private String lastField;
+    private String lastField; // request code
 
     private boolean hasData;
+
+    private boolean local;
+
+    
 
 
 
@@ -98,7 +102,7 @@ public class MiniRequest {
     }
 
     public MiniRequest(long id, String type, String creatorMail, String creatorName, String creationDate, String status,
-            String lastField, boolean hasData) {
+            String lastField, boolean hasData, boolean local) {
         this.id = id;
         this.type = type;
         this.creatorMail = creatorMail;
@@ -106,7 +110,16 @@ public class MiniRequest {
         this.creationDate = creationDate;
         this.status = status;
         this.lastField = lastField;
-        this.hasData= hasData;
+        this.hasData = hasData;
+        this.local = local;
+    }
+
+    public boolean isLocal() {
+        return local;
+    }
+
+    public void setLocal(boolean local) {
+        this.local = local;
     }
 
 

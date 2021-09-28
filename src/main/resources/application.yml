@@ -18,9 +18,9 @@ spring:
         INDENT_OUTPUT: true
     datasource:
         ## MYSQL
-        url: jdbc:mysql://127.0.0.1:3306/qsample?useSSL=false&serverTimezone=UTC
+        url: jdbc:mysql://127.0.0.1:3306/qsample?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
         username: "root"
-        password: "***REMOVED***"
+        password: "qCloud1*2"
         driver-class-name: com.mysql.cj.jdbc.Driver
     mail:
       default-encoding: UTF-8
@@ -80,6 +80,8 @@ agendo:
     from: Y3Jn
     url: https://api.qcloud2.crg.eu/mirror?url=https://api.agendoscience.com
     facility: 10
+
+local-requests: true # true to use local database, false to use agendo. If true unlocks the request creation, delete and update form TODO
 
 ---
 
