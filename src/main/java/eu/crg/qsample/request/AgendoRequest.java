@@ -36,6 +36,12 @@ public class AgendoRequest {
 
     private List<AgendoRequestFieldProduct> products;
 
+    private String localCode;
+
+    private String localCreator;
+
+    private String localCreationDate;
+
     public long getId() {
         return id;
     }
@@ -148,6 +154,8 @@ public class AgendoRequest {
         this.products = products;
     }
 
+    
+
     public AgendoRequest() {
     }
 
@@ -170,6 +178,40 @@ public class AgendoRequest {
         this.fields = fields;
         this.products = products;
     }
+
+    public AgendoRequest(long id, String group, String classs, String date_created, String status) {
+        this.id = id;
+        this.group = group;
+        this.classs = classs;
+        this.date_created = date_created;
+        this.status = status;
+    }
+
+    public String getLocalCode() {
+        return localCode;
+    }
+
+    public void setLocalCode(String localCode) {
+        this.localCode = localCode;
+    }
+
+    public String getLocalCreator() {
+        return localCreator;
+    }
+
+    public void setLocalCreator(String localCreator) {
+        this.localCreator = localCreator;
+    }
+
+    public String getLocalCreationDate() {
+        return localCreationDate;
+    }
+
+    public void setLocalCreationDate(String localCreationDate) {
+        this.localCreationDate = localCreationDate;
+    }
+
+    
 
 
 
