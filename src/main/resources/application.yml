@@ -62,18 +62,18 @@ jwt:
         refresh: refresh
 
 qcloud2:
-    disable: true
+    disable: false
     url: https://api.qcloud2.crg.eu/qsample
     # url: http://localhost:5001/qsample
     username: qsample
     password: qsample
 
 neon-stats:
-    disable: true
+    disable: false
     url: http://neon.crg.eu/
 
 nextflow-tower:
-    disable: true
+    disable: false
     token: eyJ0aWQiOiAzOTM3fS42Mjc0MjQ0YzI3NjBmZmU3ZmQxNTc4Y2M1OGE0YzM5NjA0MjkxZWI3
     url: https://api.tower.nf/
 
@@ -109,7 +109,39 @@ spring:
       - classpath:/db/migration
     enabled: false
 server:
-  port: 8081
+  port: 8081 # test port should be 8099
+email-conf:
+  address: qcloud@crg.eu
+  admin-email: marc.serret@crg.eu
+  app-url: "qsample.crg.eu"
+logging:
+  file: qsample.log
+  level:
+    org.springframework:
+    security: ERROR
+
+---
+
+spring:
+  profiles: prod
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/qsample?useSSL=false&serverTimezone=UTC
+    username: "admin"
+    password: "CRG4dm1n!"
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: MySQL57InnoDB
+    show-sql: false
+  flyway:
+    locations:
+      - classpath:/db/migration
+    enabled: false
+server:
+  port: 8099 # prod should be 
 email-conf:
   address: qcloud@crg.eu
   admin-email: marc.serret@crg.eu
