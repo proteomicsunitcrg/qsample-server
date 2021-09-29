@@ -196,4 +196,13 @@ public class RequestService {
         return disableQCloudFiles;
     }
 
+    public RequestLocal getLocalRequestById(Long id) {
+        Optional <RequestLocal> localOpt = requestRepository.findById(id);
+        if (localOpt.isPresent()) {
+            return localOpt.get();
+        } else {
+            throw new NotFoundException("Request not found by id");
+        }
+    }
+
 }

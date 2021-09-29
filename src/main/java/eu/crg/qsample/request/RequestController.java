@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import eu.crg.qsample.request.local.RequestLocal;
+
 @RestController
 @RequestMapping(value = "api/request")
 public class RequestController {
@@ -41,6 +43,12 @@ public class RequestController {
     @RequestMapping(value = "{id}")
     public AgendoRequest getRequestById(@PathVariable Long id) {
         return requestService.getRequestById(id);
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @RequestMapping(value = "getLocalById/{id}")
+    public RequestLocal getLocalRequestById(@PathVariable Long id) {
+        return requestService.getLocalRequestById(id);
     }
 
     @PreAuthorize("hasRole('USER')")
