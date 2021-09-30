@@ -149,6 +149,8 @@ public class RequestService {
             agendoRequest.setLocalCode(requestOpt.get().getRequestCode());
             agendoRequest.setLocalCreationDate(requestOpt.get().getCreationDate().toString());
             agendoRequest.setLocalCreator(requestOpt.get().getCreator());
+            agendoRequest.setSamples(requestOpt.get().getSamples());
+            agendoRequest.setLocalTaxonomy(requestOpt.get().getTaxonomy());
             return agendoRequest;
         } else {
             throw new NotFoundException("Request not found by id");
@@ -216,6 +218,10 @@ public class RequestService {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public boolean isLocalMode() {
+        return localRequests;
     }
 
 }
