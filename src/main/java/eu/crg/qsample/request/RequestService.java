@@ -205,4 +205,17 @@ public class RequestService {
         }
     }
 
+    public RequestLocal saveLocal(RequestLocal localRequest) {
+        return requestRepository.save(localRequest);
+    }
+
+    public boolean deleteLocal(Long localRequestId) {
+        try {
+            requestRepository.deleteById(localRequestId);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 }
