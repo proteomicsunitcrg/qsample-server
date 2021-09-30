@@ -83,6 +83,13 @@ public class RequestController {
         return requestService.isQCloud2FilesEnabled();
     }
 
+    @PreAuthorize("hasRole('INTERNAL')")
+    @RequestMapping(value = "localMode")
+    public boolean isLocalMode() {
+        return requestService.isLocalMode();
+    }
+
+
     @ExceptionHandler(NotFoundException.class)
     void handleNotFoundException(HttpServletResponse response, Exception e) throws IOException {
         response.sendError(HttpStatus.NOT_FOUND.value(), "Nothing found with this parameters");

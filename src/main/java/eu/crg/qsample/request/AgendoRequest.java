@@ -42,6 +42,26 @@ public class AgendoRequest {
 
     private String localCreationDate;
 
+    private String localTaxonomy;
+
+    public String getLocalTaxonomy() {
+        return localTaxonomy;
+    }
+
+    public void setLocalTaxonomy(String localTaxonomy) {
+        this.localTaxonomy = localTaxonomy;
+    }
+
+    private String samples;
+
+    public String getSamples() {
+        return samples;
+    }
+
+    public void setSamples(String samples) {
+        this.samples = samples;
+    }
+
     public long getId() {
         return id;
     }
@@ -154,7 +174,7 @@ public class AgendoRequest {
         this.products = products;
     }
 
-    
+
 
     public AgendoRequest() {
     }
@@ -211,7 +231,17 @@ public class AgendoRequest {
         this.localCreationDate = localCreationDate;
     }
 
-    
+    @Override
+    public String toString() {
+        return "AgendoRequest [account=" + account + ", classs=" + classs + ", comment=" + comment + ", created_by="
+                + created_by + ", date_created=" + date_created + ", delivery_date=" + delivery_date
+                + ", delivery_location=" + delivery_location + ", fields=" + fields + ", group=" + group + ", id=" + id
+                + ", last_action=" + last_action + ", localCode=" + localCode + ", localCreationDate="
+                + localCreationDate + ", localCreator=" + localCreator + ", products=" + products + ", status=" + status
+                + ", total=" + total + "]";
+    }
+
+
 
 
 
