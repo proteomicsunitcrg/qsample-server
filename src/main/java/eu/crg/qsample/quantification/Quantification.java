@@ -28,16 +28,12 @@ public class Quantification {
     @JoinColumn(name = "fileId", insertable = true, updatable = false)
     private File file;
 
-    @NotBlank
     private String accession;
 
-    @NotBlank
     private String description;
 
-    @NotNull
     private double abundance;
 
-    @NotNull
     private boolean contaminant;
 
     public Long getId() {

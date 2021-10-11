@@ -28,11 +28,14 @@ public class ModificationService {
             throw new DataRetrievalFailureException("File not found");
         }
         for (ModificationFile mod: modificationFromPipeline.getData()) {
+            if (mod.getModification().getType() == null) {
+                mod.getModification().setType("total-numbers");
+            }
             Optional <Modification> modOpt = modRepo.findOneByName(mod.getModification().getName());
             ModificationFile modFile = new ModificationFile();
             if (modOpt.isPresent()) { // mod already at BD, use existing entity
                 modFile.setModification(modOpt.get());
-            } 
+            }
                 else { // mod not at DB, save and use it
                 Modification saved = modRepo.save(mod.getModification());
                 modFile.setModification(saved);
