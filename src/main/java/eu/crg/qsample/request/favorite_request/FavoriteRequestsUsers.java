@@ -19,6 +19,7 @@ public class FavoriteRequestsUsers {
     private Long id;
     private FavoriteRequest favoriteRequest;
     private User user;
+    private String notes;
 
     //additional
     private boolean notify;
@@ -58,6 +59,15 @@ public class FavoriteRequestsUsers {
         return notify;
     }
 
+    @Column(length = 1000)
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
     public void setNotify(boolean notify) {
         this.notify = notify;
     }
@@ -71,6 +81,16 @@ public class FavoriteRequestsUsers {
         this.user = user;
         this.notify = notify;
     }
+
+    public FavoriteRequestsUsers(Long id, FavoriteRequest favoriteRequest, User user, String notes, boolean notify) {
+        this.id = id;
+        this.favoriteRequest = favoriteRequest;
+        this.user = user;
+        this.notes = notes;
+        this.notify = notify;
+    }
+
+
 
 
 
