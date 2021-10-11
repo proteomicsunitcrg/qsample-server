@@ -170,14 +170,16 @@ public class DataService {
         return new PlotTracePointWetlab("W" + wf.getWeek() + "Y" + wf.getYear(), value, std, wf.getWeek(), wf.getYear(), triplicats);
     }
 
-    public List<PlotTrace> getTraceDataRequest(Long csId, Long paramId, String requestCode, String order) {
-        Optional<ContextSource> cs = csRepo.findById(csId);
+    public List<PlotTrace> getTraceDataRequest(List <Long> csIds, Long paramId, String requestCode, String order) {
+        System.out.println(csIds);
+        // return null;
+        Optional <List <ContextSource>> cs = csRepo.findAllByIdIn(csIds);
         if (!cs.isPresent()) {
-            throw new NotFoundException("Context Source with id: " + csId + " not found");
+            throw new NotFoundException("Context Source not found");
         }
         Optional<Param> param = paramRepo.findById(paramId);
         if (!param.isPresent()) {
-            throw new NotFoundException("Param with id: " + csId + " not found");
+            throw new NotFoundException("Param with id: " + paramId + " not found");
         }
         List<Data> data = new ArrayList<>();
         TraceHashMap<String, PlotTrace> traces = new TraceHashMap<>();
@@ -200,15 +202,15 @@ public class DataService {
         allFiles = parseFileNameForPlot(allFiles);
         switch (order) {
             case "filename":
-                data = dataRepo.findByFileInAndContextSourceAndParamOrderByFileFilename(files.get(), cs.get(),
+                data = dataRepo.findByFileInAndContextSourceInAndParamOrderByFileFilename(files.get(), cs.get(),
                         param.get());
                 break;
             case "date":
-                data = dataRepo.findByFileInAndContextSourceAndParamOrderByFileCreationDate(files.get(), cs.get(),
+                data = dataRepo.findByFileInAndContextSourceInAndParamOrderByFileCreationDate(files.get(), cs.get(),
                         param.get());
                 break;
             default:
-                data = dataRepo.findByFileInAndContextSourceAndParamOrderByFileFilename(files.get(), cs.get(),
+                data = dataRepo.findByFileInAndContextSourceInAndParamOrderByFileFilename(files.get(), cs.get(),
                         param.get());
                 break;
         }
