@@ -171,8 +171,6 @@ public class DataService {
     }
 
     public List<PlotTrace> getTraceDataRequest(List <Long> csIds, Long paramId, String requestCode, String order) {
-        System.out.println(csIds);
-        // return null;
         Optional <List <ContextSource>> cs = csRepo.findAllByIdIn(csIds);
         if (!cs.isPresent()) {
             throw new NotFoundException("Context Source not found");
