@@ -40,10 +40,10 @@ public class DataController {
         return dataService.getTraceData(startDate, endDate, plotId, wetLabApiKey);
     }
 
-    @GetMapping("/tracesRequest/{csId}/{paramId}/{requestCode}")
+    @GetMapping("/tracesRequest/{paramId}/{requestCode}")
     @PreAuthorize("hasRole('USER')")
-    public List<PlotTrace> getTraceRequest(@PathVariable Long csId, @PathVariable Long paramId, @PathVariable String requestCode, @RequestParam(defaultValue = "filename") String order) {
-        return dataService.getTraceDataRequest(csId, paramId, requestCode, order);
+    public List<PlotTrace> getTraceRequest(@PathVariable Long paramId, @PathVariable String requestCode, @RequestParam(name = "csIds") List<Long> csIds, @RequestParam(defaultValue = "filename") String order) {
+        return dataService.getTraceDataRequest(csIds, paramId, requestCode, order);
     }
 
     @RequestMapping(value = "/pipeline", method = RequestMethod.POST)

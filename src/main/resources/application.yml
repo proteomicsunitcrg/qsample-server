@@ -86,7 +86,7 @@ agendo:
     url: https://api.qcloud2.crg.eu/mirror?url=https://api.agendoscience.com
     facility: 10
 
-local-requests: true # true to use local database, false to use agendo. If true unlocks the request creation, delete and update form TODO
+local-requests: false # true to use local database, false to use agendo. If true unlocks the request creation, delete and update form TODO
 
 ---
 
