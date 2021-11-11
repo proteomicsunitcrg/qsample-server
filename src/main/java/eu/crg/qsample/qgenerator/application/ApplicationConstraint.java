@@ -54,6 +54,14 @@ public class ApplicationConstraint {
     @NotNull
     private boolean showChargesPlot;
 
+    @Column(columnDefinition = "bit(1) default false")
+    @NotNull
+    private boolean showHistonesTailored;
+
+    @Column(columnDefinition = "bit(1) default false")
+    @NotNull
+    private boolean showHistonesBiological;
+
     public Long getId() {
         return id;
     }
@@ -193,6 +201,28 @@ public class ApplicationConstraint {
         this.showDendogram = showDendogram;
         this.showChargesPlot = showChargesPlot;
     }
+
+
+    public boolean isShowHistonesTailored() {
+        return showHistonesTailored;
+    }
+
+
+    public void setShowHistonesTailored(boolean showHistonesTailored) {
+        this.showHistonesTailored = showHistonesTailored;
+    }
+
+
+    public boolean isShowHistonesBiological() {
+        return showHistonesBiological;
+    }
+
+
+    public void setShowHistonesBiological(boolean showHistonesBiological) {
+        this.showHistonesBiological = showHistonesBiological;
+    }
+
+
 
 
 
