@@ -44,7 +44,7 @@ This will generate a .jar file named with the POM version saved at `target` fold
 
 Send the jar to the server:
 
-`scp target\QSample-XXXXX.jar admin@10.102.1.26:/home/admin/qsample/latest`
+`scp target\QSample-XXXXX.jar admin@10.102.1.26:/home/admin/qsampletest/latest`
 
 Connect to the server, go to the qsample directory and launch the next command to stop the daemon:
 
