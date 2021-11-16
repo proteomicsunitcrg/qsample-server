@@ -38,7 +38,7 @@ Comment `$JAVA_HOME` at `.bashrc"
 
 Obviously change the paths.
 
-This will generate a .jar file named with the POM version saved at target folder.
+This will generate a .jar file named with the POM version saved at `target` folder.
 
 ## Deploy the project
 
