@@ -30,7 +30,11 @@ Right-click on the project and start to run the server. And everything *should* 
 
 Change the version in the `pom.xml` file and with maven installed launch the following command:
 
-`"f:\projects\qsample-server\mvnw.cmd" package -DskipTests -f "f:\projects\qsample-server\pom.xml"`
+Edit and change `pom.xml` version
+
+Comment `$JAVA_HOME` at `.bashrc"
+
+`mvn package -DskipTests -f pom.xml`
 
 Obviously change the paths.
 
