@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.lang.Math;
 
 import com.google.gson.JsonObject;
 
@@ -153,8 +154,8 @@ public class QuantificationService {
                 for (Quantification quant1 : quantificationListOpt.get()) {
                     for (Quantification quant2 : quantificationListOpt2.get()) {
                         if (quant1.getAccession().equals(quant2.getAccession())) {
-                            consensued.add(quant1.getAbundance());
-                            consensued2.add(quant2.getAbundance());
+                            consensued.add(Math.log(quant1.getAbundance()));
+                            consensued2.add(Math.log(quant2.getAbundance()));
                             continue;
                         }
                     }
@@ -277,8 +278,8 @@ public class QuantificationService {
         return true;
     }
 
-    public byte[] dendogram(String requestCode, List<String> checksums, String theme) {
-        HeatmapData heatmapData = heatmap2(requestCode, checksums, 20, "filename");
+    public byte[] dendogram(String requestCode, List<String> checksums, int consensus, String theme) {
+        HeatmapData heatmapData = heatmap2(requestCode, checksums, consensus, "filename");
         DendogramBody dendo = new DendogramBody(heatmapData.getData(), heatmapData.getNames(), theme);
         byte[] imgbyte= restNeon.getFiles(dendo);
 

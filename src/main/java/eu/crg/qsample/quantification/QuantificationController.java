@@ -71,8 +71,8 @@ public class QuantificationController {
 
     @GetMapping(value = "/dendogram/{requestcode}")
     @PreAuthorize("hasRole('INTERNAL')")
-    public byte[] getDendogram(@PathVariable(name = "requestcode") String requestCode, @RequestParam(name = "checksums[]") List <String> checksums, @RequestParam String theme) {
-        return quantificationService.dendogram(requestCode, checksums, theme);
+    public byte[] getDendogram(@PathVariable(name = "requestcode") String requestCode, @RequestParam(name = "checksums[]") List <String> checksums, @RequestParam int consensus, @RequestParam String theme) {
+        return quantificationService.dendogram(requestCode, checksums, consensus, theme);
     }
 
     @GetMapping(value = "/showNeonStats")
