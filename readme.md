@@ -30,17 +30,21 @@ Right-click on the project and start to run the server. And everything *should* 
 
 Change the version in the `pom.xml` file and with maven installed launch the following command:
 
-`"f:\projects\qsample-server\mvnw.cmd" package -DskipTests -f "f:\projects\qsample-server\pom.xml"`
+Edit and change `pom.xml` version
+
+Comment `$JAVA_HOME` at `.bashrc"
+
+`mvn package -DskipTests -f pom.xml`
 
 Obviously change the paths.
 
-This will generate a .jar file named with the POM version saved at target folder.
+This will generate a .jar file named with the POM version saved at `target` folder.
 
 ## Deploy the project
 
 Send the jar to the server:
 
-`scp target\QSample-XXXXX.jar admin@10.102.1.26:/home/admin/qsample/latest`
+`scp target\QSample-XXXXX.jar admin@10.102.1.26:/home/admin/qsampletest/latest`
 
 Connect to the server, go to the qsample directory and launch the next command to stop the daemon:
 
