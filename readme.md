@@ -66,10 +66,10 @@ To know how to deploy the front end check the [QSample-Client.md](QSample-Client
 
 ## Database import
 
-`[admin@QCloudTest ~]$ mysqldump --user admin -pCRG4dm1n! qsampletest > 20211210_backup_qsampletest.sql`
-`[rolivella@ssh-server ~]$ scp admin@10.102.1.26:/home/admin/backup/20211210_backup_qsampletest.sql .`
-`rolivella@hipnos3:~$ scp rolivella@ssh-server.crg.es:~/20211210_backup_qsampletest.sql /home/rolivella/mydata/sql`
-`rolivella@hipnos3:~/mydata/sql$ mysql -u root -pqcloud2017 qsample < 20211210_backup_qsampletest.sql`
+* `[admin@QCloudTest ~]$ mysqldump --user admin -pCRG4dm1n! qsampletest > 20211210_backup_qsampletest.sql`
+* `[rolivella@ssh-server ~]$ scp admin@10.102.1.26:/home/admin/backup/20211210_backup_qsampletest.sql .`
+* `rolivella@hipnos3:~$ scp rolivella@ssh-server.crg.es:~/20211210_backup_qsampletest.sql /home/rolivella/mydata/sql`
+* `rolivella@hipnos3:~/mydata/sql$ mysql -u root -pqcloud2017 qsample < 20211210_backup_qsampletest.sql`
 
 ## Errors
 
