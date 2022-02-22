@@ -64,13 +64,6 @@ Wait a minute and the new backend *should* work.
 
 To know how to deploy the front end check the [QSample-Client.md](QSample-Client.md) file.
 
-## Database import
-
-* `[admin@QCloudTest ~]$ mysqldump --user admin -pCRG4dm1n! qsampletest > 20211210_backup_qsampletest.sql`
-* `[rolivella@ssh-server ~]$ scp admin@10.102.1.26:/home/admin/backup/20211210_backup_qsampletest.sql .`
-* `rolivella@hipnos3:~$ scp rolivella@ssh-server.crg.es:~/20211210_backup_qsampletest.sql /home/rolivella/mydata/sql`
-* `rolivella@hipnos3:~/mydata/sql$ mysql -u root -pqcloud2017 qsample < 20211210_backup_qsampletest.sql`
-
 ## Errors
 
 Sometimes when you start the server at prod it appears to work (systemctl status returns green code) but at the reality the front-end can't establish connection.
