@@ -62,7 +62,7 @@ Change the name of the new jar to `qsample-latest.jar` and launch the following 
 
 Wait a minute and the new backend *should* work.
 
-To know how to deploy the front end check the [QSample-Client.md](QSample-Client.md) file.
+To know how to deploy the front end check the [QSample-Client](https://github.com/proteomicsunitcrg/qsample-client/) repository.
 
 ## Errors
 
