@@ -1,0 +1,3 @@
+[submodule "qsample-client"]
+	path = qsample-client
+	url = git@github.com:proteomicsunitcrg/qsample-client.git
