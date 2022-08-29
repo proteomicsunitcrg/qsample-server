@@ -76,11 +76,8 @@ With hibernate ddl mode in validate the deployment will fail if the database sch
 
 ## References
 
-[Getting started with Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/html/getting-started.html)
-
-[Proteomics unit daemons](https://github.com/proteomicsunitcrg/general-servers/issues?q=is%3Aissue+is%3Aopen+label%3Adaemon)
-
-[Spring Boot with Visual Studio Code](https://code.visualstudio.com/docs/java/java-spring-boot)
+* [Getting started with Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/html/getting-started.html)
+* [Spring Boot with Visual Studio Code](https://code.visualstudio.com/docs/java/java-spring-boot)
 
 ---
 
