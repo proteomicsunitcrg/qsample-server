@@ -1,5 +1,8 @@
 -- STARTING database
-CREATE DATABASE `qsample` IF NOT EXISTS;
+CREATE DATABASE IF NOT EXISTS `qsample`;
+
+GRANT ALL PRIVILEGES on qsample.* to qsample@'%';
+
 USE `qsample`;
 
 -- MySQL dump 10.13  Distrib 8.0.29, for Linux (x86_64)
