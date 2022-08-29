@@ -74,6 +74,15 @@ Here I stop the daemon (`sudo systemctl stop qsample`) and I launch the jar with
 
 With hibernate ddl mode in validate the deployment will fail if the database schema is not the same in the Java entities. Just update the SQL schema. This happens when you add a field to a table or something like that and you don't create a new migration file with the changes. With update mode the .jar file updates the database and everything works without any problem.
 
+## Running with docker-compose
+
+```
+# Start the system
+docker-compose up
+# Stop the system
+docker-compose down
+```
+
 ## References
 
 * [Getting started with Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/html/getting-started.html)
