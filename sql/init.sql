@@ -803,7 +803,7 @@ CREATE TABLE `modification_file` (
   KEY `FKsv7aipa6b5my7optbhv05ufwn` (`modification_id`),
   CONSTRAINT `FKnvy5xth7b00tf5k4k61j9c7th` FOREIGN KEY (`file_id`) REFERENCES `file` (`id`),
   CONSTRAINT `FKsv7aipa6b5my7optbhv05ufwn` FOREIGN KEY (`modification_id`) REFERENCES `modification` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1254,7 +1254,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (26,942,_binary '`P¸DA\n±\Í\·NõZjè','admin','admin','$2a$10$zBX52L1fispvDUi6BqArKuCX3jY1nURmp6YnWtk1zvnIGPDzMo6.m','admin@admin.com');
+INSERT INTO `user` VALUES (26,942,_binary '`PÔøΩDA\nÔøΩ\ÔøΩ\ÔøΩNÔøΩZjÔøΩ','admin','admin','$2a$10$zBX52L1fispvDUi6BqArKuCX3jY1nURmp6YnWtk1zvnIGPDzMo6.m','admin@admin.com');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
