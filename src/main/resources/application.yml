@@ -18,7 +18,7 @@ spring:
         INDENT_OUTPUT: true
     datasource:
         ## MYSQL
-        url: jdbc:mysql://127.0.0.1:3306/qsample?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+        url: jdbc:mysql://qsample-server_db_1:3306/qsample?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
         username: "qsample"
         password: "qsample2017"
         driver-class-name: com.mysql.cj.jdbc.Driver
@@ -93,7 +93,7 @@ local-requests: false # true to use local database, false to use agendo. If true
 spring:
   profiles: test
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/qsampletest?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://qsample-server_db_1:3306/qsampletest?useSSL=false&serverTimezone=UTC
     username: "admin"
     password: "CRG4dm1n!"
     driver-class-name: com.mysql.jdbc.Driver
@@ -125,7 +125,7 @@ logging:
 spring:
   profiles: prod
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/qsample?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://qsample-server_db_1:3306/qsample?useSSL=false&serverTimezone=UTC
     username: "admin"
     password: "CRG4dm1n!"
     driver-class-name: com.mysql.jdbc.Driver
@@ -156,7 +156,7 @@ logging:
 spring:
   profiles: unittest
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/qsampleunit?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://qsample-server_db_1:3306/qsampleunit?useSSL=false&serverTimezone=UTC
     username: "root"
     password: "vesperon501"
     driver-class-name: com.mysql.jdbc.Driver
