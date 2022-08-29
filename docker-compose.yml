@@ -6,11 +6,14 @@ services:
     restart: always
     volumes:
       # Where starting dumps are stored
-      - ./sql:/docker-entrypoint-initdb.d
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
       # Where data will be stored
       - ./mysql:/var/lib/mysql
     expose:
       - 3306
+    ports:
+      # Mapping here for testing purposes
+      - 3308:3306
     environment:
       MARIADB_ROOT_PASSWORD: qsample2022
       MARIADB_USER: qsample
@@ -27,5 +30,5 @@ services:
         read_only: true
     ports:
       # Ports exposed outside, they should match config
-      - 8081
-      - 8082
+      - 8081:8081
+      - 8082:8082
