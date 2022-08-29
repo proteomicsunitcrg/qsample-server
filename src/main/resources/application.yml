@@ -19,8 +19,8 @@ spring:
     datasource:
         ## MYSQL
         url: jdbc:mysql://127.0.0.1:3306/qsample?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-        username: "root"
-        password: "qcloud2017"
+        username: "qsample"
+        password: "qsample2017"
         driver-class-name: com.mysql.cj.jdbc.Driver
     mail:
       default-encoding: UTF-8
