@@ -1,5 +1,5 @@
+version: "3.2"
 services:
-
   db:
     image: mariadb:10.7
     command: --default-authentication-plugin=mysql_native_password
@@ -12,15 +12,19 @@ services:
     expose:
       - 3306
     environment:
-      MARIADB_ROOT_PASSWORD: rootpasswd
+      MARIADB_ROOT_PASSWORD: qsample2022
       MARIADB_USER: qsample
-      MARIADB_PASSWORD: qsamplepass
+      MARIADB_PASSWORD: qsample2017
       MARIADB_DATABASE: qsample
-  server:
-    image: qsample
+  app:
+    # image: qsample:latest
+    build: .
     restart: always
     volumes:
-    - /my/config/application.yml:/config/application.yml
+      - type: bind
+        source: ./src/main/resources/application.yml
+        target: /config/application.yml
+        read_only: true
     ports:
       # Ports exposed outside, they should match config
       - 8081

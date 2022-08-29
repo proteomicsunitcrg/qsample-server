@@ -24,7 +24,7 @@ RUN apt clean
 
 FROM biocorecrg/debian-perlbrew-pyenv3-java:buster
 VOLUME /tmp
-VOLUME /config/application.yml
+RUN mkdir -p /config
 RUN mkdir -p /app
 WORKDIR /app
 COPY --from=jarserver /tmp/target/*jar /app
