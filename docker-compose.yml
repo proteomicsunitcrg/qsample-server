@@ -1,0 +1,16 @@
+services:
+
+  db:
+    image: mariadb
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      # Where starting dumps are stored
+      - ./sql:/docker-entrypoint-initdb.d
+      # Where data will be stored
+      - ./mysql:/var/lib/mysql
+    environment:
+      MARIADB_ROOT_PASSWORD: rootpasswd
+      MARIADB_USER: qsample
+      MARIADB_PASSWORD: qsamplepass
+      MARIADB_DATABASE: qsample
