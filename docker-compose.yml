@@ -1,7 +1,7 @@
 services:
 
   db:
-    image: mariadb
+    image: mariadb:10.7
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     volumes:
@@ -9,8 +9,19 @@ services:
       - ./sql:/docker-entrypoint-initdb.d
       # Where data will be stored
       - ./mysql:/var/lib/mysql
+    expose:
+      - 3306
     environment:
       MARIADB_ROOT_PASSWORD: rootpasswd
       MARIADB_USER: qsample
       MARIADB_PASSWORD: qsamplepass
       MARIADB_DATABASE: qsample
+  server:
+    image: qsample
+    restart: always
+    volumes:
+    - /my/config/application.yml:/config/application.yml
+    ports:
+      # Ports exposed outside, they should match config
+      - 8081
+      - 8082
