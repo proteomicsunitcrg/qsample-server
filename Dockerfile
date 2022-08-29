@@ -28,5 +28,5 @@ RUN mkdir -p /config
 RUN mkdir -p /app
 WORKDIR /app
 COPY --from=jarserver /tmp/target/*jar /app
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app/qsample-0.2.5.Roger.jar", "--spring.config.location=file:/config/application.yml"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-jar","/app/qsample-0.2.5.Roger.jar", "--spring.config.location=file:/config/application.yml"]
 
