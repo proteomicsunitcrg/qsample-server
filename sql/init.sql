@@ -2,11 +2,6 @@
 
 CREATE DATABASE IF NOT EXISTS `qsample`;
 
-GRANT ALL PRIVILEGES on qsample.* to qsample@'%';
-GRANT ALL PRIVILEGES on qsample.* to qsample@'localhost';
-
-FLUSH PRIVILEGES;
-
 USE `qsample`;
 
 -- MariaDB dump 10.19  Distrib 10.5.17-MariaDB, for debian-linux-gnu (x86_64)
@@ -54,6 +49,31 @@ INSERT INTO `application` VALUES (1,'Identification of a protein in a gel band',
 UNLOCK TABLES;
 
 --
+-- Table structure for table `application_constraint_seq`
+--
+
+DROP TABLE IF EXISTS `application_constraint_seq`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `application_constraint_seq` (
+  `next_val` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `application_constraint_seq`
+--
+
+LOCK TABLES `application_constraint_seq` WRITE;
+/*!40000 ALTER TABLE `application_constraint_seq` DISABLE KEYS */;
+INSERT INTO `application_constraint_seq` VALUES (1);
+/*!40000 ALTER TABLE `application_constraint_seq` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `application_constraint`
+--
+--
 -- Table structure for table `application_constraint`
 --
 
@@ -77,36 +97,11 @@ CREATE TABLE `application_constraint` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `application_constraint`
---
 
 LOCK TABLES `application_constraint` WRITE;
 /*!40000 ALTER TABLE `application_constraint` DISABLE KEYS */;
-INSERT INTO `application_constraint` VALUES (1,'Default','\0','','','\0','','','','','\0','\0'),(2,'Phospho','','','','','\0','','\0','','\0','\0'),(3,'PTM','','','','\0','\0','','\0','','','');
+INSERT INTO `application_constraint` (id, name) VALUES (1,'Default'),(2,'Phospho'),(3,'PTM');
 /*!40000 ALTER TABLE `application_constraint` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `application_constraint_seq`
---
-
-DROP TABLE IF EXISTS `application_constraint_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `application_constraint_seq` (
-  `next_val` bigint(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `application_constraint_seq`
---
-
-LOCK TABLES `application_constraint_seq` WRITE;
-/*!40000 ALTER TABLE `application_constraint_seq` DISABLE KEYS */;
-INSERT INTO `application_constraint_seq` VALUES (1);
-/*!40000 ALTER TABLE `application_constraint_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1399,3 +1394,4 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2022-08-30 14:12:46
+
