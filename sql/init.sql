@@ -1,20 +1,24 @@
--- STARTING database
+-- Pre, starting database
+
 CREATE DATABASE IF NOT EXISTS `qsample`;
 
 GRANT ALL PRIVILEGES on qsample.* to qsample@'%';
+GRANT ALL PRIVILEGES on qsample.* to qsample@'localhost';
+
+FLUSH PRIVILEGES;
 
 USE `qsample`;
 
--- MySQL dump 10.13  Distrib 8.0.29, for Linux (x86_64)
+-- MariaDB dump 10.19  Distrib 10.5.17-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: qsample
 -- ------------------------------------------------------
--- Server version	8.0.29-0ubuntu0.20.04.3
+-- Server version	10.5.17-MariaDB-1:10.5.17+maria~ubu2004
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -28,11 +32,11 @@ USE `qsample`;
 
 DROP TABLE IF EXISTS `application`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `application` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `name` varchar(200) DEFAULT NULL,
-  `application_constraint_id` bigint DEFAULT NULL,
+  `application_constraint_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK5h6cfohdp8p2tj8k13qau90nj` (`application_constraint_id`),
   CONSTRAINT `FK5h6cfohdp8p2tj8k13qau90nj` FOREIGN KEY (`application_constraint_id`) REFERENCES `application_constraint` (`id`)
@@ -55,9 +59,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `application_constraint`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `application_constraint` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `name` varchar(255) NOT NULL,
   `show_file_info_plot` bit(1) NOT NULL,
   `show_identified_peptides_plot` bit(1) NOT NULL,
@@ -79,7 +83,7 @@ CREATE TABLE `application_constraint` (
 
 LOCK TABLES `application_constraint` WRITE;
 /*!40000 ALTER TABLE `application_constraint` DISABLE KEYS */;
-INSERT INTO `application_constraint` VALUES (1,'Default',_binary '\0',_binary '',_binary '',_binary '\0',_binary '',_binary '',_binary '',_binary '',_binary '\0',_binary '\0'),(2,'Phospho',_binary '',_binary '',_binary '',_binary '',_binary '\0',_binary '',_binary '\0',_binary '',_binary '\0',_binary '\0'),(3,'PTM',_binary '',_binary '',_binary '',_binary '\0',_binary '\0',_binary '',_binary '\0',_binary '',_binary '',_binary '');
+INSERT INTO `application_constraint` VALUES (1,'Default','\0','','','\0','','','','','\0','\0'),(2,'Phospho','','','','','\0','','\0','','\0','\0'),(3,'PTM','','','','\0','\0','','\0','','','');
 /*!40000 ALTER TABLE `application_constraint` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -89,9 +93,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `application_constraint_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `application_constraint_seq` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -111,9 +115,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `application_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `application_seq` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -133,15 +137,15 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `context_source`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `context_source` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `abbreviated` varchar(50) NOT NULL,
   `api_key` binary(50) NOT NULL,
-  `charge` bigint DEFAULT NULL,
+  `charge` bigint(20) DEFAULT NULL,
   `mz` float DEFAULT NULL,
   `name` varchar(50) NOT NULL,
-  `trace_color_id` bigint DEFAULT NULL,
+  `trace_color_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKk6d0ww18rgc22m9s351or4hqu` (`trace_color_id`),
   CONSTRAINT `FKk6d0ww18rgc22m9s351or4hqu` FOREIGN KEY (`trace_color_id`) REFERENCES `trace_color` (`id`)
@@ -154,7 +158,7 @@ CREATE TABLE `context_source` (
 
 LOCK TABLES `context_source` WRITE;
 /*!40000 ALTER TABLE `context_source` DISABLE KEYS */;
-INSERT INTO `context_source` VALUES (1,'# proteins',_binary 'apiKey1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Total number of identified grouped proteins',1),(2,'# peptides',_binary 'apiKey2\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Total number of identified peptides',1),(3,'+2',_binary 'apiKey3\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Charge +2',1),(4,'+3',_binary 'apiKey4\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Charge +3',1),(5,'+4',_binary 'apiKey5\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Charge +4',1),(6,'Missed cleavages',_binary 'apiKey6\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Missed cleavages',1),(7,'Base peak intensity (removed log 04/04/22)',_binary 'apiKey7\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Base peak intensity (removed log 04/04/22)',1),(8,'Percentage Propionyl',_binary 'apiKey8\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Percentage Propionyl',1),(9,'Percentage PIC',_binary 'apiKey9\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Percentage PIC',1),(10,'K(Carbamyl)',_binary 'apiKey@\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Percentage K(Carbamyl)',1),(11,'N-terminal (Carbamyl)',_binary 'apiKeyA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Percentage .(Carbamyl))',1),(12,'R(Carbamyl)',_binary 'apiKeyB\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Percentage R(Carbamyl))',1),(13,'N(Deamidated)',_binary 'apiKeyC\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Percentage N(Deamidated))',1),(14,'K(Formyl)',_binary 'apiKeyD\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Percentage K(Formyl))',1),(15,'N-terminal (Formyl)',_binary 'apiKeyE\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Percentage .(Formyl))',1),(16,'S(Formyl)',_binary 'apiKeyF\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Percentage S(Formyl))',1),(17,'T(Formyl)',_binary 'apiKeyG\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Percentage T(Formyl))',1),(18,'pyro-Glu',_binary 'apiKeyH\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Percentage pyro-Glu)',1),(19,'TIC (removed log 04/04/22)',_binary 'apiKeyI\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'TIC (removed log 04/04/22)',1),(20,'0',_binary 'apiKeyP\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'# missed cleavages = 0',1),(21,'1',_binary 'apiKeyQ\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'# missed cleavages = 1',1),(22,'2',_binary 'apiKeyR\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'# missed cleavages = 2',1),(23,'3',_binary 'apiKeyS\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'# missed cleavages = 3',1),(24,'Total number of phospho peptides',_binary 'apiKeyT\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Total number of phospho peptides',1);
+INSERT INTO `context_source` VALUES (1,'# proteins','apiKey1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Total number of identified grouped proteins',1),(2,'# peptides','apiKey2\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Total number of identified peptides',1),(3,'+2','apiKey3\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Charge +2',1),(4,'+3','apiKey4\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Charge +3',1),(5,'+4','apiKey5\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Charge +4',1),(6,'Missed cleavages','apiKey6\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Missed cleavages',1),(7,'Base peak intensity (removed log 04/04/22)','apiKey7\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Base peak intensity (removed log 04/04/22)',1),(8,'Percentage Propionyl','apiKey8\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Percentage Propionyl',1),(9,'Percentage PIC','apiKey9\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Percentage PIC',1),(10,'K(Carbamyl)','apiKey@\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Percentage K(Carbamyl)',1),(11,'N-terminal (Carbamyl)','apiKeyA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Percentage .(Carbamyl))',1),(12,'R(Carbamyl)','apiKeyB\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Percentage R(Carbamyl))',1),(13,'N(Deamidated)','apiKeyC\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Percentage N(Deamidated))',1),(14,'K(Formyl)','apiKeyD\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Percentage K(Formyl))',1),(15,'N-terminal (Formyl)','apiKeyE\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Percentage .(Formyl))',1),(16,'S(Formyl)','apiKeyF\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Percentage S(Formyl))',1),(17,'T(Formyl)','apiKeyG\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Percentage T(Formyl))',1),(18,'pyro-Glu','apiKeyH\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Percentage pyro-Glu)',1),(19,'TIC (removed log 04/04/22)','apiKeyI\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'TIC (removed log 04/04/22)',1),(20,'0','apiKeyP\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'# missed cleavages = 0',1),(21,'1','apiKeyQ\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'# missed cleavages = 1',1),(22,'2','apiKeyR\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'# missed cleavages = 2',1),(23,'3','apiKeyS\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'# missed cleavages = 3',1),(24,'Total number of phospho peptides','apiKeyT\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Total number of phospho peptides',1);
 /*!40000 ALTER TABLE `context_source` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -164,9 +168,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `context_source_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `context_source_seq` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -186,15 +190,15 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `data`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `data` (
-  `context_source_id` bigint NOT NULL,
-  `file_id` bigint NOT NULL,
-  `param_id` bigint NOT NULL,
+  `context_source_id` bigint(20) NOT NULL,
+  `file_id` bigint(20) NOT NULL,
+  `param_id` bigint(20) NOT NULL,
   `calculated_value` float DEFAULT NULL,
   `non_conformity_status` varchar(255) DEFAULT 'OK',
   `value` float DEFAULT NULL,
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `std` float DEFAULT NULL,
   PRIMARY KEY (`context_source_id`,`file_id`,`param_id`),
   KEY `FKg3e02o0b669arg7nkyrs60lh7` (`file_id`),
@@ -220,9 +224,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `data_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `data_seq` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -242,10 +246,10 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `favorite_request`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `favorite_request` (
-  `id` bigint NOT NULL,
-  `agendo_id` bigint DEFAULT NULL,
+  `id` bigint(20) NOT NULL,
+  `agendo_id` bigint(20) DEFAULT NULL,
   `request_code` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -266,9 +270,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `favorite_request_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `favorite_request_seq` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -288,12 +292,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `favorite_request_users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `favorite_request_users` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `notify` bit(1) DEFAULT NULL,
-  `favorite_request_id` bigint DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
+  `favorite_request_id` bigint(20) DEFAULT NULL,
+  `user_id` bigint(20) DEFAULT NULL,
   `notes` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKss42oap5dsfcmaseto0hf317e` (`favorite_request_id`),
@@ -318,19 +322,19 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `file`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `file` (
   `dtype` varchar(31) NOT NULL,
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `checksum` varchar(50) NOT NULL,
   `creation_date` datetime DEFAULT NULL,
   `filename` varchar(200) DEFAULT NULL,
-  `wet_lab_type` bigint DEFAULT NULL,
+  `wet_lab_type` bigint(20) DEFAULT NULL,
   `request_code` varchar(255) DEFAULT NULL,
-  `file_info_id` bigint DEFAULT NULL,
-  `replicate` int DEFAULT NULL,
-  `week` int DEFAULT NULL,
-  `year` int DEFAULT NULL,
+  `file_info_id` bigint(20) DEFAULT NULL,
+  `replicate` int(11) DEFAULT NULL,
+  `week` int(11) DEFAULT NULL,
+  `year` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKngem4y76s84dei8nvtw44r1fl` (`wet_lab_type`),
   KEY `FKrmh3d76ins4ukfmi4e154cvvw` (`file_info_id`),
@@ -354,11 +358,11 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `file_info`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `file_info` (
-  `id` bigint NOT NULL,
-  `peptide_hits` bigint DEFAULT NULL,
-  `peptide_modified` bigint DEFAULT NULL,
+  `id` bigint(20) NOT NULL,
+  `peptide_hits` bigint(20) DEFAULT NULL,
+  `peptide_modified` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -378,9 +382,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `file_info_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `file_info_seq` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -400,9 +404,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `file_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `file_seq` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -422,9 +426,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `guide_set`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `guide_set` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `api_key` binary(16) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_ea8e5icv3469cmimqepyfx3cx` (`api_key`)
@@ -446,10 +450,10 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `guide_set_files`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `guide_set_files` (
-  `guide_set_id` bigint NOT NULL,
-  `files_id` bigint NOT NULL,
+  `guide_set_id` bigint(20) NOT NULL,
+  `files_id` bigint(20) NOT NULL,
   UNIQUE KEY `UK_hynquehs4vq14dfc83838jbnf` (`files_id`),
   KEY `FKdh668kmoo1ma7132mvg8gb872` (`guide_set_id`),
   CONSTRAINT `FK7uep4tvhecv44gufxf1f51trd` FOREIGN KEY (`files_id`) REFERENCES `file` (`id`),
@@ -472,9 +476,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `guide_set_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `guide_set_seq` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -494,9 +498,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `hibernate_sequence`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hibernate_sequence` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -516,12 +520,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `injection_conditions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `injection_conditions` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `volume` float DEFAULT NULL,
-  `application_id` bigint DEFAULT NULL,
-  `instrument_id` bigint DEFAULT NULL,
+  `application_id` bigint(20) DEFAULT NULL,
+  `instrument_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKt6u95asoldj1myeloay3s2xvr` (`application_id`),
   KEY `FKdjycswuqkp2d2u5xdmev5druu` (`instrument_id`),
@@ -546,10 +550,10 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `injection_conditions_methods`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `injection_conditions_methods` (
-  `injection_conditions_id` bigint NOT NULL,
-  `methods_id` bigint NOT NULL,
+  `injection_conditions_id` bigint(20) NOT NULL,
+  `methods_id` bigint(20) NOT NULL,
   KEY `FKa1d5d4l47f56xcv95swwygj2` (`methods_id`),
   KEY `FKo6oxj02cd0inf575gem10g2vt` (`injection_conditions_id`),
   CONSTRAINT `FKa1d5d4l47f56xcv95swwygj2` FOREIGN KEY (`methods_id`) REFERENCES `method` (`id`),
@@ -573,13 +577,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `injection_conditions_qc`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `injection_conditions_qc` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `method` varchar(255) DEFAULT NULL,
   `qctype` varchar(255) DEFAULT NULL,
   `volume` float DEFAULT NULL,
-  `instrument_id` bigint DEFAULT NULL,
+  `instrument_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKnu8rjv35u3r9cbh16vel91tx0` (`instrument_id`),
   CONSTRAINT `FKnu8rjv35u3r9cbh16vel91tx0` FOREIGN KEY (`instrument_id`) REFERENCES `instrument` (`id`)
@@ -602,9 +606,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `injection_conditions_qc_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `injection_conditions_qc_seq` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -624,9 +628,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `injection_conditions_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `injection_conditions_seq` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -646,13 +650,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `injection_conditionsqc`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `injection_conditionsqc` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `qctype` varchar(255) DEFAULT NULL,
   `method` varchar(255) DEFAULT NULL,
   `volume` float DEFAULT NULL,
-  `instrument_id` bigint DEFAULT NULL,
+  `instrument_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK33yldjedmrun94xrhrb62ldlg` (`instrument_id`),
   CONSTRAINT `FK33yldjedmrun94xrhrb62ldlg` FOREIGN KEY (`instrument_id`) REFERENCES `instrument` (`id`)
@@ -674,9 +678,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `instrument`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `instrument` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -698,9 +702,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `instrument_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `instrument_seq` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -720,9 +724,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `method`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `method` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `name` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -744,9 +748,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `method_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `method_seq` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -766,9 +770,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `modification`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `modification` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -792,12 +796,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `modification_file`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `modification_file` (
-  `id` bigint NOT NULL,
-  `value` bigint DEFAULT NULL,
-  `file_id` bigint DEFAULT NULL,
-  `modification_id` bigint DEFAULT NULL,
+  `id` bigint(20) NOT NULL,
+  `value` bigint(20) DEFAULT NULL,
+  `file_id` bigint(20) DEFAULT NULL,
+  `modification_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKnvy5xth7b00tf5k4k61j9c7th` (`file_id`),
   KEY `FKsv7aipa6b5my7optbhv05ufwn` (`modification_id`),
@@ -821,9 +825,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `modification_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `modification_seq` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -843,9 +847,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `param`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `param` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `api_key` binary(50) NOT NULL,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
@@ -858,7 +862,7 @@ CREATE TABLE `param` (
 
 LOCK TABLES `param` WRITE;
 /*!40000 ALTER TABLE `param` DISABLE KEYS */;
-INSERT INTO `param` VALUES (1,_binary 'apiKey1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0','Total Numbers');
+INSERT INTO `param` VALUES (1,'apiKey1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0','Total Numbers');
 /*!40000 ALTER TABLE `param` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -868,9 +872,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `param_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `param_seq` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -890,12 +894,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `password_reset_token`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `password_reset_token` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `expiry_date` datetime(6) DEFAULT NULL,
   `token` varchar(255) DEFAULT NULL,
-  `user_id` bigint NOT NULL,
+  `user_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK5lwtbncug84d4ero33v3cfxvl` (`user_id`),
   CONSTRAINT `FK5lwtbncug84d4ero33v3cfxvl` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
@@ -917,11 +921,11 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `plot`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `plot` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `api_key` binary(50) NOT NULL,
-  `param_id` bigint DEFAULT NULL,
+  `param_id` bigint(20) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKd61s4kadcsyyck19p3gmxeuwa` (`param_id`),
@@ -935,7 +939,7 @@ CREATE TABLE `plot` (
 
 LOCK TABLES `plot` WRITE;
 /*!40000 ALTER TABLE `plot` DISABLE KEYS */;
-INSERT INTO `plot` VALUES (1,_binary 'apiKey1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',1,'Total numbers of proteins'),(3,_binary 'plot3\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',1,'Total number of peptides'),(4,_binary 'plot4\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',1,'Percentage Propionyl'),(5,_binary 'plot5\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',1,'Percentage PIC'),(6,_binary 'plot6\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',1,'Total number of phospho peptides');
+INSERT INTO `plot` VALUES (1,'apiKey1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',1,'Total numbers of proteins'),(3,'plot3\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',1,'Total number of peptides'),(4,'plot4\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',1,'Percentage Propionyl'),(5,'plot5\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',1,'Percentage PIC'),(6,'plot6\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',1,'Total number of phospho peptides');
 /*!40000 ALTER TABLE `plot` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -945,10 +949,10 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `plot_context_source`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `plot_context_source` (
-  `plot_id` bigint NOT NULL,
-  `context_source_id` bigint NOT NULL,
+  `plot_id` bigint(20) NOT NULL,
+  `context_source_id` bigint(20) NOT NULL,
   KEY `FKhilmbckmk1jl1pygas5pfxm59` (`context_source_id`),
   KEY `FKt78bum1vtgpmulboxxhg446d1` (`plot_id`),
   CONSTRAINT `FKhilmbckmk1jl1pygas5pfxm59` FOREIGN KEY (`context_source_id`) REFERENCES `context_source` (`id`),
@@ -972,9 +976,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `plot_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `plot_seq` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -994,14 +998,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `quantification`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `quantification` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `abundance` float DEFAULT NULL,
   `accession` varchar(255) DEFAULT NULL,
   `contaminant` bit(1) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
-  `file_id` bigint DEFAULT NULL,
+  `file_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKqdhhym2283lgqv665ymm68e1q` (`file_id`),
   CONSTRAINT `FKqdhhym2283lgqv665ymm68e1q` FOREIGN KEY (`file_id`) REFERENCES `file` (`id`)
@@ -1023,9 +1027,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `quantification_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `quantification_seq` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1045,9 +1049,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `request_local`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `request_local` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `creation_date` datetime(6) DEFAULT NULL,
   `creator` varchar(255) DEFAULT NULL,
   `groupp` varchar(255) DEFAULT NULL,
@@ -1055,7 +1059,7 @@ CREATE TABLE `request_local` (
   `samples` varchar(5000) DEFAULT NULL,
   `statuss` varchar(255) DEFAULT NULL,
   `taxonomy` varchar(255) DEFAULT NULL,
-  `application_id` bigint DEFAULT NULL,
+  `application_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKp73aox9pm50r87pd7gt6euxfu` (`application_id`),
   CONSTRAINT `FKp73aox9pm50r87pd7gt6euxfu` FOREIGN KEY (`application_id`) REFERENCES `application` (`id`)
@@ -1077,9 +1081,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `role` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `name` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -1101,14 +1105,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `threshold`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `threshold` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `api_key` binary(16) NOT NULL,
   `non_conformity_direction` varchar(255) DEFAULT NULL,
-  `steps` int DEFAULT NULL,
-  `wetlab_id` bigint DEFAULT NULL,
-  `param_id` bigint NOT NULL,
+  `steps` int(11) DEFAULT NULL,
+  `wetlab_id` bigint(20) DEFAULT NULL,
+  `param_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_9hxspk3fg6bhh4y1yyuu36ov9` (`api_key`),
   KEY `FKl5qysigvx0wpmif73wfo9iya2` (`wetlab_id`),
@@ -1133,10 +1137,10 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `threshold_params`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `threshold_params` (
-  `context_source_id` bigint NOT NULL,
-  `threshold_id` bigint NOT NULL,
+  `context_source_id` bigint(20) NOT NULL,
+  `threshold_id` bigint(20) NOT NULL,
   `initial_value` float DEFAULT NULL,
   `is_enabled` bit(1) DEFAULT b'1',
   `step_value` float DEFAULT NULL,
@@ -1162,9 +1166,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `threshold_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `threshold_seq` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1184,14 +1188,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `trace_color`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `trace_color` (
-  `id` bigint NOT NULL,
-  `a` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
+  `a` bigint(20) NOT NULL,
   `api_key` binary(50) NOT NULL,
-  `b` bigint NOT NULL,
-  `g` bigint NOT NULL,
-  `r` bigint NOT NULL,
+  `b` bigint(20) NOT NULL,
+  `g` bigint(20) NOT NULL,
+  `r` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1202,7 +1206,7 @@ CREATE TABLE `trace_color` (
 
 LOCK TABLES `trace_color` WRITE;
 /*!40000 ALTER TABLE `trace_color` DISABLE KEYS */;
-INSERT INTO `trace_color` VALUES (1,0,_binary 'apiKey1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',100,100,100);
+INSERT INTO `trace_color` VALUES (1,0,'apiKey1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',100,100,100);
 /*!40000 ALTER TABLE `trace_color` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1212,9 +1216,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `trace_color_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `trace_color_seq` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1234,10 +1238,10 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
-  `id` bigint NOT NULL,
-  `agendo_id` bigint DEFAULT NULL,
+  `id` bigint(20) NOT NULL,
+  `agendo_id` bigint(20) DEFAULT NULL,
   `api_key` binary(16) NOT NULL,
   `firstname` varchar(50) NOT NULL,
   `lastname` varchar(50) NOT NULL,
@@ -1254,7 +1258,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (26,942,_binary '`P�DA\n�\�\�N�Zj�','admin','admin','$2a$10$zBX52L1fispvDUi6BqArKuCX3jY1nURmp6YnWtk1zvnIGPDzMo6.m','admin@admin.com');
+INSERT INTO `user` VALUES (26,942,'`P�DA\n��','admin','admin','$2a$10$zBX52L1fispvDUi6BqArKuCX3jY1nURmp6YnWtk1zvnIGPDzMo6.m','admin@admin.com');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1264,9 +1268,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `user_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_seq` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1286,10 +1290,10 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `users_roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users_roles` (
-  `user_id` bigint NOT NULL,
-  `role_id` bigint NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `role_id` bigint(20) NOT NULL,
   KEY `FKt4v0rrweyk393bdgt107vdx0x` (`role_id`),
   KEY `FKgd3iendaoyh04b95ykqise6qh` (`user_id`),
   CONSTRAINT `FKgd3iendaoyh04b95ykqise6qh` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
@@ -1313,9 +1317,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `wet_lab_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wet_lab_seq` (
-  `next_val` bigint DEFAULT NULL
+  `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1335,12 +1339,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `wetlab`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wetlab` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `api_key` binary(16) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `guide_set_id` bigint DEFAULT NULL,
+  `guide_set_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_ejfiihgmd6k24h2rg119qycaw` (`api_key`),
   KEY `FKdmtiufjb02q61tejl5ki4bo5u` (`guide_set_id`),
@@ -1354,7 +1358,7 @@ CREATE TABLE `wetlab` (
 
 LOCK TABLES `wetlab` WRITE;
 /*!40000 ALTER TABLE `wetlab` DISABLE KEYS */;
-INSERT INTO `wetlab` VALUES (1,_binary 'apiKey1\0\0\0\0\0\0\0\0\0','InSolutionQC',NULL),(2,_binary 'wetlab2\0\0\0\0\0\0\0\0\0','AgilentQC',NULL),(3,_binary 'wetlab3\0\0\0\0\0\0\0\0\0','InGelQC',NULL),(4,_binary 'wetlab4\0\0\0\0\0\0\0\0\0','PhosphoQC',NULL),(5,_binary 'wetlab5\0\0\0\0\0\0\0\0\0','FASPQC',NULL),(6,_binary 'wetlab6\0\0\0\0\0\0\0\0\0','HistoneQC',NULL);
+INSERT INTO `wetlab` VALUES (1,'apiKey1\0\0\0\0\0\0\0\0\0','InSolutionQC',NULL),(2,'wetlab2\0\0\0\0\0\0\0\0\0','AgilentQC',NULL),(3,'wetlab3\0\0\0\0\0\0\0\0\0','InGelQC',NULL),(4,'wetlab4\0\0\0\0\0\0\0\0\0','PhosphoQC',NULL),(5,'wetlab5\0\0\0\0\0\0\0\0\0','FASPQC',NULL),(6,'wetlab6\0\0\0\0\0\0\0\0\0','HistoneQC',NULL);
 /*!40000 ALTER TABLE `wetlab` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1364,10 +1368,10 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `wetlab_plot`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wetlab_plot` (
-  `wet_lab_id` bigint NOT NULL,
-  `plot_id` bigint NOT NULL,
+  `wet_lab_id` bigint(20) NOT NULL,
+  `plot_id` bigint(20) NOT NULL,
   KEY `FKg61sv5eqdbpsytd5lravvkf0j` (`plot_id`),
   KEY `FK79plxrl3k35xg5hme4xu0hidx` (`wet_lab_id`),
   CONSTRAINT `FK79plxrl3k35xg5hme4xu0hidx` FOREIGN KEY (`wet_lab_id`) REFERENCES `wetlab` (`id`),
@@ -1394,4 +1398,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-07-28 11:57:38
+-- Dump completed on 2022-08-30 14:12:46
