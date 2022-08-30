@@ -115,7 +115,7 @@ email-conf:
   admin-email: marc.serret@crg.eu
   app-url: "qsample.crg.eu"
 logging:
-  file: qsample.log
+  file: /tmp/qsample.log
   level:
     org.springframework:
     security: ERROR
@@ -147,7 +147,7 @@ email-conf:
   admin-email: marc.serret@crg.eu
   app-url: "qsample.crg.eu"
 logging:
-  file: qsample.log
+  file: /tmp/qsample.log
   level:
     org.springframework:
     security: ERROR
@@ -175,6 +175,6 @@ spring:
 server:
   port: 8082
 logging:
-  file: qsampleUnitTest.log
+  file: /tmp/qsampleUnitTest.log
 
 spring.main.allow-bean-definition-overriding: true
