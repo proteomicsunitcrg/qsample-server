@@ -66,6 +66,7 @@ public class DataService {
     GuideSetService guideSetService;
 
     public List<PlotTraceWetlab> getTraceData(Date startDate, Date endDate, Long plotId, UUID wetLabApiKey) {
+        System.out.println("0.1------------------------------>");
         Optional<Plot> plot = plotRepo.findById(plotId);
         Optional<WetLab> wetlab = wetLabRepo.findOneByApiKey(wetLabApiKey);
         List<Data> data = new ArrayList<>();
@@ -147,6 +148,7 @@ public class DataService {
     }
 
     private PlotTrace generatePlotTraceFromContextSource(ContextSource contextSource) {
+        System.out.println("0------------------------------>");
         PlotTrace plotTrace = new PlotTrace();
         plotTrace.setAbbreviated(contextSource.getAbbreviated());
         plotTrace.setTraceColor(contextSource.getTraceColor());
@@ -155,6 +157,7 @@ public class DataService {
     }
 
     private PlotTraceWetlab generatePlotTraceFromContextSourceWetlab(ContextSource contextSource) {
+        System.out.println("1------------------------------>");
         PlotTraceWetlab plotTrace = new PlotTraceWetlab();
         plotTrace.setAbbreviated(contextSource.getAbbreviated());
         plotTrace.setTraceColor(contextSource.getTraceColor());
@@ -163,6 +166,7 @@ public class DataService {
     }
 
     private PlotTracePoint generatePlotTracePointFromData(Data d) {
+        System.out.println("2----------------------------->");
         return new PlotTracePoint(d.getFile(), d.getCalculatedValue(), d.getNonConformityStatus());
     }
 
@@ -171,6 +175,7 @@ public class DataService {
     }
 
     public List<PlotTrace> getTraceDataRequest(List <Long> csIds, Long paramId, String requestCode, String order) {
+        System.out.println("3------------------------------>");
         Optional <List <ContextSource>> cs = csRepo.findAllByIdIn(csIds);
         if (!cs.isPresent()) {
             throw new NotFoundException("Context Source not found");
@@ -231,6 +236,7 @@ public class DataService {
      * @return
      */
     private List<RequestFile> parseFileNameForPlot(List<RequestFile> files) {
+        System.out.println("4------------------------------>");
         for (RequestFile file : files) {
             List<String> items = new ArrayList<>(Arrays.asList(file.getFilename().split("\\s*_\\s*"))); // https://stackoverflow.com/questions/5755477/java-list-add-unsupportedoperationexception
             if (items.get(0).equals(file.getRequestCode())) {

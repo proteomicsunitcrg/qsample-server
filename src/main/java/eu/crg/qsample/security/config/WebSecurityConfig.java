@@ -24,6 +24,8 @@ import eu.crg.qsample.security.JwtAuthenticationEntryPoint;
 import eu.crg.qsample.security.JwtAuthenticationTokenFilter;
 import eu.crg.qsample.security.services.UserDetailsServiceImpl;
 
+import org.springframework.http.HttpMethod;
+
 @SuppressWarnings("SpringJavaAutowiringInspection")
 @Configuration
 @EnableWebSecurity
@@ -64,7 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         security.formLogin().disable();
         security.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-                .antMatchers("/api/auth/**").permitAll().antMatchers("/api/test/**").permitAll().anyRequest()
+                .antMatchers("/api/auth/**").permitAll().antMatchers("/**","/").permitAll().anyRequest()
                 .authenticated();
 
         security.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
