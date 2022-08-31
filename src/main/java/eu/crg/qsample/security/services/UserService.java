@@ -81,6 +81,23 @@ public class UserService {
         return userRepo.save(newUser);
     }
 
+    public User addLocalUser() {
+
+        User newUser = new User(null, UUID.randomUUID(), "admin", "admin", "admin@admin.com",
+                encoder.encode("admin"), 942l);
+        Set<Role> roles = new HashSet<>();
+        Role roleAdmin = roleRepo.findByName(ERole.ROLE_ADMIN).get();
+        Role roleInternal = roleRepo.findByName(ERole.ROLE_INTERNAL).get();
+        Role roleManager = roleRepo.findByName(ERole.ROLE_MANAGER).get();
+        Role roleUser = roleRepo.findByName(ERole.ROLE_USER).get();
+        roles.add(roleAdmin);
+        roles.add(roleInternal);
+        roles.add(roleManager);
+        roles.add(roleUser);
+        newUser.setRoles(roles);
+        return userRepo.save(newUser);
+    }
+
     public List<User> getAllUsers() {
         return userRepo.findAll();
     }

@@ -121,6 +121,19 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
+    /**
+     * Secret endpoint just to setup users for testing withouth asking agendo
+     * @param signUpRequest
+     * @return
+     */
+    @PostMapping("/firstsignup")
+    public ResponseEntity<?> setFirstUserToDB() {
+        System.out.println("Start /firstsignup entry point...");
+        userService.addLocalUser();
+        System.out.println("End /firstsignup entry point.");
+        return ResponseEntity.ok(new MessageResponse("First signup successfull!"));
+    }
+
     @PostMapping("/recovery")
     public ResponseEntity<?> recoverPassword(@RequestBody LoginRequest email) {
         if (!userRepository.existsByUsername(email.getUsername())) {
@@ -139,8 +152,6 @@ public class AuthController {
     public User changePassword(@RequestBody LoginRequest email) {
         return userService.changePassword(email.getUsername(), email.getPassword());
     }
-
-
 
     /**
      * Return bad request instead of not found per security purposes

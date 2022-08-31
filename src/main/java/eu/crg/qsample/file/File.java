@@ -28,7 +28,7 @@ public class File {
     @SequenceGenerator(name = "file_seq", sequenceName = "file_seq", allocationSize = 1)
     private Long id;
 
-    @Column(name = "checksum", length = 20, unique = true)
+    @Column(name = "checksum", length = 50, unique = true)
     @NotNull
     private String checksum;
 
