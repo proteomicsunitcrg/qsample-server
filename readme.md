@@ -10,6 +10,14 @@ Install **Maven** to install packages, libraries to the project and compile the 
 
 Install the latest version of **MySQL**.
 
+### Download software
+
+The latest version of this repository can be downloaded this way:
+
+```
+git clone --depth 1 --recurse-submodules https://github.com/proteomicsunitcrg/qsample-server
+```
+
 ### Configuration file
 
 Change the important things like the port, SQL credentials, FlyWay, QSample local mode, APIs URL and much more in the configuration file `src/main/resources/application.yml`.
@@ -77,6 +85,8 @@ With hibernate ddl mode in validate the deployment will fail if the database sch
 ## Running with docker-compose
 
 ```
+# Adapt docker-compose.yml file with the paths and the configuration file that fits your system
+# This will start both a MariaDB/MySQL instance and a web server instance
 # Start the system
 docker-compose up
 # Stop the system
