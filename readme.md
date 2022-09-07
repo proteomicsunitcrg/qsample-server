@@ -1,6 +1,30 @@
 # QSample Server
 
-## Install and launch the development environment
+## Download
+
+The latest version of this repository can be downloaded this way:
+
+```
+git clone --depth 1 --recurse-submodules https://github.com/proteomicsunitcrg/qsample-server
+```
+## Configuration file
+
+Change the important things like the port, SQL credentials, FlyWay, QSample local mode, APIs URL and much more in the configuration file `src/main/resources/application.yml`.
+
+## Execution with docker-compose
+
+The easiest way to run Qsample is with [Docker compose](https://github.com/docker/compose) (you need also Docker installed in your system)
+
+```
+# Adapt docker-compose.yml file with the paths and the configuration file that fits your system
+# This will start both a MariaDB/MySQL instance and a web server instance
+# Start the system
+docker-compose up
+# Stop the system
+docker-compose down
+```
+
+## Manual installation
 
 ### Requirements
 
@@ -10,17 +34,6 @@ Install **Maven** to install packages, libraries to the project and compile the 
 
 Install the latest version of **MySQL**.
 
-### Download software
-
-The latest version of this repository can be downloaded this way:
-
-```
-git clone --depth 1 --recurse-submodules https://github.com/proteomicsunitcrg/qsample-server
-```
-
-### Configuration file
-
-Change the important things like the port, SQL credentials, FlyWay, QSample local mode, APIs URL and much more in the configuration file `src/main/resources/application.yml`.
 
 ### Starting the dev server
 
@@ -82,16 +95,6 @@ Here I stop the daemon (`sudo systemctl stop qsample`) and I launch the jar with
 
 With hibernate ddl mode in validate the deployment will fail if the database schema is not the same in the Java entities. Just update the SQL schema. This happens when you add a field to a table or something like that and you don't create a new migration file with the changes. With update mode the .jar file updates the database and everything works without any problem.
 
-## Running with docker-compose
-
-```
-# Adapt docker-compose.yml file with the paths and the configuration file that fits your system
-# This will start both a MariaDB/MySQL instance and a web server instance
-# Start the system
-docker-compose up
-# Stop the system
-docker-compose down
-```
 
 ## References
 
