@@ -7,6 +7,12 @@ The latest version of this repository can be downloaded this way:
 ```
 git clone --depth 1 --recurse-submodules https://github.com/proteomicsunitcrg/qsample-server
 ```
+You can retrieve further updates with:
+
+```
+git pull --recurse-submodules 
+```
+
 ## Configuration file
 
 Change the important things like the port, SQL credentials, FlyWay, QSample local mode, APIs URL and much more in the configuration file `src/main/resources/application.yml`.
