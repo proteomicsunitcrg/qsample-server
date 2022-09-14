@@ -20,7 +20,7 @@ WORKDIR /tmp
 COPY mvn* /tmp/
 COPY pom.xml /tmp/
 COPY src/ /tmp/src/
-COPY --from=nodeclient /tmp/dist/ /tmp/src/main/resources/dist/
+COPY --from=nodeclient /tmp/dist/qsample-client/ /tmp/src/main/resources/static/
 RUN mvn package -DskipTests -f pom.xml
 # Result in target/*jar
 RUN apt clean
