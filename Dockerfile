@@ -1,9 +1,12 @@
 FROM node:14-buster as nodeclient
+ARG QSAMPLE_API_PREFIX=http://localhost:8099/
 
-RUN apt update && apt upgrade -y
+RUN apt update && apt upgrade -y && apt -y install gettext-base
 RUN mkdir -p /tmp
 WORKDIR /tmp
 COPY qsample-client/ /tmp/
+# TODO: This could be moved to runtime later
+RUN bash -c envsubst < src/assets/env.sample.js > src/assets/env.js
 RUN npm install
 RUN npm run transpile:prod
 # Result in dist/
