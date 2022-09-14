@@ -23,6 +23,13 @@ services:
       qsample:
         aliases:
           - database
+    # Below, compatible with depends in new docker compose versions (starting from 3.9)
+    # Situation: https://stackoverflow.com/questions/71060072/docker-compose-depends-on-with-condition-invalid-type-should-be-an-array
+    # healthcheck:
+    #     test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u$$MARIADB_USER', '-p$$MARIADB_PASSWORD' ]
+    #     interval: 30s
+    #     timeout: 10s
+    #     retries: 5
   app:
     # image: qsample:latest
     build: .
@@ -34,6 +41,9 @@ services:
         read_only: true
     depends_on:
       - db
+      # Below, compatible with new docker compose versions
+      # db:
+      #  condition: service_healthy
     ports:
       # Ports exposed outside, they should match config
       - 8081:8081
