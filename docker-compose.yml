@@ -32,13 +32,17 @@ services:
     #     retries: 5
   app:
     # image: qsample:latest
-    build: .
+    build: 
+      context: .
+      args:
+        QSAMPLE_API_PREFIX: http://localhost:8099/ #TODO: to be replaced with a fully running time system
     restart: always
     volumes:
       - type: bind
         source: ./src/main/resources/application.yml
         target: /config/application.yml
         read_only: true
+
     environment:
       QSAMPLE_API_PREFIX: http://localhost:8099/ #Adapt for the final URL to be used
     depends_on:
