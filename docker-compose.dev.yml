@@ -43,7 +43,10 @@ services:
         source: ./src/main/resources/application.yml
         target: /config/application.yml
         read_only: true
-
+      - type: bind
+        source: /tmp/qsample.log
+        target: /tmp/qsample.log
+        
     environment:
       QSAMPLE_API_PREFIX: http://localhost:8099/ #Adapt for the final URL to be used
     depends_on:
