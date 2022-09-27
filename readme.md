@@ -25,10 +25,28 @@ The easiest way to run Qsample is with [Docker compose](https://github.com/docke
 # Adapt docker-compose.yml file with the paths and the configuration file that fits your system
 # This will start both a MariaDB/MySQL instance and a web server instance
 # Start the system
-docker-compose up
+docker compose up
 # Stop the system
-docker-compose down
+docker compose down
 ```
+
+NOTE: Depending on your installation, it can be either ``docker compose`` or ``docker-compose``
+
+NOTE: If you perform several changes, you might want to rebuild the image with ``docker compose build --no-cache``
+
+
+### Only server component
+
+You can a use a server-only component as well.
+```
+# Adapt docker-compose.yml file with the paths and the configuration file that fits your system
+# This will start both a MariaDB/MySQL instance and a web server instance
+# Start the system
+docker compose up -f Dockerfile.dev
+# Stop the system
+docker compose down -f Dockerfile.dev
+```
+
 
 ## Manual installation
 
