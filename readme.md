@@ -42,9 +42,9 @@ You can a use a server-only component as well.
 # Adapt docker-compose.yml file with the paths and the configuration file that fits your system
 # This will start both a MariaDB/MySQL instance and a web server instance
 # Start the system
-docker compose -f Dockerfile.dev up
+docker compose -f docker-compose.dev.yml up
 # Stop the system
-docker compose -f Dockerfile.dev down
+docker compose -f docker-compose.dev.yml down
 ```
 
 
