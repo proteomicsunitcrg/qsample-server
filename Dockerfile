@@ -1,12 +1,9 @@
 FROM node:14-buster as nodeclient
-ARG QSAMPLE_API_PREFIX=http://localhost:8099/
 
-RUN apt update && apt upgrade -y && apt -y install gettext-base
+RUN apt update && apt upgrade -y
 RUN mkdir -p /tmp
 WORKDIR /tmp
 COPY qsample-client/ /tmp/
-# TODO: This could be moved to runtime later
-RUN bash -c envsubst < src/assets/env.sample.js > src/assets/env.js
 RUN npm install
 RUN npm run transpile:prod
 # Result in dist/
@@ -26,10 +23,15 @@ RUN mvn package -DskipTests -f pom.xml
 RUN apt clean
 
 FROM biocorecrg/debian-perlbrew-pyenv3-java:buster
+RUN apt update && apt upgrade -y && apt -y install gettext-base
+ENV QSAMPLE_API_PREFIX=http://localhost:8099/
 VOLUME /tmp
 RUN mkdir -p /config
 RUN mkdir -p /app
 WORKDIR /app
+RUN apt clean
 COPY --from=jarserver /tmp/target/*jar /app
-ENTRYPOINT ["java", "-jar", "-Dspring.config.location=file:/config/application.yml", "-Dspring.profiles.active=prod", "/app/qsample-0.2.5.Roger.jar"]
+COPY ./entrypoint.sh /app/
+RUN chmod +x /app/entrypoint.sh
+ENTRYPOINT ["/app/entrypoint.sh"]
 
