@@ -34,8 +34,6 @@ services:
     # image: qsample:latest
     build: 
       context: .
-      args:
-        QSAMPLE_API_PREFIX: http://localhost:8099/ #TODO: to be replaced with a fully running time system
     restart: always
     volumes:
       - type: bind
