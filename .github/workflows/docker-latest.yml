@@ -18,7 +18,7 @@ jobs:
         name: Checkout
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.QSAMPLE_ACCESS }}
           submodules: recursive
       -
         name: Set up QEMU
