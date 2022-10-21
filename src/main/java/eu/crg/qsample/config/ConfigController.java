@@ -30,7 +30,7 @@ public class ConfigController {
 		Map<String, Object> response = new HashMap<>();
 		response.put("local_requests", localRequests);
 		response.put("qcloud2_disable", qcloud2Disabled);
-		response.put("nexflow_tower_disable", nextflowTowerDisabled);
+		response.put("nexftlow_tower_disable", nextflowTowerDisabled);
 		return response;
 
 	}
