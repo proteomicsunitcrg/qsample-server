@@ -52,13 +52,13 @@ DROP TABLE IF EXISTS `application_constraint`;
 CREATE TABLE `application_constraint` (
   `id` bigint NOT NULL,
   `name` varchar(255) NOT NULL,
-  `show_file_info_plot` bit(1) NOT NULL,
-  `show_identified_peptides_plot` bit(1) NOT NULL,
-  `show_identified_proteins_plot` bit(1) NOT NULL,
-  `show_modifications_plot` bit(1) NOT NULL,
-  `show_quantification_and_contaminant_list` bit(1) NOT NULL,
-  `show_quantification_heat_map` bit(1) NOT NULL,
-  `show_dendogram` bit(1) NOT NULL DEFAULT b'0',
+  `show_file_info_plot` tinyint(1) NOT NULL,
+  `show_identified_peptides_plot` tinyint(1) NOT NULL,
+  `show_identified_proteins_plot` tinyint(1) NOT NULL,
+  `show_modifications_plot` tinyint(1) NOT NULL,
+  `show_quantification_and_contaminant_list` tinyint(1) NOT NULL,
+  `show_quantification_heat_map` tinyint(1) NOT NULL,
+  `show_dendogram` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -69,7 +69,7 @@ CREATE TABLE `application_constraint` (
 
 LOCK TABLES `application_constraint` WRITE;
 /*!40000 ALTER TABLE `application_constraint` DISABLE KEYS */;
-INSERT INTO `application_constraint` VALUES (1,'Default',_binary '\0',_binary '',_binary '',_binary '\0',_binary '',_binary '',_binary ''),(2,'Phospho',_binary '',_binary '\0',_binary '\0',_binary '',_binary '\0',_binary '\0',_binary '\0');
+INSERT INTO `application_constraint` VALUES (1,'Default', 0, 1, 1, 0, 1, 1, 1),(2,'Phospho', 1, 0, 0, 1, 0, 0, 0);
 /*!40000 ALTER TABLE `application_constraint` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -144,7 +144,7 @@ CREATE TABLE `context_source` (
 
 LOCK TABLES `context_source` WRITE;
 /*!40000 ALTER TABLE `context_source` DISABLE KEYS */;
-INSERT INTO `context_source` VALUES (1,'# proteins',_binary 'apiKey1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Total number of identified grouped proteins',1),(2,'# peptides',_binary 'apiKey2\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Total number of identified peptides',1);
+INSERT INTO `context_source` VALUES (1,'# proteins', 'apiKey1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Total number of identified grouped proteins',1),(2,'# peptides', 'apiKey2\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',NULL,NULL,'Total number of identified peptides',1);
 /*!40000 ALTER TABLE `context_source` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -263,7 +263,7 @@ DROP TABLE IF EXISTS `favorite_request_users`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `favorite_request_users` (
   `id` bigint NOT NULL,
-  `notify` bit(1) DEFAULT NULL,
+  `notify` tinyint(1) DEFAULT NULL,
   `favorite_request_id` bigint DEFAULT NULL,
   `user_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -774,7 +774,7 @@ CREATE TABLE `param` (
 
 LOCK TABLES `param` WRITE;
 /*!40000 ALTER TABLE `param` DISABLE KEYS */;
-INSERT INTO `param` VALUES (1,_binary 'apiKey1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0','Total Numbers');
+INSERT INTO `param` VALUES (1, 'apiKey1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0','Total Numbers');
 /*!40000 ALTER TABLE `param` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -851,7 +851,7 @@ CREATE TABLE `plot` (
 
 LOCK TABLES `plot` WRITE;
 /*!40000 ALTER TABLE `plot` DISABLE KEYS */;
-INSERT INTO `plot` VALUES (1,_binary 'apiKey1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',1,'Total numbers of proteins'),(3,_binary 'plot3\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',1,'Total number of peptides');
+INSERT INTO `plot` VALUES (1, 'apiKey1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',1,'Total numbers of proteins'),(3, 'plot3\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',1,'Total number of peptides');
 /*!40000 ALTER TABLE `plot` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -915,7 +915,7 @@ CREATE TABLE `quantification` (
   `id` bigint NOT NULL,
   `abundance` float DEFAULT NULL,
   `accession` varchar(255) DEFAULT NULL,
-  `contaminant` bit(1) NOT NULL,
+  `contaminant` tinyint(1) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   `file_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -1004,7 +1004,7 @@ CREATE TABLE `threshold_params` (
   `context_source_id` bigint NOT NULL,
   `threshold_id` bigint NOT NULL,
   `initial_value` float DEFAULT NULL,
-  `is_enabled` bit(1) DEFAULT b'1',
+  `is_enabled` tinyint(1) DEFAULT 1,
   `step_value` float DEFAULT NULL,
   PRIMARY KEY (`context_source_id`,`threshold_id`),
   KEY `FK8g1pxjaqjdhdc96r5ok5eyd9k` (`threshold_id`),
@@ -1059,7 +1059,7 @@ CREATE TABLE `trace_color` (
 
 LOCK TABLES `trace_color` WRITE;
 /*!40000 ALTER TABLE `trace_color` DISABLE KEYS */;
-INSERT INTO `trace_color` VALUES (1,0,_binary 'apiKey1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',100,100,100);
+INSERT INTO `trace_color` VALUES (1,0, 'apiKey1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',100,100,100);
 /*!40000 ALTER TABLE `trace_color` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1191,7 +1191,7 @@ CREATE TABLE `wetlab` (
 
 LOCK TABLES `wetlab` WRITE;
 /*!40000 ALTER TABLE `wetlab` DISABLE KEYS */;
-INSERT INTO `wetlab` VALUES (1,_binary 'apiKey1\0\0\0\0\0\0\0\0\0','InSolutionQC',NULL),(2,_binary 'wetlab2\0\0\0\0\0\0\0\0\0','AgilentQC',45),(3,_binary 'wetlab3\0\0\0\0\0\0\0\0\0','InGelQC',NULL),(4,_binary 'wetlab4\0\0\0\0\0\0\0\0\0','PhosphoQC',NULL),(5,_binary 'wetlab5\0\0\0\0\0\0\0\0\0','FASPQC',NULL);
+INSERT INTO `wetlab` VALUES (1, 'apiKey1\0\0\0\0\0\0\0\0\0','InSolutionQC',NULL),(2, 'wetlab2\0\0\0\0\0\0\0\0\0','AgilentQC',45),(3, 'wetlab3\0\0\0\0\0\0\0\0\0','InGelQC',NULL),(4, 'wetlab4\0\0\0\0\0\0\0\0\0','PhosphoQC',NULL),(5, 'wetlab5\0\0\0\0\0\0\0\0\0','FASPQC',NULL);
 /*!40000 ALTER TABLE `wetlab` ENABLE KEYS */;
 UNLOCK TABLES;
 
