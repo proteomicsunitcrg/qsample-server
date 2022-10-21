@@ -83,16 +83,16 @@ DROP TABLE IF EXISTS `application_constraint`;
 CREATE TABLE `application_constraint` (
   `id` bigint(20) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `show_file_info_plot` bit(1) NOT NULL,
-  `show_identified_peptides_plot` bit(1) NOT NULL,
-  `show_identified_proteins_plot` bit(1) NOT NULL,
-  `show_modifications_plot` bit(1) NOT NULL,
-  `show_quantification_and_contaminant_list` bit(1) NOT NULL,
-  `show_quantification_heat_map` bit(1) NOT NULL,
-  `show_dendogram` bit(1) NOT NULL DEFAULT b'0',
-  `show_charges_plot` bit(1) NOT NULL DEFAULT b'0',
-  `show_histones_biological` bit(1) NOT NULL DEFAULT b'0',
-  `show_histones_tailored` bit(1) NOT NULL DEFAULT b'0',
+  `show_file_info_plot` tinyint(1) NOT NULL,
+  `show_identified_peptides_plot` tinyint(1) NOT NULL,
+  `show_identified_proteins_plot` tinyint(1) NOT NULL,
+  `show_modifications_plot` tinyint(1) NOT NULL,
+  `show_quantification_and_contaminant_list` tinyint(1) NOT NULL,
+  `show_quantification_heat_map` tinyint(1) NOT NULL,
+  `show_dendogram` tinyint(1) NOT NULL DEFAULT '0',
+  `show_charges_plot` tinyint(1) NOT NULL DEFAULT '0',
+  `show_histones_biological` tinyint(1) NOT NULL DEFAULT '0',
+  `show_histones_tailored` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -290,7 +290,7 @@ DROP TABLE IF EXISTS `favorite_request_users`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `favorite_request_users` (
   `id` bigint(20) NOT NULL,
-  `notify` bit(1) DEFAULT NULL,
+  `notify` tinyint(1) DEFAULT NULL,
   `favorite_request_id` bigint(20) DEFAULT NULL,
   `user_id` bigint(20) DEFAULT NULL,
   `notes` varchar(1000) DEFAULT NULL,
@@ -998,7 +998,7 @@ CREATE TABLE `quantification` (
   `id` bigint(20) NOT NULL,
   `abundance` float DEFAULT NULL,
   `accession` varchar(255) DEFAULT NULL,
-  `contaminant` bit(1) NOT NULL,
+  `contaminant` tinyint(1) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   `file_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -1137,7 +1137,7 @@ CREATE TABLE `threshold_params` (
   `context_source_id` bigint(20) NOT NULL,
   `threshold_id` bigint(20) NOT NULL,
   `initial_value` float DEFAULT NULL,
-  `is_enabled` bit(1) DEFAULT b'1',
+  `is_enabled` tinyint(1) DEFAULT '1',
   `step_value` float DEFAULT NULL,
   PRIMARY KEY (`context_source_id`,`threshold_id`),
   KEY `FK8g1pxjaqjdhdc96r5ok5eyd9k` (`threshold_id`),
