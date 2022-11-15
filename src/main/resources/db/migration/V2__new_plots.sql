@@ -1,4 +1,4 @@
-alter table application_constraint add `show_charges_plot` bit(1) NOT NULL DEFAULT b'0';
+alter table application_constraint add `show_charges_plot` tinyint(1) NOT NULL DEFAULT '0';
 update application_constraint set show_charges_plot = true where id = 1;
 
 
