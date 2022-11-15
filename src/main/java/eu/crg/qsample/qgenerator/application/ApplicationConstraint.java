@@ -46,19 +46,19 @@ public class ApplicationConstraint {
     @NotNull
     private boolean showModificationsPlot;
 
-    @Column(columnDefinition = "bit(1) default false")
+    @Column(columnDefinition = "tinyint(1) default 0")
     @NotNull
     private boolean showDendogram;
 
-    @Column(columnDefinition = "bit(1) default false")
+    @Column(columnDefinition = "tinyint(1) default 0")
     @NotNull
     private boolean showChargesPlot;
 
-    @Column(columnDefinition = "bit(1) default false")
+    @Column(columnDefinition = "tinyint(1) default 0")
     @NotNull
     private boolean showHistonesTailored;
 
-    @Column(columnDefinition = "bit(1) default false")
+    @Column(columnDefinition = "tinyint(1) default 0")
     @NotNull
     private boolean showHistonesBiological;
 

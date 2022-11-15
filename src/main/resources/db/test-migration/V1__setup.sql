@@ -611,7 +611,7 @@ CREATE TABLE `threshold_params` (
   `context_source_id` bigint NOT NULL,
   `threshold_id` bigint NOT NULL,
   `initial_value` float DEFAULT NULL,
-  `is_enabled` bit(1) DEFAULT b'1',
+  `is_enabled` tinyint(1) DEFAULT '1',
   `step_value` float DEFAULT NULL,
   PRIMARY KEY (`context_source_id`,`threshold_id`),
   KEY `FK8g1pxjaqjdhdc96r5ok5eyd9k` (`threshold_id`),

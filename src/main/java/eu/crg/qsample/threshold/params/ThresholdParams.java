@@ -28,7 +28,7 @@ public class ThresholdParams {
     @JoinColumn(name = "contextSourceId", insertable = false, updatable = false)
     private ContextSource contextSource;
 
-    @Column(name = "is_enabled", columnDefinition = "bit default 1")
+    @Column(name = "is_enabled", columnDefinition = "tinyint(1) default 1")
     private boolean isEnabled;
 
     @ManyToOne(cascade = CascadeType.ALL)
