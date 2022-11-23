@@ -39,6 +39,18 @@ spring:
     h2:
         console:
             enabled: false
+    jpa:
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                dialect: MySQL57InnoDB
+            format_sql: true
+        show-sql: false
+    flyway:
+      locations:
+        - classpath:/db/migration
+      enabled: false
 
 jwt:
     header: Authorization
@@ -51,14 +63,62 @@ jwt:
 
 qcloud2:
     disable: true
+    url: https://api.qcloud2.crg.eu/qsample
+    # url: http://localhost:5001/qsample
+    username: qsample
+    password: qsample
 
 neon-stats:
     disable: true
+    url: http://neon.crg.eu/
 
 nextflow-tower:
-    disable: true
+    disable: false
+    token: eyJ0aWQiOiAzOTM3fS42Mjc0MjQ0YzI3NjBmZmU3ZmQxNTc4Y2M1OGE0YzM5NjA0MjkxZWI3
+    url: https://api.tower.nf/
+
+agendo:
+    # username: marc.serret@crg.eu
+    # password: cacaDeVaca1
+    username: qsample
+    password: qsample
+    from: Y3Jn
+    url: https://api.qcloud2.crg.eu/mirror?url=https://api.agendoscience.com
+    facility: 10
 
 local-requests: true # true to use local database, false to use agendo. If true unlocks the request creation, delete and update form TODO
+
+---
+
+spring:
+  profiles: test
+  datasource:
+    url: jdbc:mysql://database:3306/qsampletest?useSSL=false&serverTimezone=UTC
+    username: "qsample"
+    password: "qsample2017"
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: MySQL57InnoDB
+    show-sql: false
+  flyway:
+    locations:
+      - classpath:/db/migration
+    enabled: false
+server:
+  port: 8081 # test port should be 8099
+email-conf:
+  address: qcloud@crg.eu
+  admin-email: marc.serret@crg.eu
+  app-url: "qsample.crg.eu"
+logging:
+  file: /tmp/qsample.log
+  level:
+    org.springframework:
+    security: ERROR
 
 ---
 
@@ -92,5 +152,29 @@ logging:
     org.springframework:
     security: ERROR
 
+---
+spring:
+  profiles: unittest
+  datasource:
+    url: jdbc:mysql://database:3306/qsampleunit?useSSL=false&serverTimezone=UTC
+    username: "root"
+    password: "vesperon501"
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: MySQL57InnoDB
+    show-sql: false
+
+  flyway:
+    locations:
+      - classpath:/db/test-migration
+    enabled: true
+server:
+  port: 8082
+logging:
+  file: /tmp/qsampleUnitTest.log
 
 spring.main.allow-bean-definition-overriding: true
