@@ -20,6 +20,8 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.tomcat.util.descriptor.web.ContextService;
 
+import org.hibernate.annotations.Type;
+
 import eu.crg.qsample.context_source.ContextSource;
 import eu.crg.qsample.param.Param;
 
@@ -35,6 +37,7 @@ public class Plot {
 
     @Column(name = "apiKey", length = 50)
     @NotNull
+    @Type(type = "uuid-char")
     private UUID apiKey;
 
     // @Column (name = "contextSource")

@@ -11,6 +11,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Type;
 @Entity
 @Table(name = "traceColor")
 public class TraceColor {
@@ -23,6 +24,7 @@ public class TraceColor {
 
     @Column(name = "apiKey", length = 50)
     @NotNull
+    @Type(type = "uuid-char")
     private UUID apiKey;
 
     @Column(name = "r", length = 50)

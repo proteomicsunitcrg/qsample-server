@@ -13,6 +13,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Type;
 import org.springframework.lang.Nullable;
 
 import eu.crg.qsample.TraceColor.TraceColor;
@@ -37,6 +38,7 @@ public class ContextSource {
 
     @Column(name = "apiKey", length = 50)
     @NotNull
+    @Type(type = "uuid-char")
     private UUID apiKey;
 
     @Column(name = "charge", length = 50)
