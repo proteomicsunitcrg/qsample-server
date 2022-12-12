@@ -326,6 +326,7 @@ CREATE TABLE `file` (
   `week` int(11) DEFAULT NULL,
   `year` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY (`checksum`),
   KEY `FKngem4y76s84dei8nvtw44r1fl` (`wet_lab_type`),
   KEY `FKrmh3d76ins4ukfmi4e154cvvw` (`file_info_id`),
   CONSTRAINT `FKngem4y76s84dei8nvtw44r1fl` FOREIGN KEY (`wet_lab_type`) REFERENCES `wetlab` (`id`),
