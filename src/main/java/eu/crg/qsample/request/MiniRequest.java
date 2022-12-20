@@ -1,7 +1,5 @@
 package eu.crg.qsample.request;
 
-import java.util.Date;
-
 public class MiniRequest {
     private long id;
 
@@ -20,10 +18,6 @@ public class MiniRequest {
     private boolean hasData;
 
     private boolean local;
-
-    
-
-
 
     public long getId() {
         return id;
@@ -92,7 +86,8 @@ public class MiniRequest {
     public MiniRequest() {
     }
 
-    public MiniRequest(long id, String type, String creatorMail, String creatorName,String creationDate, String status) {
+    public MiniRequest(long id, String type, String creatorMail, String creatorName, String creationDate,
+            String status) {
         this.id = id;
         this.type = type;
         this.creatorMail = creatorMail;
@@ -121,7 +116,5 @@ public class MiniRequest {
     public void setLocal(boolean local) {
         this.local = local;
     }
-
-
 
 }
