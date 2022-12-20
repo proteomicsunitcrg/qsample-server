@@ -1,7 +1,6 @@
 package eu.crg.qsample.request.local;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -104,12 +103,11 @@ public class RequestLocal {
         this.taxonomy = taxonomy;
     }
 
-    
-
     public RequestLocal() {
     }
 
-    public RequestLocal(Long id, String requestCode, Application application, Date creationDate, String status, String group,
+    public RequestLocal(Long id, String requestCode, Application application, Date creationDate, String status,
+            String group,
             String samples, String taxonomy, String creator) {
         this.id = id;
         this.requestCode = requestCode;
@@ -130,5 +128,4 @@ public class RequestLocal {
         this.creator = creator;
     }
 
-    
 }

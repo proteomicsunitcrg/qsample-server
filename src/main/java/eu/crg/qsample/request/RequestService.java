@@ -5,26 +5,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.ws.rs.NotFoundException;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import eu.crg.qsample.restservice.RestService;
-import eu.crg.qsample.security.model.User;
-import eu.crg.qsample.security.repository.UserRepository;
+import com.google.gson.Gson;
+
 import eu.crg.qsample.context_source.ContextSource;
 import eu.crg.qsample.context_source.ContextSourceRepository;
 import eu.crg.qsample.file.FileRepository;
@@ -33,6 +25,9 @@ import eu.crg.qsample.param.ParamRepository;
 import eu.crg.qsample.request.AgendoRequestWrapperOneRequest;
 import eu.crg.qsample.request.local.RequestLocal;
 import eu.crg.qsample.request.local.RequestRepository;
+import eu.crg.qsample.restservice.RestService;
+import eu.crg.qsample.security.model.User;
+import eu.crg.qsample.security.repository.UserRepository;
 
 @Service
 public class RequestService {
@@ -199,11 +194,20 @@ public class RequestService {
     }
 
     public RequestLocal getLocalRequestById(Long id) {
-        Optional <RequestLocal> localOpt = requestRepository.findById(id);
+        Optional<RequestLocal> localOpt = requestRepository.findById(id);
         if (localOpt.isPresent()) {
             return localOpt.get();
         } else {
             throw new NotFoundException("Request not found by id");
+        }
+    }
+
+    public RequestLocal getLocalRequestByRequestCode(String requestCode) {
+        Optional<RequestLocal> localOpt = requestRepository.findByRequestCode(requestCode);
+        if (localOpt.isPresent()) {
+            return localOpt.get();
+        } else {
+            throw new NotFoundException("Request not found by Request Code");
         }
     }
 
