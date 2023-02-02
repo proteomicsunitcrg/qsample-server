@@ -1353,7 +1353,7 @@ CREATE TABLE `wetlab` (
 
 LOCK TABLES `wetlab` WRITE;
 /*!40000 ALTER TABLE `wetlab` DISABLE KEYS */;
-INSERT INTO `wetlab` VALUES (1,_binary 'apiKey1\0\0\0\0\0\0\0\0\0','InSolutionQC',NULL),(2,_binary 'wetlab2\0\0\0\0\0\0\0\0\0','AgilentQC',NULL),(3,_binary 'wetlab3\0\0\0\0\0\0\0\0\0','InGelQC',NULL),(4,_binary 'wetlab4\0\0\0\0\0\0\0\0\0','PhosphoQC',NULL),(5,_binary 'wetlab5\0\0\0\0\0\0\0\0\0','FASPQC',NULL),(6,_binary 'wetlab6\0\0\0\0\0\0\0\0\0','HistoneQC',NULL);
+INSERT INTO `wetlab` VALUES (1,_binary 'apiKey1\0\0\0\0\0\0\0\0\0','InSolutionQC',NULL),(2,_binary 'wetlab2\0\0\0\0\0\0\0\0\0','AgilentQC',NULL),(3,_binary 'wetlab3\0\0\0\0\0\0\0\0\0','InGelQC',NULL),(4,_binary 'wetlab4\0\0\0\0\0\0\0\0\0','Phospho TIO QC',NULL),(5,_binary 'wetlab5\0\0\0\0\0\0\0\0\0','FASPQC',NULL),(6,_binary 'wetlab6\0\0\0\0\0\0\0\0\0','Histone PROP-PIC QC',NULL);
 /*!40000 ALTER TABLE `wetlab` ENABLE KEYS */;
 UNLOCK TABLES;
 
