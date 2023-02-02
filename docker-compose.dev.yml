@@ -1,7 +1,7 @@
 version: "3.6"
 services:
   db:
-    image: mariadb:10.7
+    image: mysql:8.0
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     volumes:
@@ -15,10 +15,10 @@ services:
       # Mapping here for testing purposes
       - 3308:3306
     environment:
-      MARIADB_ROOT_PASSWORD: qsample2022
-      MARIADB_USER: qsample
-      MARIADB_PASSWORD: qsample2017
-      MARIADB_DATABASE: qsample
+      MYSQL_ROOT_PASSWORD: qsample2022
+      MYSQL_USER: qsample
+      MYSQL_PASSWORD: qsample2017
+      MYSQL_DATABASE: qsample
     networks:
       qsample:
         aliases:
@@ -26,7 +26,7 @@ services:
     # Below, compatible with depends in new docker compose versions (starting from 3.9)
     # Situation: https://stackoverflow.com/questions/71060072/docker-compose-depends-on-with-condition-invalid-type-should-be-an-array
     # healthcheck:
-    #     test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u$$MARIADB_USER', '-p$$MARIADB_PASSWORD' ]
+    #     test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u$$MYSQL_USER', '-p$$MYSQL_PASSWORD' ]
     #     interval: 30s
     #     timeout: 10s
     #     retries: 5
