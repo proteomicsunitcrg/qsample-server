@@ -1,0 +1,29 @@
+# Example docker compose for am instance with an already existing database
+version: "3.6"
+services:
+  app:
+    # image: qsample:latest
+    build: 
+      context: .
+    restart: always
+    volumes:
+      - type: bind
+        source: /path/to/application.prod.yml
+        target: /config/application.yml
+        read_only: true
+      - ./tmp:/tmp
+
+    environment:
+      QSAMPLE_API_PREFIX: http://localhost:8099/ #Adapt for the final URL to be used
+    ports:
+      # Ports exposed outside, they should match config
+      - 8081:8081
+      - 8082:8082
+      - 8099:8099
+    networks:
+      qsample:
+        aliases:
+          - qsample
+
+networks:
+  qsample:
