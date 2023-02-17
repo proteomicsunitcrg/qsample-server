@@ -893,7 +893,7 @@ DROP TABLE IF EXISTS `password_reset_token`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `password_reset_token` (
   `id` bigint(20) NOT NULL,
-  `expiry_date` datetime(6) DEFAULT NULL,
+  `expiry_date` datetime DEFAULT NULL,
   `token` varchar(255) DEFAULT NULL,
   `user_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
@@ -1049,7 +1049,7 @@ DROP TABLE IF EXISTS `request_local`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `request_local` (
   `id` bigint(20) NOT NULL,
-  `creation_date` datetime(6) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
   `creator` varchar(255) DEFAULT NULL,
   `groupp` varchar(255) DEFAULT NULL,
   `request_code` varchar(255) DEFAULT NULL,
