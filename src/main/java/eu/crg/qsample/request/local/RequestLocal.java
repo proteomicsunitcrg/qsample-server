@@ -11,6 +11,10 @@ import javax.persistence.Table;
 
 import eu.crg.qsample.qgenerator.application.Application;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name = "request_local")
 public class RequestLocal {
@@ -24,6 +28,8 @@ public class RequestLocal {
     @ManyToOne
     private Application application;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	  @Column(name = "creation_date", columnDefinition = "DATETIME")
     private Date creationDate;
 
     @Column(name = "statuss") // some version f mysql doest accept that name
@@ -63,6 +69,8 @@ public class RequestLocal {
         this.application = application;
     }
 
+    @JsonAlias({ "creation_date" })
+    @JsonProperty("creation_date")
     public Date getCreationDate() {
         return creationDate;
     }

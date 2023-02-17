@@ -138,7 +138,7 @@ public class FavoriteRequestService {
                         request.getApplication().getName(),
                         "",
                         request.getCreator(),
-                        request.getCreationDate().toString(),
+                        request.getCreationDate().toString().split("\\.")[0],
                         request.getStatus(),
                         request.getRequestCode(),
                         false,

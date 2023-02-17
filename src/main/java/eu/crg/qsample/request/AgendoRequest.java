@@ -87,7 +87,7 @@ public class AgendoRequest {
     }
 
     public String getdate_created() {
-        return date_created;
+        return date_created.split("\\.")[0];
     }
 
     public void setdate_created(String date_created) {
