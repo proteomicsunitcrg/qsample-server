@@ -69,9 +69,10 @@ public class RequestService {
         List<MiniRequest> miniRequestList = new ArrayList<>();
         for (RequestLocal req : requestList) {
             System.out.println(req.getRequestCode());
+            // Format string and remove dots of create_date
             miniRequestList.add(
                     new MiniRequest(req.getId(), req.getApplication().getName(), req.getCreator(), req.getCreator(),
-                            req.getCreationDate().toString(), req.getStatus(), req.getRequestCode(), false, true));
+                            req.getCreationDate().toString().split("\\.")[0], req.getStatus(), req.getRequestCode(), false, true));
         }
         return miniRequestList;
     }
