@@ -30,7 +30,8 @@ public class WetLab {
     @SequenceGenerator(name = "wetLab_seq", sequenceName = "wetLab_seq", allocationSize = 1)
     private Long id;
 
-    @Column(name = "apiKey", updatable = true, nullable = false, unique = true, columnDefinition = "CHAR(32)")
+    @Column(name = "apiKey", updatable = true, nullable = false, unique = true, columnDefinition = "CHAR(100)")
+    @org.hibernate.annotations.Type(type="uuid-char")
     @NotNull
     private UUID apiKey;
 
