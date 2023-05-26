@@ -29,7 +29,7 @@ public class User {
     @SequenceGenerator(name = "user_seq", sequenceName = "user_seq", allocationSize = 1)
     private Long id;
 
-    @Column(name = "apiKey", updatable = false, nullable = false, unique = true, columnDefinition = "BINARY(16)")
+    @Column(name = "apiKey", updatable = false, nullable = false, unique = true, columnDefinition = "CHAR(32)")
     private UUID apiKey;
 
     @Column(name = "firstname", length = 50)

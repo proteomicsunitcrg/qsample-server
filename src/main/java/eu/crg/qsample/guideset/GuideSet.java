@@ -27,8 +27,9 @@ public class GuideSet {
 	private Long id;
 
 
-    @Column(name = "apiKey", updatable = true, nullable = false, unique = true, columnDefinition = "BINARY(16)")
-	@org.hibernate.annotations.Type(type = "org.hibernate.type.UUIDBinaryType")
+    @Column(name = "apiKey", updatable = true, nullable = false, unique = true, columnDefinition = "CHAR(32)")
+	  //@org.hibernate.annotations.Type(type = "org.hibernate.type.UUIDBinaryType")
+    @org.hibernate.annotations.Type(type="uuid-char")
     private UUID apiKey;
 
     @Column

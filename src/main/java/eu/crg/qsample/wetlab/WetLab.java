@@ -30,7 +30,7 @@ public class WetLab {
     @SequenceGenerator(name = "wetLab_seq", sequenceName = "wetLab_seq", allocationSize = 1)
     private Long id;
 
-    @Column(name = "apiKey", updatable = true, nullable = false, unique = true, columnDefinition = "BINARY(16)")
+    @Column(name = "apiKey", updatable = true, nullable = false, unique = true, columnDefinition = "CHAR(32)")
     @NotNull
     private UUID apiKey;
 
