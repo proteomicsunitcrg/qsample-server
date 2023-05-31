@@ -13,7 +13,7 @@ email-conf:
 
 spring:
     jackson:
-        time-zone: Europe/Madrid
+        time-zone: UTC
     serialization:
         INDENT_OUTPUT: true
     datasource:
