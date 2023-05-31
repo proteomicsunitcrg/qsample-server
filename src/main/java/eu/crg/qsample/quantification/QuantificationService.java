@@ -180,7 +180,7 @@ public class QuantificationService {
 
     /**
      * OTHER HEATMAP WITH FULL CONSENSUS TRACES I DONT WANT TO DELETE IT BECAUSE WE
-     * ***REMOVED***
+     * KNOW CRISTINA AND EDUARD <3
      */
 
     // public List<List<Double>> heatmap(String requestCode, List<String> checksums)
