@@ -13,8 +13,8 @@ public class QsampleApplication {
 
 	@PostConstruct
 	void started() {
-		TimeZone.setDefault(TimeZone.getTimeZone("Europe/Madrid"));
-	}
+		//TimeZone.setDefault(TimeZone.getTimeZone("Europe/Madrid"));
+  }
 
 	public static void main(String[] args) {
 		SpringApplication.run(QsampleApplication.class, args);
