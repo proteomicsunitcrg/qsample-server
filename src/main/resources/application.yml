@@ -7,8 +7,8 @@ application:
     version: dev
 
 email-conf:
-  address: qcloud@crg.eu
-  admin-email: marc.serret@crg.eu
+  address: roger.olivella@crg.eu
+  admin-email: roger.olivella@crg.eu
   app-url: "http://localhost:4200"
 
 spring:
@@ -26,7 +26,7 @@ spring:
       default-encoding: UTF-8
       host: smtp.crg.eu
       username: proteomics
-      password: xxx
+      password: ***REMOVED***
       port: 587
       properties:
         mail:
@@ -77,8 +77,6 @@ nextflow-tower:
     url: https://api.tower.nf/
 
 agendo:
-    # username: marc.serret@crg.eu
-    # password: cacaDeVaca1
     username: qsample
     password: xxx
     from: Y3Jn
@@ -108,11 +106,12 @@ spring:
       - classpath:/db/migration
     enabled: false
 server:
-  port: 8099 # prod should be
+  port: 8099
 email-conf:
   address: qcloud@crg.eu
-  admin-email: marc.serret@crg.eu
-  app-url: "qsample.crg.eu"
+  admin-email: roger.olivella@crg.eu
+  #app-url: "http://qsample.crg.eu"
+  app-url: "http://localhost:4200" 
 logging:
   file: /tmp/qsample.log
   level:
