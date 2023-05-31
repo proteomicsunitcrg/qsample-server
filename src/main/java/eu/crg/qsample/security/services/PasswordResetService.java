@@ -36,9 +36,9 @@ public class PasswordResetService {
 
     public void sendPasswordResetHtmlEmail(PasswordResetToken token) {
 		Mail mail = new Mail();
-		mail.setFrom("qcloud@crg.eu");
+		mail.setFrom("roger.olivella@crg.eu");
 		mail.setTo(new String[] { token.getUser().getUsername() });
-		mail.setSubject("QCloud 2.0 - Password reset");
+		mail.setSubject("QSample - Password reset");
 
 		Map<String, String> model = new HashMap<>();
 		model.put("name", token.getUser().getFirstname());
