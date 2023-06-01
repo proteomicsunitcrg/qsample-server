@@ -178,34 +178,6 @@ public class QuantificationService {
         return heatmapData.getData();
     }
 
-    /**
-     * OTHER HEATMAP WITH FULL CONSENSUS TRACES I DONT WANT TO DELETE IT BECAUSE WE
-     * ***REMOVED***
-     */
-
-    // public List<List<Double>> heatmap(String requestCode, List<String> checksums)
-    // {
-    // SortedMap<RequestFile, List<Double>> fileWithConsensusQuantificationsMap =
-    // consensus(requestCode);
-    // List<List<Double>> finalCorrelationList = new ArrayList<>();
-    // fileWithConsensusQuantificationsMap.forEach((kpapa, vpapa) -> {
-    // System.out.println("Consensued prots: " + vpapa.size());
-    // if (vpapa.size() <= 1) {
-    // throw new ConsensusException("Consensus 1 or 0");
-    // }
-    // List<Double> correlationsList = new ArrayList<>();
-    // double[] xList = convertListOfDoublesToPrimitiveArray(vpapa);
-    // correlationsList.clear();
-    // fileWithConsensusQuantificationsMap.forEach((k, v) -> {
-    // double[] yList = convertListOfDoublesToPrimitiveArray(v);
-    // double correlation = new PearsonsCorrelation().correlation(xList, yList); //
-    // do the math
-    // correlationsList.add(correlation); // add the result to the list
-    // });
-    // finalCorrelationList.add(correlationsList); // add the list inside the list
-    // });
-    // return finalCorrelationList;
-    // }
 
     /**
      *
