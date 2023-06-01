@@ -26,7 +26,7 @@ spring:
       default-encoding: UTF-8
       host: smtp.crg.eu
       username: proteomics
-      password: ***REMOVED***
+      password: ****
       port: 587
       properties:
         mail:
