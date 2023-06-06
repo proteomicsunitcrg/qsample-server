@@ -109,6 +109,13 @@ Wait a minute and the new backend *should* work.
 
 To know how to deploy the front end check the [QSample-Client](https://github.com/proteomicsunitcrg/qsample-client/) repository.
 
+## Database updates
+
+Database updates (related to application updates) are kept in: ```src/main/resources/db/migration directory``` using [Flyway](https://flywaydb.org/). This is configured in ```src/main/resources/application.yml``` and it is taken care by the application every time it starts with no need of manual intervention.
+
+Once flyway is enabled, a table named ``flyway_schema_history`` is created in the target DB, and new scripts will be considered. If you need to ever run previous SQL scripts, you might need to enable ```outOfOrder``` flyway option. 
+
+
 ## Errors
 
 Sometimes when you start the server at prod it appears to work (systemctl status returns green code) but at the reality the front-end can't establish connection.

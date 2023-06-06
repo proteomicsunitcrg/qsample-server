@@ -26,7 +26,7 @@ spring:
       default-encoding: UTF-8
       host: smtp.crg.eu
       username: proteomics
-      password: ****
+      password: xxx
       port: 587
       properties:
         mail:
@@ -49,9 +49,11 @@ spring:
         show-sql: false
     flyway:
       locations:
-        - classpath:/db/migration
+        - classpath:db/migration
       enabled: false
-
+      baselineOnMigrate: true
+      validate-on-migrate: true
+      outOfOrder: false
 jwt:
     header: Authorization
     secret: L+0P1i+38a26pHiW10iHqPBYAyklvqPdySy98BV9PPCZyDogMggoSZkYxULqCF+WG6Nimlfxd53H6zjdIUJNJA==
@@ -103,8 +105,11 @@ spring:
     show-sql: false
   flyway:
     locations:
-      - classpath:/db/migration
+      - classpath:db/migration
     enabled: false
+    baselineOnMigrate: true
+    validate-on-migrate: true
+    outOfOrder: false
 server:
   port: 8099
 email-conf:
