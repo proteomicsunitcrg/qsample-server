@@ -25,11 +25,11 @@ services:
           - database
     # Below, compatible with depends in new docker compose versions (starting from 3.9)
     # Situation: https://stackoverflow.com/questions/71060072/docker-compose-depends-on-with-condition-invalid-type-should-be-an-array
-    # healthcheck:
-    #     test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u$$MYSQL_USER', '-p$$MYSQL_PASSWORD' ]
-    #     interval: 30s
-    #     timeout: 10s
-    #     retries: 5
+    healthcheck:
+        test: ["CMD-SHELL", "mysql -h localhost -u root -p$${MYSQL_ROOT_PASSWORD} $${MYSQL_DATABASE} -e 'SELECT COUNT(*) FROM user limit 1;' || exit 1" ]
+        interval: 20s
+        timeout: 10s
+        retries: 5
   app:
     # image: qsample:latest
     build: 
@@ -45,10 +45,9 @@ services:
     environment:
       QSAMPLE_API_PREFIX: http://localhost:8099/ #Adapt for the final URL to be used
     depends_on:
-      - db
-      # Below, compatible with new docker compose versions
-      # db:
-      #  condition: service_healthy
+      # - db
+      db:
+        condition: service_healthy
     ports:
       # Ports exposed outside, they should match config
       - 8081:8081
