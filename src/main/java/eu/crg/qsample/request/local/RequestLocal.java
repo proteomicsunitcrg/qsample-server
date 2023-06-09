@@ -28,8 +28,8 @@ public class RequestLocal {
     @ManyToOne
     private Application application;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	  @Column(name = "creation_date", columnDefinition = "DATETIME")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-ddTHH:mm:ss.SSSZ")
+    @Column(name = "creation_date", columnDefinition = "DATETIME")
     private Date creationDate;
 
     @Column(name = "statuss") // some version f mysql doest accept that name
