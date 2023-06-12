@@ -1,6 +1,8 @@
 package eu.crg.qsample.request.local;
 
 import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import eu.crg.qsample.qgenerator.application.Application;
 
@@ -28,9 +33,11 @@ public class RequestLocal {
     @ManyToOne
     private Application application;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-ddTHH:mm:ss.SSSZ")
-    @Column(name = "creation_date", columnDefinition = "DATETIME")
-    private Date creationDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Column(name = "creation_date", columnDefinition="DATETIME")
+    // private Date creationDate;
+    private @DateTimeFormat(iso = ISO.DATE_TIME) Date creationDate;
 
     @Column(name = "statuss") // some version f mysql doest accept that name
     private String status;
@@ -118,9 +125,19 @@ public class RequestLocal {
             String group,
             String samples, String taxonomy, String creator) {
         this.id = id;
-        this.requestCode = requestCode;
+        this.requestCode = "KK";
         this.application = application;
-        this.creationDate = creationDate;
+
+        Date test = null;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String inputString1 = "2023-12-06 12:13:00";
+        try {
+          test = dateFormat.parse(inputString1);
+        } catch (ParseException e) {
+          e.printStackTrace();
+        }
+
+        this.creationDate = test;
         this.status = status;
         this.group = group;
         this.samples = samples;

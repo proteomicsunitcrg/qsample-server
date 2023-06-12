@@ -64,7 +64,7 @@ public class RequestController {
     }
 
     // @PreAuthorize("hasRole('MANAGER')")
-    @PreAuthorize("hasRole('EXTERNAL')") // Let's allow everyone temporarily
+    // @PreAuthorize("hasRole('EXTERNAL')") // Let's allow everyone temporarily
     @PostMapping(value = "saveLocal")
     public RequestLocal saveLocal(@RequestBody RequestLocal localRequest) {
         return requestService.saveLocal(localRequest);
