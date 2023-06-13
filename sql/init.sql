@@ -1069,7 +1069,7 @@ CREATE TABLE `request_local` (
 
 LOCK TABLES `request_local` WRITE;
 /*!40000 ALTER TABLE `request_local` DISABLE KEYS */;
-INSERT INTO `request_local` VALUES (8017,'2022-11-16 23:00:00.000000','Roger Olivella','Proteomics Unit','2022MQ777','','Created','Human',7),(8020,'2022-11-16 23:00:00.000000','Roger Olivella','Proteomics Unit','2022MK777','','Created','Human',15);
+INSERT INTO `request_local` VALUES (8017,DATE_SUB(CURRENT_DATE, INTERVAL 10 DAY),'Roger Olivella','Proteomics Unit','2022MQ777','','Created','Human',7),(8020,DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY),'Roger Olivella','Proteomics Unit','2022MK777','','Created','Human',15);
 /*!40000 ALTER TABLE `request_local` ENABLE KEYS */;
 UNLOCK TABLES;
 
