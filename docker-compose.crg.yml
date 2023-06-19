@@ -8,7 +8,7 @@ services:
     restart: always
     volumes:
       - type: bind
-        source: /path/to/application.prod.yml
+        source: /path/to/application.crg.yml
         target: /config/application.yml
         read_only: true
       - ./tmp:/tmp
