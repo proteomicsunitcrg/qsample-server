@@ -41,6 +41,9 @@ public class WetLab {
     @ManyToMany
     private List<Plot> plot;
 
+    @Column(name = "category_id", length = 50)
+    private Long category_id;
+
     @OneToOne(orphanRemoval = true)
     private GuideSet guideSet;
 
@@ -68,13 +71,18 @@ public class WetLab {
         this.name = name;
     }
 
+    public Long getCategoryId() {
+        return category_id;
+    }
+
     public WetLab() {
     }
 
-    public WetLab(Long id, UUID apiKey, String name) {
+    public WetLab(Long id, UUID apiKey, String name, Long category_id) {
         this.id = id;
         this.apiKey = apiKey;
         this.name = name;
+        this.category_id = category_id;
     }
 
     public List<Plot> getPlot() {
@@ -85,11 +93,12 @@ public class WetLab {
         this.plot = plot;
     }
 
-    public WetLab(Long id, @NotNull UUID apiKey, @NotNull String name, List<Plot> plot) {
+    public WetLab(Long id, @NotNull UUID apiKey, @NotNull String name, List<Plot> plot, Long category_id) {
         this.id = id;
         this.apiKey = apiKey;
         this.name = name;
         this.plot = plot;
+        this.category_id = category_id;
     }
 
     @JsonIgnore
@@ -101,12 +110,13 @@ public class WetLab {
         this.guideSet = guideSet;
     }
 
-    public WetLab(Long id, @NotNull UUID apiKey, @NotNull String name, List<Plot> plot, GuideSet guideSet) {
+    public WetLab(Long id, @NotNull UUID apiKey, @NotNull String name, List<Plot> plot, GuideSet guideSet, Long category_id) {
         this.id = id;
         this.apiKey = apiKey;
         this.name = name;
         this.plot = plot;
         this.guideSet = guideSet;
+        this.category_id = category_id;
     }
 
 

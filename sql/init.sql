@@ -1343,10 +1343,13 @@ CREATE TABLE `wetlab` (
   `api_key` binary(16) NOT NULL,
   `name` varchar(50) NOT NULL,
   `guide_set_id` bigint(20) DEFAULT NULL,
+  `category_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_ejfiihgmd6k24h2rg119qycaw` (`api_key`),
   KEY `FKdmtiufjb02q61tejl5ki4bo5u` (`guide_set_id`),
-  CONSTRAINT `FKdmtiufjb02q61tejl5ki4bo5u` FOREIGN KEY (`guide_set_id`) REFERENCES `guide_set` (`id`)
+  CONSTRAINT `FKdmtiufjb02q61tejl5ki4bo5u` FOREIGN KEY (`guide_set_id`) REFERENCES `guide_set` (`id`),
+  KEY `FK_wetlab_category` (`category_id`),
+  CONSTRAINT `FK_wetlab_category` FOREIGN KEY (`category_id`) REFERENCES `wetlab_category` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1356,13 +1359,30 @@ CREATE TABLE `wetlab` (
 
 LOCK TABLES `wetlab` WRITE;
 /*!40000 ALTER TABLE `wetlab` DISABLE KEYS */;
-INSERT INTO `wetlab` VALUES (1,_binary 'apiKey1\0\0\0\0\0\0\0\0\0','InSolutionQC',NULL),(2,_binary 'wetlab2\0\0\0\0\0\0\0\0\0','Offline Fractionation QC',NULL),(3,_binary 'wetlab3\0\0\0\0\0\0\0\0\0','InGelQC',NULL),(4,_binary 'wetlab4\0\0\0\0\0\0\0\0\0','Phospho TIO QC',NULL),(5,_binary 'wetlab5\0\0\0\0\0\0\0\0\0','FASPQC',NULL);
+INSERT INTO `wetlab` VALUES (1,_binary 'apiKey1\0\0\0\0\0\0\0\0\0','InSolutionQC',NULL,1),(2,_binary 'wetlab2\0\0\0\0\0\0\0\0\0','Offline Fractionation QC',NULL,3),(3,_binary 'wetlab3\0\0\0\0\0\0\0\0\0','InGelQC',NULL,1),(4,_binary 'wetlab4\0\0\0\0\0\0\0\0\0','Phospho TIO QC',NULL,2),(5,_binary 'wetlab5\0\0\0\0\0\0\0\0\0','FASPQC',NULL,1);
 /*!40000 ALTER TABLE `wetlab` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
 -- Table structure for table `wetlab_plot`
 --
+
+DROP TABLE IF EXISTS `wetlab_category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `wetlab_category` (
+  `id` bigint NOT NULL,
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+LOCK TABLES `wetlab_category` WRITE;
+/*!40000 ALTER TABLE `wetlab_category` DISABLE KEYS */;
+INSERT INTO `wetlab_category` VALUES (1,'Digestion'),(2,'PTM'),(3,'Fractionation');
+/*!40000 ALTER TABLE `wetlab_category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
 
 DROP TABLE IF EXISTS `wetlab_plot`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
