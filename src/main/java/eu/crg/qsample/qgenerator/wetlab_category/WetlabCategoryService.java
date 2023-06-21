@@ -18,16 +18,16 @@ public class WetlabCategoryService {
 
     public List<WetlabCategory> getAll() {
         List<WetlabCategory> wetlab_categories = new ArrayList<>();
-        WetlabCategoryRepo.findAll().forEach(wetlab_categories::add);
+        wetlab_categoryRepo.findAll().forEach(wetlab_categories::add);
         return wetlab_categories;
     }
 
     public WetlabCategory getById(Long id) {
-        return WetlabCategoryRepo.findById(id).get();
+        return wetlab_categoryRepo.findById(id).get();
     }
 
     public WetlabCategory getByName(String name) {
-        return WetlabCategoryRepo.findOneByName(name);
+        return wetlab_categoryRepo.findOneByName(name);
     }
 
 }
