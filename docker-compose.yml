@@ -19,6 +19,11 @@ services:
       MYSQL_USER: qsample
       MYSQL_PASSWORD: qsample2017
       MYSQL_DATABASE: qsample
+      UID: 1000
+      GID: 1000
+    # More details in the documentation
+    # User to run database, act UID and GID accordingly thanks to 'uid -u' and 'uid -g'
+    # user: "${UID}:${GID}"
     networks:
       qsample:
         aliases:
@@ -44,6 +49,10 @@ services:
 
     environment:
       QSAMPLE_API_PREFIX: http://localhost:8099/ #Adapt for the final URL to be used
+      UID: 1000
+      GID: 1000
+    # More details in the documentation
+    # user: "${UID}:${GID}"
     depends_on:
       # - db
       db:

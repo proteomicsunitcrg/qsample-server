@@ -47,6 +47,10 @@ docker compose -f docker-compose.dev.yml up
 docker compose -f docker-compose.dev.yml down
 ```
 
+### File permissions of mounted volumes
+
+Docker compose configuration files provide the capability of creating a working environment (a web server and a MySQL DBMS) out of the box. However, there might be issues regarding permissions that the user should be aware. By default, qsample and MySQL containers run with their own specific users and these are likely to have different UID and GID than the ones of the user that executes the process. For that reason, if the user desired to remove the resulting database files or the application logs, they might need root or sudo permissions.
+A way to overcome this is by using ```user``` parameter and tune ```UID``` and ```GID``` environment variables in docker compose configuration files. This is commented by default. In that scenario, care must be taken to create target directories in advance (initially with 777 permissions, which can be adjusted afterwards). 
 
 ## Manual installation
 
