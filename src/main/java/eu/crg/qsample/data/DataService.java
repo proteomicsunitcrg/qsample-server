@@ -202,7 +202,7 @@ public class DataService {
             throw new NotFoundException("Files not foudn with request code: " + requestCode);
         }
         List<RequestFile> allFiles = files.get();
-        allFiles = parseFileNameForPlot(allFiles);
+        // allFiles = parseFileNameForPlot(allFiles); Toniher: Let's move the parsing client-side
         switch (order) {
             case "filename":
                 data = dataRepo.findByFileInAndContextSourceInAndParamOrderByFileFilename(files.get(), cs.get(),
