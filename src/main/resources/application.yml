@@ -1,12 +1,13 @@
 # spring.jpa.show-sql=true
 
 server:
-    port: 8081
+    port: 8099
 
 application:
     version: dev
 
 email-conf:
+  # Adapt to your final email address and webserver site
   address: roger.olivella@crg.eu
   app-url: "http://localhost:4200"
 
@@ -90,30 +91,6 @@ local-requests: true # true to use local database, false to use agendo. If true 
 
 spring:
   profiles: prod
-  datasource:
-    url: jdbc:mysql://database:3306/qsample?useSSL=false&serverTimezone=UTC
-    username: "qsample"
-    password: "qsample2017"
-    driver-class-name: com.mysql.jdbc.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: MySQL57InnoDB
-    show-sql: false
-  flyway:
-    locations:
-      - classpath:db/migration
-    enabled: false
-    baselineOnMigrate: true
-    validate-on-migrate: true
-    outOfOrder: false
-server:
-  port: 8099
-email-conf:
-  address: qcloud@crg.eu
-  app-url: "http://localhost:4200" 
 logging:
   file: /tmp/qsample.log
   level:

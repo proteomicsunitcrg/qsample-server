@@ -62,8 +62,6 @@ services:
        condition: service_healthy
     ports:
       # Ports exposed outside, they should match config
-      - 8081:8081
-      - 8082:8082
       - 8099:8099
     networks:
       qsample:

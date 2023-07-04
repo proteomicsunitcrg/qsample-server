@@ -17,8 +17,6 @@ services:
       QSAMPLE_API_PREFIX: http://localhost:8099/ #Adapt for the final URL to be used
     ports:
       # Ports exposed outside, they should match config
-      - 8081:8081
-      - 8082:8082
       - 8099:8099
     networks:
       qsample:
