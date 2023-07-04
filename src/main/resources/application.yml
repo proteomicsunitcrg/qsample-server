@@ -8,7 +8,6 @@ application:
 
 email-conf:
   address: roger.olivella@crg.eu
-  admin-email: roger.olivella@crg.eu
   app-url: "http://localhost:4200"
 
 spring:
@@ -114,8 +113,6 @@ server:
   port: 8099
 email-conf:
   address: qcloud@crg.eu
-  admin-email: roger.olivella@crg.eu
-  #app-url: "http://qsample.crg.eu"
   app-url: "http://localhost:4200" 
 logging:
   file: /tmp/qsample.log
