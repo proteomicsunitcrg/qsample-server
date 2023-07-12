@@ -82,13 +82,12 @@ public class RequestService {
         String ccc = restService.getAllRequests(convertDateToAgendoFormat(startDate),
                 convertDateToAgendoFormat(endDate));
         Gson gson = new Gson();
-        System.out.println("CCC");
-        System.out.println(ccc);
         AgendoRequestWrapper response = gson.fromJson(ccc, AgendoRequestWrapper.class);
         for (AgendoRequest agendoRequest : response.getRequest()) {
             
-            String requestCode = getRequestCode(
-                    agendoRequest.getFields().get(agendoRequest.getFields().size() - 1).getValue());
+            // String requestCode = getRequestCode(
+            //         agendoRequest.getFields().get(agendoRequest.getFields().size() - 1).getValue());
+            String requestCode = agendoRequest.getRef(); // Get requestCode from ref field
             boolean hasData = false;
             if (!showAll) {
                 if (!agendoRequest.getLast_action().getAction().equals("Rejected")
@@ -118,16 +117,16 @@ public class RequestService {
     }
 
     // TODO THIS
-    private String getRequestCode(String mierda) {
-        try {
-            Gson gson = new Gson();
-            AgendoFieldWrapper[] fielderinos = gson.fromJson(mierda, AgendoFieldWrapper[].class);
-            List<AgendoFieldWrapper> wrapper = Arrays.asList(fielderinos);
-            return wrapper.get(0).getFields().get(0).getValue();
-        } catch (Exception e) {
-            return mierda;
-        }
-    }
+    // private String getRequestCode(String mierda) {
+    //     try {
+    //         Gson gson = new Gson();
+    //         AgendoFieldWrapper[] fielderinos = gson.fromJson(mierda, AgendoFieldWrapper[].class);
+    //         List<AgendoFieldWrapper> wrapper = Arrays.asList(fielderinos);
+    //         return wrapper.get(0).getFields().get(0).getValue();
+    //     } catch (Exception e) {
+    //         return mierda;
+    //     }
+    // }
 
     public AgendoRequest getRequestById(Long id) {
         if (localRequests) {
