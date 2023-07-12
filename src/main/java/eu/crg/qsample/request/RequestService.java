@@ -88,6 +88,7 @@ public class RequestService {
             // String requestCode = getRequestCode(
             //         agendoRequest.getFields().get(agendoRequest.getFields().size() - 1).getValue());
             String requestCode = agendoRequest.getRef(); // Get requestCode from ref field
+            // System.out.println(requestCode);
             boolean hasData = false;
             if (!showAll) {
                 if (!agendoRequest.getLast_action().getAction().equals("Rejected")
@@ -140,9 +141,10 @@ public class RequestService {
     private AgendoRequest getRequestByIdLocal(Long id) {
         Optional<RequestLocal> requestOpt = requestRepository.findById(id);
         if (requestOpt.isPresent()) {
-            AgendoRequest agendoRequest = new AgendoRequest(requestOpt.get().getId(), requestOpt.get().getGroup(),
-                    requestOpt.get().getApplication().getName(), requestOpt.get().getCreationDate().toString(),
-                    requestOpt.get().getStatus());
+            String emptyRef = "";
+            AgendoRequest agendoRequest = new AgendoRequest(requestOpt.get().getId(), emptyRef, 
+                    requestOpt.get().getGroup(), requestOpt.get().getApplication().getName(), 
+                    requestOpt.get().getCreationDate().toString(), requestOpt.get().getStatus());
             agendoRequest.setLocalCode(requestOpt.get().getRequestCode());
             agendoRequest.setLocalCreationDate(requestOpt.get().getCreationDate().toString());
             agendoRequest.setLocalCreator(requestOpt.get().getCreator());
