@@ -82,9 +82,11 @@ public class RequestService {
         String ccc = restService.getAllRequests(convertDateToAgendoFormat(startDate),
                 convertDateToAgendoFormat(endDate));
         Gson gson = new Gson();
+        System.out.println("CCC");
+        System.out.println(ccc);
         AgendoRequestWrapper response = gson.fromJson(ccc, AgendoRequestWrapper.class);
         for (AgendoRequest agendoRequest : response.getRequest()) {
-
+            
             String requestCode = getRequestCode(
                     agendoRequest.getFields().get(agendoRequest.getFields().size() - 1).getValue());
             boolean hasData = false;
