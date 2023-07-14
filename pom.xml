@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>eu.crg</groupId>
 	<artifactId>qsample</artifactId>
-	<version>0.2.5.Roger</version>
+	<version>0.2.6</version>
 	<name>qsample</name>
 	<description>QSample backend</description>
 
