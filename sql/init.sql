@@ -130,7 +130,7 @@ DROP TABLE IF EXISTS `context_source`;
 CREATE TABLE `context_source` (
   `id` bigint(20) NOT NULL,
   `abbreviated` varchar(50) NOT NULL,
-  `api_key` varchar(50) NOT NULL,
+  `api_key` char(50) NOT NULL,
   `charge` bigint(20) DEFAULT NULL,
   `mz` float DEFAULT NULL,
   `name` varchar(50) NOT NULL,
@@ -147,7 +147,7 @@ CREATE TABLE `context_source` (
 
 LOCK TABLES `context_source` WRITE;
 /*!40000 ALTER TABLE `context_source` DISABLE KEYS */;
-INSERT INTO `context_source` VALUES (1,'# proteins','apiKey1',NULL,NULL,'Total number of identified grouped proteins',1),(2,'# peptides','apiKey2',NULL,NULL,'Total number of identified peptides',1),(3,'+2','apiKey3',NULL,NULL,'Charge +2',1),(4,'+3','apiKey4',NULL,NULL,'Charge +3',1),(5,'+4','apiKey5',NULL,NULL,'Charge +4',1),(6,'Missed cleavages','apiKey6',NULL,NULL,'Missed cleavages',1),(7,'Base peak intensity (removed log 04/04/22)','apiKey7',NULL,NULL,'Base peak intensity (removed log 04/04/22)',1),(8,'Percentage Propionyl','apiKey8',NULL,NULL,'Percentage Propionyl',1),(9,'Percentage PIC','apiKey9',NULL,NULL,'Percentage PIC',1),(10,'K(Carbamyl)','apiKey@',NULL,NULL,'Percentage K(Carbamyl)',1),(11,'N-terminal (Carbamyl)','apiKeyA',NULL,NULL,'Percentage .(Carbamyl))',1),(12,'R(Carbamyl)','apiKeyB',NULL,NULL,'Percentage R(Carbamyl))',1),(13,'N(Deamidated)','apiKeyC',NULL,NULL,'Percentage N(Deamidated))',1),(14,'K(Formyl)','apiKeyD',NULL,NULL,'Percentage K(Formyl))',1),(15,'N-terminal (Formyl)','apiKeyE',NULL,NULL,'Percentage .(Formyl))',1),(16,'S(Formyl)','apiKeyF',NULL,NULL,'Percentage S(Formyl))',1),(17,'T(Formyl)','apiKeyG',NULL,NULL,'Percentage T(Formyl))',1),(18,'pyro-Glu','apiKeyH',NULL,NULL,'Percentage pyro-Glu)',1),(19,'TIC (removed log 04/04/22)','apiKeyI',NULL,NULL,'TIC (removed log 04/04/22)',1),(20,'0','apiKeyP',NULL,NULL,'# missed cleavages = 0',1),(21,'1','apiKeyQ',NULL,NULL,'# missed cleavages = 1',1),(22,'2','apiKeyR',NULL,NULL,'# missed cleavages = 2',1),(23,'3','apiKeyS',NULL,NULL,'# missed cleavages = 3',1),(24,'Total number of phospho peptides','apiKeyT',NULL,NULL,'Total number of phospho peptides',1);
+INSERT INTO `context_source` VALUES (1,'# proteins','5008da3a-dbcd-49c3-a008-db34c4b0bb39',NULL,NULL,'Total number of identified grouped proteins',1),(2,'# peptides','958ce553-ad1a-493f-9af0-ffac364a7075',NULL,NULL,'Total number of identified peptides',1),(3,'+2','2fc40f2d-ccce-4bc9-bfb6-92e4c29e405c',NULL,NULL,'Charge +2',1),(4,'+3','8b17a1e5-5240-4bc5-85f3-47216f82093d',NULL,NULL,'Charge +3',1),(5,'+4','4ee9389c-aaad-4478-a4d4-dd6fb9fdea98',NULL,NULL,'Charge +4',1),(6,'Missed cleavages','e5ee7fa8-8731-4b8e-b5d0-a3d148c524fb',NULL,NULL,'Missed cleavages',1),(7,'Base peak intensity (removed log 04/04/22)','f9e4aaa0-c22f-445f-89b9-823469d43a73',NULL,NULL,'Base peak intensity (removed log 04/04/22)',1),(8,'Percentage Propionyl','520fbca9-b4bb-480b-87c7-ef914a26c208',NULL,NULL,'Percentage Propionyl',1),(9,'Percentage PIC','f28e5aca-c4bb-4ca0-a90a-94d36a2f7e64',NULL,NULL,'Percentage PIC',1),(10,'K(Carbamyl)','f5d89e95-2318-4b83-95f2-1f5b6491712a',NULL,NULL,'Percentage K(Carbamyl)',1),(11,'N-terminal (Carbamyl)','0075a453-9c3f-4b6b-8d93-3cb3e12e5e71',NULL,NULL,'Percentage .(Carbamyl))',1),(12,'R(Carbamyl)','87138f68-7b72-42f9-9ae2-c0d1a8229fd1',NULL,NULL,'Percentage R(Carbamyl))',1),(13,'N(Deamidated)','aa5ef26c-77dd-48a4-9eff-8c1046326635',NULL,NULL,'Percentage N(Deamidated))',1),(14,'K(Formyl)','ba8ad35b-1613-4881-903d-b6392efcf516',NULL,NULL,'Percentage K(Formyl))',1),(15,'N-terminal (Formyl)','e87e83dd-2db3-42ba-b09b-1cf6f7e2889b',NULL,NULL,'Percentage .(Formyl))',1),(16,'S(Formyl)','a82b23ab-bd4f-498e-8bec-68f1b743d1a9',NULL,NULL,'Percentage S(Formyl))',1),(17,'T(Formyl)','7722872a-c5ad-4590-9253-7a532a8c99fd',NULL,NULL,'Percentage T(Formyl))',1),(18,'pyro-Glu','89230c47-5d32-47df-83b4-c80956a8efaf',NULL,NULL,'Percentage pyro-Glu)',1),(19,'TIC (removed log 04/04/22)','ce09aa9a-f314-4bfa-b485-5d083b4ca24e',NULL,NULL,'TIC (removed log 04/04/22)',1),(20,'0','4ceda959-a107-4272-8896-d1f3d4826b99',NULL,NULL,'# missed cleavages = 0',1),(21,'1','7b8d2a03-9f6f-473e-8362-c450df636714',NULL,NULL,'# missed cleavages = 1',1),(22,'2','d9486250-e8b7-4205-a5cb-7b7e6e6d2043',NULL,NULL,'# missed cleavages = 2',1),(23,'3','ee25bc58-87a9-4bb1-894b-ba4b1f417998',NULL,NULL,'# missed cleavages = 3',1),(24,'Total number of phospho peptides','7dafa69c-22d0-4464-9583-c9e143292f8a',NULL,NULL,'Total number of phospho peptides',1);
 /*!40000 ALTER TABLE `context_source` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -424,7 +424,7 @@ DROP TABLE IF EXISTS `guide_set`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `guide_set` (
   `id` bigint(20) NOT NULL,
-  `api_key` varchar(16) NOT NULL,
+  `api_key` char(50) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_ea8e5icv3469cmimqepyfx3cx` (`api_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -846,7 +846,7 @@ DROP TABLE IF EXISTS `param`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `param` (
   `id` bigint(20) NOT NULL,
-  `api_key` varchar(50) NOT NULL,
+  `api_key` char(50) NOT NULL,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -858,7 +858,7 @@ CREATE TABLE `param` (
 
 LOCK TABLES `param` WRITE;
 /*!40000 ALTER TABLE `param` DISABLE KEYS */;
-INSERT INTO `param` VALUES (1,'apiKey1','Total Numbers');
+INSERT INTO `param` VALUES (1,'5008da3a-dbcd-49c3-a008-db34c4b0bb39','Total Numbers');
 /*!40000 ALTER TABLE `param` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -920,7 +920,7 @@ DROP TABLE IF EXISTS `plot`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `plot` (
   `id` bigint(20) NOT NULL,
-  `api_key` varchar(50) NOT NULL,
+  `api_key` char(50) NOT NULL,
   `param_id` bigint(20) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -935,7 +935,7 @@ CREATE TABLE `plot` (
 
 LOCK TABLES `plot` WRITE;
 /*!40000 ALTER TABLE `plot` DISABLE KEYS */;
-INSERT INTO `plot` VALUES (1,'apiKey1',1,'Number of protein groups'),(3,'plot3',1,'Number of peptides'),(4,'plot4',1,'Percentage Propionyl'),(5,'plot5',1,'Percentage PIC'),(6,'plot6',1,'Number of modification sites STY');
+INSERT INTO `plot` VALUES (1,'5008da3a-dbcd-49c3-a008-db34c4b0bb39',1,'Number of protein groups'),(3,'aa7c6f75-0442-4e66-a8fd-1e564831c6da',1,'Number of peptides'),(4,'e10d8581-326b-4eae-8f9b-b21486bf5a9e',1,'Percentage Propionyl'),(5,'66bdbd2e-ab13-4585-b940-463f33a5e344',1,'Percentage PIC'),(6,'e4eb3ae0-a309-43b3-8108-543b16e863c1',1,'Number of modification sites STY');
 /*!40000 ALTER TABLE `plot` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1106,7 +1106,7 @@ DROP TABLE IF EXISTS `threshold`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `threshold` (
   `id` bigint(20) NOT NULL,
-  `api_key` varchar(16) NOT NULL,
+  `api_key` char(50) NOT NULL,
   `non_conformity_direction` varchar(255) DEFAULT NULL,
   `steps` int(11) DEFAULT NULL,
   `wetlab_id` bigint(20) DEFAULT NULL,
@@ -1190,7 +1190,7 @@ DROP TABLE IF EXISTS `trace_color`;
 CREATE TABLE `trace_color` (
   `id` bigint(20) NOT NULL,
   `a` bigint(20) NOT NULL,
-  `api_key` varchar(50) NOT NULL,
+  `api_key` char(50) NOT NULL,
   `b` bigint(20) NOT NULL,
   `g` bigint(20) NOT NULL,
   `r` bigint(20) NOT NULL,
@@ -1204,7 +1204,7 @@ CREATE TABLE `trace_color` (
 
 LOCK TABLES `trace_color` WRITE;
 /*!40000 ALTER TABLE `trace_color` DISABLE KEYS */;
-INSERT INTO `trace_color` VALUES (1,0,'apiKey1',100,100,100);
+INSERT INTO `trace_color` VALUES (1,0,'5008da3a-dbcd-49c3-a008-db34c4b0bb39',100,100,100);
 /*!40000 ALTER TABLE `trace_color` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1240,7 +1240,7 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` bigint(20) NOT NULL,
   `agendo_id` bigint(20) DEFAULT NULL,
-  `api_key` varchar(16) NOT NULL,
+  `api_key` char(50) NOT NULL,
   `firstname` varchar(50) NOT NULL,
   `lastname` varchar(50) NOT NULL,
   `password` varchar(100) NOT NULL,
@@ -1256,7 +1256,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (26,942,'`P�DA\n��','admin','admin','$2a$10$zBX52L1fispvDUi6BqArKuCX3jY1nURmp6YnWtk1zvnIGPDzMo6.m','admin@admin.com');
+INSERT INTO `user` VALUES (26,942,'51838265-6475-4237-8d58-8c5bbc053c1f','admin','admin','$2a$10$zBX52L1fispvDUi6BqArKuCX3jY1nURmp6YnWtk1zvnIGPDzMo6.m','admin@admin.com');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1340,7 +1340,7 @@ DROP TABLE IF EXISTS `wetlab`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `wetlab` (
   `id` bigint(20) NOT NULL,
-  `api_key` varchar(16) NOT NULL,
+  `api_key` char(50) NOT NULL,
   `name` varchar(50) NOT NULL,
   `guide_set_id` bigint(20) DEFAULT NULL,
   `category_id` bigint(20) DEFAULT NULL,
@@ -1359,7 +1359,7 @@ CREATE TABLE `wetlab` (
 
 LOCK TABLES `wetlab` WRITE;
 /*!40000 ALTER TABLE `wetlab` DISABLE KEYS */;
-INSERT INTO `wetlab` VALUES (1,'apiKey1','InSolutionQC',NULL,1),(2,'wetlab2','Offline Fractionation QC',NULL,3),(3,'wetlab3','InGelQC',NULL,1),(4,'wetlab4','Phospho TIO QC',NULL,2),(5,'wetlab5','FASPQC',NULL,1);
+INSERT INTO `wetlab` VALUES (1,'5008da3a-dbcd-49c3-a008-db34c4b0bb39','InSolutionQC',NULL,1),(2,'5e0f0077-2ae2-4984-88cd-20bcd62067ff','Offline Fractionation QC',NULL,3),(3,'d7bca60f-a79e-4cb9-9333-9227410629bf','InGelQC',NULL,1),(4,'0237d9fe-9013-4746-a2d7-6e5fcf007a18','Phospho TIO QC',NULL,2),(5,'0c5165d8-05eb-47e0-86e4-22a77beb86ab','FASPQC',NULL,1);
 /*!40000 ALTER TABLE `wetlab` ENABLE KEYS */;
 UNLOCK TABLES;
 

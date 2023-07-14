@@ -4,7 +4,7 @@ set -x
 echo "Starting Qsample"
 
 export PROFILE=prod
-export JAR=qsample-0.2.5.Roger.jar
+export JAR=qsample-0.2.6.jar
 
 cd /app
 unzip ${JAR} BOOT-INF/classes/static/assets/env.sample.js
