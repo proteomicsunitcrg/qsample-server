@@ -32,16 +32,13 @@ services:
     # Situation: https://stackoverflow.com/questions/71060072/docker-compose-depends-on-with-condition-invalid-type-should-be-an-array
     healthcheck:
         test: ["CMD-SHELL", "mysql -h localhost -u root -p$${MYSQL_ROOT_PASSWORD} $${MYSQL_DATABASE} -e 'SELECT COUNT(*) FROM user limit 1;' || exit 1" ]
-        interval: 30s
+        interval: 20s
         timeout: 10s
-        retries: 20
+        retries: 5
   app:
     # image: qsample:latest
     build: 
-      dockerfile: Dockerfile.dev
       context: .
-      args:
-        QSAMPLE_API_PREFIX: http://localhost:8099/ #TODO: to be replaced with a fully running time system
     restart: always
     volumes:
       - type: bind
@@ -49,7 +46,7 @@ services:
         target: /config/application.yml
         read_only: true
       - ./tmp:/tmp
-        
+
     environment:
       QSAMPLE_API_PREFIX: http://localhost:8099/ #Adapt for the final URL to be used
       UID: 1000
@@ -59,7 +56,7 @@ services:
     depends_on:
       # - db
       db:
-       condition: service_healthy
+        condition: service_healthy
     ports:
       # Ports exposed outside, they should match config
       - 8099:8099

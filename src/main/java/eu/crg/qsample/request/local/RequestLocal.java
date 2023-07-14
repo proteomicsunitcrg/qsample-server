@@ -1,7 +1,8 @@
 package eu.crg.qsample.request.local;
 
 import java.util.Date;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +11,14 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+
 import eu.crg.qsample.qgenerator.application.Application;
+
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "request_local")
@@ -25,7 +33,11 @@ public class RequestLocal {
     @ManyToOne
     private Application application;
 
-    private Date creationDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Column(name = "creation_date", columnDefinition="DATETIME")
+    // private Date creationDate;
+    private @DateTimeFormat(iso = ISO.DATE_TIME) Date creationDate;
 
     @Column(name = "statuss") // some version f mysql doest accept that name
     private String status;
@@ -64,6 +76,8 @@ public class RequestLocal {
         this.application = application;
     }
 
+    @JsonAlias({ "creation_date" })
+    @JsonProperty("creation_date")
     public Date getCreationDate() {
         return creationDate;
     }
@@ -104,17 +118,26 @@ public class RequestLocal {
         this.taxonomy = taxonomy;
     }
 
-    
-
     public RequestLocal() {
     }
 
-    public RequestLocal(Long id, String requestCode, Application application, Date creationDate, String status, String group,
+    public RequestLocal(Long id, String requestCode, Application application, Date creationDate, String status,
+            String group,
             String samples, String taxonomy, String creator) {
         this.id = id;
-        this.requestCode = requestCode;
+        this.requestCode = "KK";
         this.application = application;
-        this.creationDate = creationDate;
+
+        Date test = null;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String inputString1 = "2023-12-06 12:13:00";
+        try {
+          test = dateFormat.parse(inputString1);
+        } catch (ParseException e) {
+          e.printStackTrace();
+        }
+
+        this.creationDate = test;
         this.status = status;
         this.group = group;
         this.samples = samples;
@@ -130,5 +153,4 @@ public class RequestLocal {
         this.creator = creator;
     }
 
-    
 }

@@ -32,8 +32,8 @@ public class File {
     @NotNull
     private String checksum;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-	@Column(name = "creation_date", columnDefinition = "DATETIME")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	  @Column(name = "creation_date", columnDefinition = "DATETIME")
     private Date creationDate;
 
     @Column(name = "filename", length = 50)
@@ -57,7 +57,7 @@ public class File {
     }
 
     @JsonAlias({ "creation_date" })
-    @JsonProperty("creation_date")	
+    @JsonProperty("creation_date")
     public Date getCreationDate() {
         return creationDate;
     }

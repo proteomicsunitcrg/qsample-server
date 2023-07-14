@@ -36,9 +36,6 @@ public class MailService {
     @Value("${email-conf.address}")
     private String emailAddress;
 
-    @Value("${email-conf.admin-email}")
-    private String adminMail;
-
     @Value("${email-conf.app-url}")
     private String appUrl;
 

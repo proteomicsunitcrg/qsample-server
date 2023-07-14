@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -22,6 +23,7 @@ import org.hibernate.annotations.Type;
 
 import eu.crg.qsample.guideset.GuideSet;
 import eu.crg.qsample.plot.Plot;
+import eu.crg.qsample.qgenerator.wetlab_category.WetlabCategory;
 
 @Entity
 @Table(name = "wetlab")
@@ -47,6 +49,9 @@ public class WetLab {
     @OneToOne(orphanRemoval = true)
     private GuideSet guideSet;
 
+    @ManyToOne
+    private WetlabCategory category;
+
     public Long getId() {
         return id;
     }
@@ -71,13 +76,23 @@ public class WetLab {
         this.name = name;
     }
 
+    public WetlabCategory getWetlabCategory() {
+        return category;
+    }
+
+    public void setWetlabCategory(WetlabCategory category) {
+        this.category = category;
+    }
+
+
     public WetLab() {
     }
 
-    public WetLab(Long id, UUID apiKey, String name) {
+    public WetLab(Long id, UUID apiKey, String name, WetlabCategory category) {
         this.id = id;
         this.apiKey = apiKey;
         this.name = name;
+        this.category = category;
     }
 
     public List<Plot> getPlot() {
@@ -88,11 +103,12 @@ public class WetLab {
         this.plot = plot;
     }
 
-    public WetLab(Long id, @NotNull UUID apiKey, @NotNull String name, List<Plot> plot) {
+    public WetLab(Long id, @NotNull UUID apiKey, @NotNull String name, List<Plot> plot, WetlabCategory category) {
         this.id = id;
         this.apiKey = apiKey;
         this.name = name;
         this.plot = plot;
+        this.category = category;
     }
 
     @JsonIgnore
@@ -104,13 +120,12 @@ public class WetLab {
         this.guideSet = guideSet;
     }
 
-    public WetLab(Long id, @NotNull UUID apiKey, @NotNull String name, List<Plot> plot, GuideSet guideSet) {
+    public WetLab(Long id, @NotNull UUID apiKey, @NotNull String name, List<Plot> plot, GuideSet guideSet, WetlabCategory category) {
         this.id = id;
         this.apiKey = apiKey;
         this.name = name;
         this.plot = plot;
         this.guideSet = guideSet;
+        this.category = category;
     }
-
-
 }

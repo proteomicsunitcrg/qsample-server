@@ -9,6 +9,8 @@ import com.google.gson.annotations.SerializedName;
 public class AgendoRequest {
     private long id;
 
+    private String ref;
+    
     private String group;
 
     @SerializedName("class")
@@ -70,6 +72,15 @@ public class AgendoRequest {
         this.id = id;
     }
 
+    public String getRef() {
+        return ref;
+    }
+
+    public void setRef(String ref) {
+        this.ref = ref;
+    }
+
+
     public String getGroup() {
         return group;
     }
@@ -87,7 +98,7 @@ public class AgendoRequest {
     }
 
     public String getdate_created() {
-        return date_created;
+        return date_created.split("\\.")[0];
     }
 
     public void setdate_created(String date_created) {
@@ -179,11 +190,12 @@ public class AgendoRequest {
     public AgendoRequest() {
     }
 
-    public AgendoRequest(long id, String group, String classs, String date_created, String status, String account,
+    public AgendoRequest(long id, String ref, String group, String classs, String date_created, String status, String account,
             String total, String delivery_date, String delivery_location, String comment,
             AgendoRequestLastAction last_action, AgendoRequestUser created_by, List<AgendoRequestFieldProduct> fields,
             List<AgendoRequestFieldProduct> products) {
         this.id = id;
+        this.ref = ref;
         this.group = group;
         this.classs = classs;
         this.date_created = date_created;
@@ -199,8 +211,9 @@ public class AgendoRequest {
         this.products = products;
     }
 
-    public AgendoRequest(long id, String group, String classs, String date_created, String status) {
+    public AgendoRequest(long id, String ref, String group, String classs, String date_created, String status) {
         this.id = id;
+        this.ref = ref;
         this.group = group;
         this.classs = classs;
         this.date_created = date_created;
@@ -237,8 +250,8 @@ public class AgendoRequest {
                 + created_by + ", date_created=" + date_created + ", delivery_date=" + delivery_date
                 + ", delivery_location=" + delivery_location + ", fields=" + fields + ", group=" + group + ", id=" + id
                 + ", last_action=" + last_action + ", localCode=" + localCode + ", localCreationDate="
-                + localCreationDate + ", localCreator=" + localCreator + ", products=" + products + ", status=" + status
-                + ", total=" + total + "]";
+                + localCreationDate + ", localCreator=" + localCreator + ", products=" + products + ", ref=" + ref
+                + ", status=" + status + ", total=" + total + "]";
     }
 
 

@@ -5,26 +5,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.ws.rs.NotFoundException;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import eu.crg.qsample.restservice.RestService;
-import eu.crg.qsample.security.model.User;
-import eu.crg.qsample.security.repository.UserRepository;
+import com.google.gson.Gson;
+
 import eu.crg.qsample.context_source.ContextSource;
 import eu.crg.qsample.context_source.ContextSourceRepository;
 import eu.crg.qsample.file.FileRepository;
@@ -33,6 +25,9 @@ import eu.crg.qsample.param.ParamRepository;
 import eu.crg.qsample.request.AgendoRequestWrapperOneRequest;
 import eu.crg.qsample.request.local.RequestLocal;
 import eu.crg.qsample.request.local.RequestRepository;
+import eu.crg.qsample.restservice.RestService;
+import eu.crg.qsample.security.model.User;
+import eu.crg.qsample.security.repository.UserRepository;
 
 @Service
 public class RequestService {
@@ -74,9 +69,10 @@ public class RequestService {
         List<MiniRequest> miniRequestList = new ArrayList<>();
         for (RequestLocal req : requestList) {
             System.out.println(req.getRequestCode());
+            // Format string and remove dots of create_date
             miniRequestList.add(
                     new MiniRequest(req.getId(), req.getApplication().getName(), req.getCreator(), req.getCreator(),
-                            req.getCreationDate().toString(), req.getStatus(), req.getRequestCode(), false, true));
+                            req.getCreationDate().toString().split("\\.")[0], req.getStatus(), req.getRequestCode(), false, true));
         }
         return miniRequestList;
     }
@@ -88,9 +84,11 @@ public class RequestService {
         Gson gson = new Gson();
         AgendoRequestWrapper response = gson.fromJson(ccc, AgendoRequestWrapper.class);
         for (AgendoRequest agendoRequest : response.getRequest()) {
-
-            String requestCode = getRequestCode(
-                    agendoRequest.getFields().get(agendoRequest.getFields().size() - 1).getValue());
+            
+            // String requestCode = getRequestCode(
+            //         agendoRequest.getFields().get(agendoRequest.getFields().size() - 1).getValue());
+            String requestCode = agendoRequest.getRef(); // Get requestCode from ref field
+            // System.out.println(requestCode);
             boolean hasData = false;
             if (!showAll) {
                 if (!agendoRequest.getLast_action().getAction().equals("Rejected")
@@ -120,16 +118,16 @@ public class RequestService {
     }
 
     // TODO THIS
-    private String getRequestCode(String mierda) {
-        try {
-            Gson gson = new Gson();
-            AgendoFieldWrapper[] fielderinos = gson.fromJson(mierda, AgendoFieldWrapper[].class);
-            List<AgendoFieldWrapper> wrapper = Arrays.asList(fielderinos);
-            return wrapper.get(0).getFields().get(0).getValue();
-        } catch (Exception e) {
-            return mierda;
-        }
-    }
+    // private String getRequestCode(String mierda) {
+    //     try {
+    //         Gson gson = new Gson();
+    //         AgendoFieldWrapper[] fielderinos = gson.fromJson(mierda, AgendoFieldWrapper[].class);
+    //         List<AgendoFieldWrapper> wrapper = Arrays.asList(fielderinos);
+    //         return wrapper.get(0).getFields().get(0).getValue();
+    //     } catch (Exception e) {
+    //         return mierda;
+    //     }
+    // }
 
     public AgendoRequest getRequestById(Long id) {
         if (localRequests) {
@@ -143,9 +141,10 @@ public class RequestService {
     private AgendoRequest getRequestByIdLocal(Long id) {
         Optional<RequestLocal> requestOpt = requestRepository.findById(id);
         if (requestOpt.isPresent()) {
-            AgendoRequest agendoRequest = new AgendoRequest(requestOpt.get().getId(), requestOpt.get().getGroup(),
-                    requestOpt.get().getApplication().getName(), requestOpt.get().getCreationDate().toString(),
-                    requestOpt.get().getStatus());
+            String emptyRef = "";
+            AgendoRequest agendoRequest = new AgendoRequest(requestOpt.get().getId(), emptyRef, 
+                    requestOpt.get().getGroup(), requestOpt.get().getApplication().getName(), 
+                    requestOpt.get().getCreationDate().toString(), requestOpt.get().getStatus());
             agendoRequest.setLocalCode(requestOpt.get().getRequestCode());
             agendoRequest.setLocalCreationDate(requestOpt.get().getCreationDate().toString());
             agendoRequest.setLocalCreator(requestOpt.get().getCreator());
@@ -199,11 +198,20 @@ public class RequestService {
     }
 
     public RequestLocal getLocalRequestById(Long id) {
-        Optional <RequestLocal> localOpt = requestRepository.findById(id);
+        Optional<RequestLocal> localOpt = requestRepository.findById(id);
         if (localOpt.isPresent()) {
             return localOpt.get();
         } else {
             throw new NotFoundException("Request not found by id");
+        }
+    }
+
+    public RequestLocal getLocalRequestByRequestCode(String requestCode) {
+        Optional<RequestLocal> localOpt = requestRepository.findByRequestCode(requestCode);
+        if (localOpt.isPresent()) {
+            return localOpt.get();
+        } else {
+            throw new NotFoundException("Request not found by Request Code");
         }
     }
 

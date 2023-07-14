@@ -47,6 +47,10 @@ docker compose -f docker-compose.dev.yml up
 docker compose -f docker-compose.dev.yml down
 ```
 
+### File permissions of mounted volumes
+
+Docker compose configuration files provide the capability of creating a working environment (a web server and a MySQL DBMS) out of the box. However, there might be issues regarding permissions that the user should be aware. By default, qsample and MySQL containers run with their own specific users and these are likely to have different UID and GID than the ones of the user that executes the process. For that reason, if the user desired to remove the resulting database files or the application logs, they might need root or sudo permissions.
+A way to overcome this is by using ```user``` parameter and tune ```UID``` and ```GID``` environment variables in docker compose configuration files. This is commented by default. In that scenario, care must be taken to create target directories in advance (initially with 777 permissions, which can be adjusted afterwards). 
 
 ## Manual installation
 
@@ -108,6 +112,13 @@ Change the name of the new jar to `qsample-latest.jar` and launch the following 
 Wait a minute and the new backend *should* work.
 
 To know how to deploy the front end check the [QSample-Client](https://github.com/proteomicsunitcrg/qsample-client/) repository.
+
+## Database updates
+
+Database updates (related to application updates) are kept in: ```src/main/resources/db/migration directory``` using [Flyway](https://flywaydb.org/). This is configured in ```src/main/resources/application.yml``` and it is taken care by the application every time it starts with no need of manual intervention.
+
+Once flyway is enabled, a table named ``flyway_schema_history`` is created in the target DB, and new scripts will be considered. If you need to ever run previous SQL scripts, you might need to enable ```outOfOrder``` flyway option. 
+
 
 ## Errors
 
