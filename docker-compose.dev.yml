@@ -52,6 +52,7 @@ services:
         
     environment:
       QSAMPLE_API_PREFIX: http://localhost:8099/ #Adapt for the final URL to be used
+      QSAMPLE_VERSION: 0.2.6
       UID: 1000
       GID: 1000
     # More details in the documentation
