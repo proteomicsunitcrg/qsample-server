@@ -13,6 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+
 import eu.crg.qsample.wetlab.WetLab;
 import eu.crg.qsample.wetlab.WetLabFile;
 
@@ -27,8 +29,9 @@ public class GuideSet {
 	private Long id;
 
 
-    @Column(name = "apiKey", updatable = true, nullable = false, unique = true, columnDefinition = "BINARY(16)")
-	@org.hibernate.annotations.Type(type = "org.hibernate.type.UUIDBinaryType")
+    @Column(name = "apiKey", updatable = true, nullable = false, unique = true, columnDefinition = "CHAR(50)")
+    // @org.hibernate.annotations.Type(type = "org.hibernate.type.UUIDBinaryType")
+    @Type(type = "uuid-char")
     private UUID apiKey;
 
     @Column

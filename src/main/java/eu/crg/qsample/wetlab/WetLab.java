@@ -19,6 +19,8 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import org.hibernate.annotations.Type;
+
 import eu.crg.qsample.guideset.GuideSet;
 import eu.crg.qsample.plot.Plot;
 import eu.crg.qsample.qgenerator.wetlab_category.WetlabCategory;
@@ -32,8 +34,9 @@ public class WetLab {
     @SequenceGenerator(name = "wetLab_seq", sequenceName = "wetLab_seq", allocationSize = 1)
     private Long id;
 
-    @Column(name = "apiKey", updatable = true, nullable = false, unique = true, columnDefinition = "BINARY(16)")
+    @Column(name = "apiKey", updatable = true, nullable = false, unique = true, columnDefinition = "CHAR(50)")
     @NotNull
+    @Type(type = "uuid-char")
     private UUID apiKey;
 
     @Column(name = "name", length = 50)
@@ -125,5 +128,4 @@ public class WetLab {
         this.guideSet = guideSet;
         this.category = category;
     }
-
 }
