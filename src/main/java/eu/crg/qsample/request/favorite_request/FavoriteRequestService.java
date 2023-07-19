@@ -107,11 +107,13 @@ public class FavoriteRequestService {
                 agendoRequests.add(requestService.getRequestById(request.getFavoriteRequest().getAgendoId()));
             }
             for (AgendoRequest agendoRequest : agendoRequests) {
+                String requestCode = agendoRequest.getRef(); // Get requestCode from ref field
                 miniRequests.add(new MiniRequest(agendoRequest.getId(), agendoRequest.getClasss(),
                         agendoRequest.getCreated_by().getEmail(), agendoRequest.getCreated_by().getName(),
                         agendoRequest.getdate_created(),
                         agendoRequest.getLast_action().getAction(),
-                        getRequestCode(agendoRequest.getFields().get(agendoRequest.getFields().size() - 1).getValue()),
+                        // getRequestCode(agendoRequest.getFields().get(agendoRequest.getFields().size() - 1).getValue()),
+                        requestCode,
                         false, false));
             }
         }
@@ -152,17 +154,17 @@ public class FavoriteRequestService {
     }
 
     // TODO THIS
-    private String getRequestCode(String mierda) {
-        try {
-            Gson gson = new Gson();
-            // mierda = mierda.substring(1, mierda.length() - 1);
-            AgendoFieldWrapper[] fielderinos = gson.fromJson(mierda, AgendoFieldWrapper[].class);
-            List<AgendoFieldWrapper> wrapper = Arrays.asList(fielderinos);
-            return wrapper.get(0).getFields().get(0).getValue();
-        } catch (Exception e) {
-            return mierda;
-        }
-    }
+    // private String getRequestCode(String mierda) {
+    //     try {
+    //         Gson gson = new Gson();
+    //         // mierda = mierda.substring(1, mierda.length() - 1);
+    //         AgendoFieldWrapper[] fielderinos = gson.fromJson(mierda, AgendoFieldWrapper[].class);
+    //         List<AgendoFieldWrapper> wrapper = Arrays.asList(fielderinos);
+    //         return wrapper.get(0).getFields().get(0).getValue();
+    //     } catch (Exception e) {
+    //         return mierda;
+    //     }
+    // }
 
     public FavoriteRequestsUsers getFavoriteRequestRelationByAgendoId(Long agendoId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
