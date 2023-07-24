@@ -1,143 +1,27 @@
 # QSample Server
 
-## Download
+![AngularJS](https://img.shields.io/badge/AngularJS-E23237?style=for-the-badge&logo=angularjs&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-F2F4F9?style=for-the-badge&logo=spring-boot)
 
-The latest version of this repository can be downloaded this way:
+## Introduction
 
-```
-git clone --depth 1 --recurse-submodules https://github.com/proteomicsunitcrg/qsample-server
-```
-You can retrieve further updates with:
+**Qsample Server** is a ...
 
-```
-git pull --recurse-submodules 
-```
+## QSample Schema
 
-## Configuration file
+![Screenshot from 2023-07-24 16-30-48](https://github.com/proteomicsunitcrg/qsample-server/assets/1679820/5e13185c-72b4-4f8e-9fda-93738a64c9ba)
 
-Change the important things like the port, SQL credentials, FlyWay, QSample local mode, APIs URL and much more in the configuration file `src/main/resources/application.yml`.
+## Quick Start
 
-## Execution with docker-compose
+1. .....
+   
+## Credits
 
-The easiest way to run Qsample is with [Docker compose](https://github.com/docker/compose) (you need also Docker installed in your system)
+**QSample** was originally written by Marc Serret, Toni Hermoso and @rolivella and.
 
-```
-# Adapt docker-compose.yml file with the paths and the configuration file that fits your system
-# This will start both a MariaDB/MySQL instance and a web server instance
-# Start the system
-docker compose up
-# Stop the system
-docker compose down
-```
+We thank the following people for their assistance in the development of this pipeline:
 
-NOTE: Depending on your installation, it can be either ``docker compose`` or ``docker-compose``
+Eduard Sabidó (@edunivers), Cristina Chiva, Eva Borràs, Guadalupe Espadas, Olga Pastor, Enrique Alonso, Selena Fernández.
 
-NOTE: If you perform several changes, you might want to rebuild the image with ``docker compose build --no-cache``
-
-
-### Only server component
-
-You can a use a server-only component as well.
-```
-# Adapt docker-compose.yml file with the paths and the configuration file that fits your system
-# This will start both a MariaDB/MySQL instance and a web server instance
-# Start the system
-docker compose -f docker-compose.dev.yml up
-# Stop the system
-docker compose -f docker-compose.dev.yml down
-```
-
-### File permissions of mounted volumes
-
-Docker compose configuration files provide the capability of creating a working environment (a web server and a MySQL DBMS) out of the box. However, there might be issues regarding permissions that the user should be aware. By default, qsample and MySQL containers run with their own specific users and these are likely to have different UID and GID than the ones of the user that executes the process. For that reason, if the user desired to remove the resulting database files or the application logs, they might need root or sudo permissions.
-A way to overcome this is by using ```user``` parameter and tune ```UID``` and ```GID``` environment variables in docker compose configuration files. This is commented by default. In that scenario, care must be taken to create target directories in advance (initially with 777 permissions, which can be adjusted afterwards). 
-
-## Manual installation
-
-### Requirements
-
-Install **Java 1.8** or higher. Other java open source *should* work.
-
-Install **Maven** to install packages, libraries to the project and compile the project.
-
-Install the latest version of **MySQL**.
-
-
-### Starting the dev server
-
-I personally use the following official Spring Boot Visual Studio Code extensions to manage the project:
-1. Spring Boot Extension Pack
-2. Spring Boot Tools
-
-I think that you have to put the JAVA PATH if the IDE asks for it and then this should appear on your VSC explorer tab:
-
-![startSpringBootLocal](https://user-images.githubusercontent.com/1679820/137739707-1e68d2fc-4b06-42af-ab42-a21a8107efd5.png)
-
-Right-click on the project and start to run the server. And everything *should* work.
-
-## Compile the project
-
-Change the version in the `pom.xml` file and with maven installed launch the following command:
-
-Edit and change `pom.xml` version
-
-Comment `$JAVA_HOME` at `.bashrc"
-
-`mvn package -DskipTests -f pom.xml`
-
-Obviously change the paths.
-
-This will generate a .jar file named with the POM version saved at `target` folder.
-
-## Deploy the project
-
-Send the jar to the server:
-
-`scp target\QSample-XXXXX.jar admin@10.102.1.26:/home/admin/qsampletest/latest`
-
-Connect to the server, go to the qsample directory and launch the next command to stop the daemon:
-
-`sudo systemctl stop qsample`
-
-Make a database backup:
-
-`mysqldump  --user admin -pPASSWORDHERE qsample > home/admin/sq;lqsample.sql`
-
-Move the old `qsample-latest.jar` to `qsample-latest.old.jar`
-
-Change the name of the new jar to `qsample-latest.jar` and launch the following command:
-
-`sudo systemctl start qsample`
-
-Wait a minute and the new backend *should* work.
-
-To know how to deploy the front end check the [QSample-Client](https://github.com/proteomicsunitcrg/qsample-client/) repository.
-
-## Database updates
-
-Database updates (related to application updates) are kept in: ```src/main/resources/db/migration directory``` using [Flyway](https://flywaydb.org/). This is configured in ```src/main/resources/application.yml``` and it is taken care by the application every time it starts with no need of manual intervention.
-
-Once flyway is enabled, a table named ``flyway_schema_history`` is created in the target DB, and new scripts will be considered. If you need to ever run previous SQL scripts, you might need to enable ```outOfOrder``` flyway option. 
-
-
-## Errors
-
-Sometimes when you start the server at prod it appears to work (systemctl status returns green code) but at the reality the front-end can't establish connection.
-
-Here I stop the daemon (`sudo systemctl stop qsample`) and I launch the jar with "manually" to check the logs easily:
-
-`/usr/bin/java -jar -Dspring.profiles.active=test|prod /home/admin/qsampletest/latest/qsample-latest.jar`
-
-With hibernate ddl mode in validate the deployment will fail if the database schema is not the same in the Java entities. Just update the SQL schema. This happens when you add a field to a table or something like that and you don't create a new migration file with the changes. With update mode the .jar file updates the database and everything works without any problem.
-
-
-## References
-
-* [Getting started with Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/html/getting-started.html)
-* [Spring Boot with Visual Studio Code](https://code.visualstudio.com/docs/java/java-spring-boot)
-
----
-
-Document created by *[Marc](mailto:vesperon51@gmail.com)* with [love](https://i.imgur.com/sifK6ru.jpg).
-
-4/10/2021
+## Citations
+..
