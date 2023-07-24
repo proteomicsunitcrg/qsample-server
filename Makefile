@@ -1,7 +1,13 @@
 run:
-	docker compose -f docker-compose.dev.yml up -d 
+	docker compose -f docker-compose.yml up -d 
+
+run-dev: 
+	docker compose -f docker-compose.dev.yml up -d
 
 stop:
+	docker compose -f docker-compose.yml down
+
+stop-dev:
 	docker compose -f docker-compose.dev.yml down
 
 build:
