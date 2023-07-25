@@ -9,10 +9,6 @@
 
 ![Screenshot from 2023-07-24 16-30-48](https://github.com/proteomicsunitcrg/qsample-server/assets/1679820/5e13185c-72b4-4f8e-9fda-93738a64c9ba)
 
-
-## QSample Schema
-
-
 ## Quick Start
 
 1. Clone the github repo: `git clone --recurse-submodules git@github.com:proteomicsunitcrg/qsample-server.git`
@@ -21,7 +17,7 @@
 4. Build `docker compose build --no-cache`
 5. Run `docker compose -f docker-compose.yml up -d`
 
-For more detailed documentation please chwck the [wiki](https://github.com/proteomicsunitcrg/qsample-server/wiki/Point-5:-Server-installation). 
+For more detailed documentation please check the [wiki](https://github.com/proteomicsunitcrg/qsample-server/wiki/Point-5:-Server-installation). 
    
 ## Credits
 
