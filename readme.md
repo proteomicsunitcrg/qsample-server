@@ -19,7 +19,7 @@
    
 ## Credits
 
-**QSample** was originally written by Marc Serret, Toni Hermoso and @rolivella and.
+**QSample** was originally written by Marc Serret, Toni Hermoso and Roger Olivella.
 
 We thank the following people for their assistance in the development of this pipeline:
 
