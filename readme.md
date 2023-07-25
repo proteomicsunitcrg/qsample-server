@@ -23,7 +23,4 @@
 
 We thank the following people for their assistance in the development of this pipeline:
 
-Eduard Sabidó (@edunivers), Cristina Chiva, Eva Borràs, Guadalupe Espadas, Olga Pastor, Enrique Alonso, Selena Fernández.
-
-## Citations
-..
+Eduard Sabidó, Cristina Chiva, Eva Borràs, Guadalupe Espadas, Olga Pastor, Enrique Alonso, Selena Fernández.
