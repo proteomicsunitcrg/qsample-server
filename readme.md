@@ -5,11 +5,13 @@
 
 ## Introduction
 
-**Qsample Server** is a ...
+**QSample Server** is a generic name to label the repository where all the front-end code for the QSample project is stored. Strictly speaking it is much more than that: it contains the QSample presentation layer which is called the **(QSample Client)[https://github.com/proteomicsunitcrg/qsample-client]**, the **QSample Server** itself which is the layer inbetween the presentation and database, and finally, the database schema. For managing this three components a [https://github.com/proteomicsunitcrg/qsample-server/blob/master/docker-compose.default.yml](Docker Compose) file has been created. It provides a seamless way to build and run all the components. The QSample Server and the [https://github.com/proteomicsunitcrg/atlas](atlas pipleline) form the QSample project:  
+
+![Screenshot from 2023-07-24 16-30-48](https://github.com/proteomicsunitcrg/qsample-server/assets/1679820/5e13185c-72b4-4f8e-9fda-93738a64c9ba)
+
 
 ## QSample Schema
 
-![Screenshot from 2023-07-24 16-30-48](https://github.com/proteomicsunitcrg/qsample-server/assets/1679820/5e13185c-72b4-4f8e-9fda-93738a64c9ba)
 
 ## Quick Start
 
