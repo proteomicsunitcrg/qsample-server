@@ -23,6 +23,6 @@ For more detailed documentation please check the [wiki](https://github.com/prote
 
 **QSample Server** was originally written by Marc Serret, Toni Hermoso and Roger Olivella.
 
-We thank the following people for their assistance in the development of this pipeline:
+We thank the following people for their assistance in the development of this project:
 
 Eduard Sabidó, Cristina Chiva, Eva Borràs, Guadalupe Espadas, Olga Pastor, Enrique Alonso, Selena Fernández.
