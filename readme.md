@@ -15,11 +15,17 @@
 
 ## Quick Start
 
-1. .....
+1. Clone the github repo: `git clone --recurse-submodules git@github.com:proteomicsunitcrg/qsample-server.git`
+2. Modify [docker-compose.default.yml](https://github.com/proteomicsunitcrg/qsample-server/blob/master/docker-compose.default.yml) file according you server configuration.
+3. Modify [application.yml](https://github.com/proteomicsunitcrg/qsample-server/blob/master/src/main/resources/application.yml) file according you server configuration.
+4. Build `docker compose build --no-cache`
+5. Run `docker compose -f docker-compose.yml up -d`
+
+For more detailed documentation please chwck the [wiki](https://github.com/proteomicsunitcrg/qsample-server/wiki/Point-5:-Server-installation). 
    
 ## Credits
 
-**QSample** was originally written by Marc Serret, Toni Hermoso and Roger Olivella.
+**QSample Server** was originally written by Marc Serret, Toni Hermoso and Roger Olivella.
 
 We thank the following people for their assistance in the development of this pipeline:
 
