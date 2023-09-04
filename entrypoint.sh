@@ -3,9 +3,8 @@ set -x
 
 echo "Starting Qsample"
 
-QSAMPLE_VERSION=${1:-0.2.6}
 export PROFILE=prod
-export JAR=qsample-${QSAMPLE_VERSION}.jar
+export JAR=qsample.jar
 
 cd /app
 unzip ${JAR} BOOT-INF/classes/static/assets/env.sample.js

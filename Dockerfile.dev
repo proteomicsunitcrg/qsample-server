@@ -16,6 +16,7 @@ RUN mkdir -p /config
 RUN mkdir -p /app
 WORKDIR /app
 COPY --from=jarserver /tmp/target/*jar /app
-ENV QSAMPLE_VERSION 0.2.6
-ENTRYPOINT java -jar -Dspring.config.location=file:/config/application.yml -Dspring.profiles.active=prod /app/qsample-${QSAMPLE_VERSION}.jar
+# We don't keep version number for making things easier
+RUN mv /app/qsample-*.jar /app/qsample.jar 
+ENTRYPOINT java -jar -Dspring.config.location=file:/config/application.yml -Dspring.profiles.active=prod /app/qsample.jar
 

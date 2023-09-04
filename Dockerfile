@@ -33,6 +33,6 @@ RUN apt clean
 COPY --from=jarserver /tmp/target/*jar /app
 COPY ./entrypoint.sh /app/
 RUN chmod +x /app/entrypoint.sh
-ENV QSAMPLE_VERSION=0.2.6
-ENTRYPOINT /app/entrypoint.sh ${QSAMPLE_VERSION}
+RUN mv /app/qsample-*.jar /app/qsample.jar 
+ENTRYPOINT /app/entrypoint.sh
 
