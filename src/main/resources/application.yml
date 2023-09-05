@@ -3,9 +3,6 @@
 server:
     port: 8099
 
-application:
-    version: dev
-
 email-conf:
   # Adapt to your final email address and webserver site
   address: roger.olivella@crg.eu

@@ -21,18 +21,22 @@ public class ConfigController {
 
 	@Value("${nextflow-tower.disable}")
 	boolean nextflowTowerDisabled;
-
-	//@PreAuthorize("hasRole('INTERNAL')")
+	
+  //@PreAuthorize("hasRole('INTERNAL')")
 	@RequestMapping(value = "")
 
+  // https://blog.jdriven.com/2018/10/get-your-application-version-with-spring-boot/
 	public Map<String, Object> getConfig() {
 
 		Map<String, Object> response = new HashMap<>();
 		response.put("local_requests", localRequests);
 		response.put("qcloud2_disable", qcloud2Disabled);
 		response.put("nextflow_tower_disable", nextflowTowerDisabled);
-		return response;
 
+    String appVersion = this.getClass().getPackage().getImplementationVersion();
+    response.put("version", appVersion);
+    
+    return response;
 	}
 
 }
