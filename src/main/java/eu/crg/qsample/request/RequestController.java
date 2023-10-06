@@ -63,6 +63,12 @@ public class RequestController {
         return requestService.getLocalRequestByRequestCode(requestCode);
     }
 
+    @PreAuthorize("hasRole('USER')")
+    @RequestMapping(value = "getByRequestCode/{requestCode}")
+    public RequestLocal getRequestByCode(@PathVariable String requestCode) {
+        return requestService.getRequestByCode(requestCode);
+    }
+
     // @PreAuthorize("hasRole('MANAGER')")
     // @PreAuthorize("hasRole('EXTERNAL')") // Let's allow everyone temporarily
     @PostMapping(value = "saveLocal")

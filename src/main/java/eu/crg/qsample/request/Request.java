@@ -12,8 +12,7 @@ public class Request {
 
     private User assignedTo;
 
-    public Request() {
-    }
+    public Request() {}
 
     public Request(Long id, String name, String status, User assignedTo) {
         this.id = id;

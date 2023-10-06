@@ -81,6 +81,7 @@ public class RequestService {
         List<MiniRequest> miniRequests = new ArrayList<>();
         String ccc = restService.getAllRequests(convertDateToAgendoFormat(startDate),
                 convertDateToAgendoFormat(endDate));
+        // System.out.println(ccc);
         Gson gson = new Gson();
         AgendoRequestWrapper response = gson.fromJson(ccc, AgendoRequestWrapper.class);
         for (AgendoRequest agendoRequest : response.getRequest()) {
@@ -88,6 +89,7 @@ public class RequestService {
             // String requestCode = getRequestCode(
             //         agendoRequest.getFields().get(agendoRequest.getFields().size() - 1).getValue());
             String requestCode = agendoRequest.getRef(); // Get requestCode from ref field
+            // System.out.println("REQUEST CODE:");
             // System.out.println(requestCode);
             boolean hasData = false;
             if (!showAll) {
@@ -136,6 +138,16 @@ public class RequestService {
             return getRequestByIdAgendo(id);
         }
 
+    }
+
+    public RequestLocal getRequestByCode(String requestCode) {
+        if (localRequests) {
+            return getLocalRequestByRequestCode(requestCode);
+        } else {
+            // TODO: We should preload all agendo Requests and then retrieve the one we want
+            // If client already detected one in cache, we would not need it anymore
+            return null;
+        }
     }
 
     private AgendoRequest getRequestByIdLocal(Long id) {
