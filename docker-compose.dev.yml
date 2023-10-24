@@ -45,7 +45,7 @@ services:
     restart: always
     volumes:
       - type: bind
-        source: ./src/main/resources/application.yml
+        source: ./src/main/resources/application.dev.yml
         target: /config/application.yml
         read_only: true
       - ./tmp:/tmp
