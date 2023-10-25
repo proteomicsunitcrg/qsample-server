@@ -43,15 +43,15 @@ public class PasswordResetService {
         model.put("appUrl", appUrl);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String churro = null;
+        String encodedToken = null;
         token.setUser(createUserToSend(token.getUser()));
         try {
-            churro = Base64.getEncoder().encodeToString(objectMapper.writeValueAsBytes(token));
+            encodedToken = Base64.getEncoder().encodeToString(objectMapper.writeValueAsBytes(token));
         } catch (JsonProcessingException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-        model.put("base", churro);
+        model.put("base", encodedToken);
 
         mail.setModel(model);
 
