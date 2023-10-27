@@ -38,6 +38,7 @@ docker-compose.agendo.yml
 src/main/resources/application.yml
 src/main/resources/application.agendo.yml
 mysql/
+mysql.agendo/
 tmp/
 sql/agendo.sql
 
