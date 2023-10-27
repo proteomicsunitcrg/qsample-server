@@ -34,8 +34,10 @@ src/main/resources/static
 *.log
 *.gz
 
+docker-compose.agendo.yml
 src/main/resources/application.yml
+src/main/resources/application.agendo.yml
 mysql/
 tmp/
-
+sql/agendo.sql
 
