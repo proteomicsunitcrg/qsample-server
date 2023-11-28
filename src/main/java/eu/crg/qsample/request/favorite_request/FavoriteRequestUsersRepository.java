@@ -1,21 +1,27 @@
 package eu.crg.qsample.request.favorite_request;
 
-import java.util.List;
-import java.util.Optional;
+import eu.crg.qsample.security.model.User;
 
 import org.springframework.data.repository.CrudRepository;
 
-import eu.crg.qsample.security.model.User;
+import java.util.List;
+import java.util.Optional;
 
-public interface FavoriteRequestUsersRepository extends CrudRepository <FavoriteRequestsUsers, Long> {
+public interface FavoriteRequestUsersRepository
+        extends CrudRepository<FavoriteRequestsUsers, Long> {
 
     public List<FavoriteRequestsUsers> findByFavoriteRequest(FavoriteRequest favoriteRequest);
 
-    public Optional<FavoriteRequestsUsers> findOneByFavoriteRequestAgendoIdAndUser(Long agendoId, User user);
+    public Optional<FavoriteRequestsUsers> findOneByFavoriteRequestAgendoIdAndUser(
+            Long agendoId, User user);
+
+    public Optional<FavoriteRequestsUsers> findOneByFavoriteRequestRequestCodeAndUser(
+            String requestCode, User user);
 
     public Optional<List<FavoriteRequestsUsers>> findByAndUser(User user);
 
-    public Optional <List<FavoriteRequestsUsers>> findByFavoriteRequestAgendoId(Long agendoId);
+    public Optional<List<FavoriteRequestsUsers>> findByFavoriteRequestAgendoId(Long agendoId);
 
-    public List<FavoriteRequestsUsers> findByFavoriteRequestRequestCodeAndNotify(String requestCode, boolean notify);
+    public List<FavoriteRequestsUsers> findByFavoriteRequestRequestCodeAndNotify(
+            String requestCode, boolean notify);
 }

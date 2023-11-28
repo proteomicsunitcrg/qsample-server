@@ -1,6 +1,6 @@
 package eu.crg.qsample.request.favorite_request;
 
-import java.util.List;
+import eu.crg.qsample.request.MiniRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,14 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import eu.crg.qsample.request.MiniRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/favRequest")
 public class FavoriteRequestController {
 
-    @Autowired
-    FavoriteRequestService favoriteRequestService;
+    @Autowired FavoriteRequestService favoriteRequestService;
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping(value = "/setNew")
@@ -39,6 +38,12 @@ public class FavoriteRequestController {
     }
 
     @PreAuthorize("hasRole('USER')")
+    @GetMapping(value = "/checkByRequestCode/{requestCode}")
+    public boolean checkIfFav(@PathVariable String requestCode) {
+        return favoriteRequestService.checkIfFavByRequestCode(requestCode);
+    }
+
+    @PreAuthorize("hasRole('USER')")
     @GetMapping(value = "/favAgendo")
     public List<MiniRequest> getFavAgendo() {
         return favoriteRequestService.getFavAgendo();
@@ -56,10 +61,16 @@ public class FavoriteRequestController {
         return favoriteRequestService.getFavoriteRequestRelationByAgendoId(agendoId);
     }
 
-    @PreAuthorize("hasRole('USER')")
-    @PostMapping(value = "/notify/{action}")
-    public FavoriteRequestsUsers setNotifyTrue(@RequestBody FavoriteRequest favRequest, @PathVariable boolean action) {
-        return favoriteRequestService.setNotify(favRequest, action);
+   @PreAuthorize("hasRole('USER')")
+    @GetMapping(value = "/getByRequestCode/{requestCode}")
+    public FavoriteRequestsUsers getFavoriteRequestRelationByRequestCode(@PathVariable String requestCode) {
+        return favoriteRequestService.getFavoriteRequestRelationByRequestCode(requestCode);
     }
 
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping(value = "/notify/{action}")
+    public FavoriteRequestsUsers setNotifyTrue(
+            @RequestBody FavoriteRequest favRequest, @PathVariable boolean action) {
+        return favoriteRequestService.setNotify(favRequest, action);
+    }
 }
