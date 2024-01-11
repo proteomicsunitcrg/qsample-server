@@ -1,9 +1,7 @@
 package eu.crg.qsample.user;
 
-import java.io.IOException;
-import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
+import eu.crg.qsample.security.model.User;
+import eu.crg.qsample.security.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -17,15 +15,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import eu.crg.qsample.security.model.User;
-import eu.crg.qsample.security.services.UserService;
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
 
-    @Autowired
-    UserService userService;
+    @Autowired UserService userService;
 
     @GetMapping("")
     @PreAuthorize("hasRole('ADMIN')")
@@ -33,13 +32,18 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    // Retrieve information from the currently logged in user.
+    @GetMapping("/current")
+    @PreAuthorize("hasRole('USER')")
+    public User getCurrentUser() {
+        return userService.getCurrentUser();
+    }
 
     @PostMapping("/modifyRole/{to}")
     @PreAuthorize("hasRole('ADMIN')")
     public User modifyRole(@RequestBody User user, @PathVariable String to) {
         return userService.modifyRole(user, to);
     }
-
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     void handleNotFoundException(HttpServletResponse response, Exception e) throws IOException {
