@@ -43,6 +43,9 @@ public class User {
     @NotNull
     private String lastname;
 
+	@Column(name = "groupp", length = 255)
+    private String groupp;
+
     @Column(name = "username", length = 50)
     @NotNull
     @Size(min = 4, max = 50)
@@ -97,6 +100,15 @@ public class User {
         return password;
     }
 
+	public String getGroupp() {
+        return groupp;
+    }
+
+    public void setGroupp(String groupp) {
+        this.groupp = groupp;
+    }
+
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -122,7 +134,7 @@ public class User {
 
     public User(Long id, UUID apiKey, @NotNull String firstname, @NotNull String lastname,
             @NotNull @Size(min = 4, max = 50) String username, @NotNull @Size(min = 4, max = 100) String password,
-            Long agendoId) {
+            Long agendoId, String groupp) {
         this.id = id;
         this.apiKey = apiKey;
         this.firstname = firstname;
@@ -130,6 +142,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.agendoId = agendoId;
+		this.groupp = groupp;
     }
 
     public String getUsername() {
