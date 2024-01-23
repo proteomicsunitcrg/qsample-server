@@ -153,6 +153,14 @@ public class AuthController {
         return userService.changePassword(email.getUsername(), email.getPassword());
     }
 
+	// TODO: To work on adding new user
+	@PreAuthorize("hasRole('MANAGER')") //TODO: This can be commented for testing
+	@PostMapping("/addUser")
+    public User addUser(@RequestBody User newuser) {
+        return null;
+    }
+
+
     /**
      * Return bad request instead of not found per security purposes
      * @param response
