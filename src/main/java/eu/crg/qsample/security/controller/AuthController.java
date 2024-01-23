@@ -156,8 +156,8 @@ public class AuthController {
 	// TODO: To work on adding new user
 	@PreAuthorize("hasRole('MANAGER')") //TODO: This can be commented for testing
 	@PostMapping("/addUser")
-    public User addUser(@RequestBody User newuser) {
-        return null;
+    public User addUser(@RequestBody User newUser) {
+        return userService.addUser(newUser);
     }
 
 

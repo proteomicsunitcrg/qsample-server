@@ -112,6 +112,15 @@ public class UserService {
         return userRepo.save(newUser);
     }
 
+    // TODO: Check creation of user here
+    public User addUser(User newUser) {
+        return userRepo.save(newUser);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepo.findAll();
+    }
+
     public List<User> getAllUsers() {
         return userRepo.findAll();
     }
