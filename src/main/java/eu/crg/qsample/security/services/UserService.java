@@ -121,10 +121,6 @@ public class UserService {
         return userRepo.findAll();
     }
 
-    public List<User> getAllUsers() {
-        return userRepo.findAll();
-    }
-
     public User getCurrentUser() {
         return getUserFromSecurityContext();
     }

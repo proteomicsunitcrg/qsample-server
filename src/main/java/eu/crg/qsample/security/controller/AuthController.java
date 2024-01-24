@@ -1,19 +1,22 @@
 package eu.crg.qsample.security.controller;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import eu.crg.qsample.exceptions.NotFoundException;
+import eu.crg.qsample.security.UserDetailsImpl;
+import eu.crg.qsample.security.agendo.AgendoAuthService;
+import eu.crg.qsample.security.jwt.JwtUtils;
+import eu.crg.qsample.security.model.PasswordResetToken;
+import eu.crg.qsample.security.model.User;
+import eu.crg.qsample.security.payload.requests.LoginRequest;
+import eu.crg.qsample.security.payload.responses.JwtResponse;
+import eu.crg.qsample.security.payload.responses.MessageResponse;
+import eu.crg.qsample.security.repository.RoleRepository;
+import eu.crg.qsample.security.repository.UserRepository;
+import eu.crg.qsample.security.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,46 +29,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import eu.crg.qsample.exceptions.NotFoundException;
-import eu.crg.qsample.security.UserDetailsImpl;
-import eu.crg.qsample.security.agendo.AgendoAuthService;
-import eu.crg.qsample.security.jwt.JwtUtils;
-import eu.crg.qsample.security.model.ERole;
-import eu.crg.qsample.security.model.PasswordResetToken;
-import eu.crg.qsample.security.model.Role;
-import eu.crg.qsample.security.model.User;
-import eu.crg.qsample.security.payload.requests.LoginRequest;
-import eu.crg.qsample.security.payload.requests.SignupRequest;
-import eu.crg.qsample.security.payload.responses.JwtResponse;
-import eu.crg.qsample.security.payload.responses.MessageResponse;
-import eu.crg.qsample.security.repository.RoleRepository;
-import eu.crg.qsample.security.repository.UserRepository;
-import eu.crg.qsample.security.services.UserService;
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    @Autowired
-    AuthenticationManager authenticationManager;
+    @Autowired AuthenticationManager authenticationManager;
 
-    @Autowired
-    UserRepository userRepository;
+    @Autowired UserRepository userRepository;
 
-    @Autowired
-    RoleRepository roleRepository;
+    @Autowired RoleRepository roleRepository;
 
-    @Autowired
-    PasswordEncoder encoder;
+    @Autowired PasswordEncoder encoder;
 
-    @Autowired
-    JwtUtils jwtUtils;
+    @Autowired JwtUtils jwtUtils;
 
-    @Autowired
-    AgendoAuthService agendoAuthService;
+    @Autowired AgendoAuthService agendoAuthService;
 
-    @Autowired
-    UserService userService;
+    @Autowired UserService userService;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -76,28 +64,35 @@ public class AuthController {
             return registerUser(loginRequest);
         }
 
-        Authentication authentication = authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        Authentication authentication =
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                loginRequest.getUsername(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         System.out.println(userDetails.toString());
-        List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+        List<String> roles =
+                userDetails.getAuthorities().stream()
+                        .map(item -> item.getAuthority())
+                        .collect(Collectors.toList());
 
-        return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), roles));
+        return ResponseEntity.ok(
+                new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), roles));
     }
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody LoginRequest signUpRequest) {
         System.out.println("signup try");
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+            return ResponseEntity.badRequest()
+                    .body(new MessageResponse("Error: Username is already taken!"));
         }
 
-        if(!agendoAuthService.agendoAuth(signUpRequest.getUsername(), signUpRequest.getPassword())) {
+        if (!agendoAuthService.agendoAuth(
+                signUpRequest.getUsername(), signUpRequest.getPassword())) {
             return new ResponseEntity<String>("User not found", HttpStatus.UNAUTHORIZED);
         }
 
@@ -106,6 +101,7 @@ public class AuthController {
 
     /**
      * Secret endpoint just to setup users for testing withouth asking agendo
+     *
      * @param signUpRequest
      * @return
      */
@@ -113,7 +109,8 @@ public class AuthController {
     public ResponseEntity<?> registerUserDummy(@Valid @RequestBody LoginRequest signUpRequest) {
         System.out.println("signup try");
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+            return ResponseEntity.badRequest()
+                    .body(new MessageResponse("Error: Username is already taken!"));
         }
 
         userService.addUserDummy();
@@ -123,6 +120,7 @@ public class AuthController {
 
     /**
      * Secret endpoint just to setup users for testing withouth asking agendo
+     *
      * @param signUpRequest
      * @return
      */
@@ -153,16 +151,16 @@ public class AuthController {
         return userService.changePassword(email.getUsername(), email.getPassword());
     }
 
-	// TODO: To work on adding new user
-	@PreAuthorize("hasRole('MANAGER')") //TODO: This can be commented for testing
-	@PostMapping("/addUser")
+    // TODO: To work on adding new user
+    @PreAuthorize("hasRole('MANAGER')") // TODO: This can be commented for testing
+    @PostMapping("/addUser")
     public User addUser(@RequestBody User newUser) {
         return userService.addUser(newUser);
     }
 
-
     /**
      * Return bad request instead of not found per security purposes
+     *
      * @param response
      * @param e
      * @throws IOException

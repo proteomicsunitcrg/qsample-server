@@ -51,7 +51,7 @@ public class User {
     @Column(name = "password", length = 100)
     @NotNull
     @Size(min = 4, max = 100)
-    @JsonIgnore
+    // @JsonIgnore
     private String password;
 
     @Column(name = "agendo_id")
