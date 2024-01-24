@@ -794,7 +794,7 @@ DROP TABLE IF EXISTS `modification_file`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `modification_file` (
   `id` bigint(20) NOT NULL,
-  `value` bigint(20) DEFAULT NULL,
+  `value` double DEFAULT NULL,
   `file_id` bigint(20) DEFAULT NULL,
   `modification_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -1245,6 +1245,7 @@ CREATE TABLE `user` (
   `lastname` varchar(50) NOT NULL,
   `password` varchar(100) NOT NULL,
   `username` varchar(50) NOT NULL,
+  `groupp` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_2lxq4yoyabuji9s2a1i0c8938` (`api_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
