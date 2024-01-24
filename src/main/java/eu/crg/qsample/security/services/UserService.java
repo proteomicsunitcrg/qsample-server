@@ -51,7 +51,8 @@ public class UserService {
                         user.getName(),
                         username,
                         encoder.encode(password),
-                        user.getId());
+                        user.getId(),
+                        null);
         Set<Role> roles = new HashSet<>();
         Role internalRole = roleRepo.findByName(ERole.ROLE_INTERNAL).get();
         Role userRole = roleRepo.findByName(ERole.ROLE_USER).get();
@@ -79,7 +80,8 @@ public class UserService {
                         "UNIT",
                         "admin@unittest.cat",
                         encoder.encode("unittest"),
-                        942l);
+                        942l,
+                        null);
         roles.add(roleAdmin);
         roles.add(roleInternal);
         roles.add(roleManager);
@@ -98,7 +100,8 @@ public class UserService {
                         "admin",
                         "admin@admin.com",
                         encoder.encode("admin"),
-                        942l);
+                        942l,
+                        null);
         Set<Role> roles = new HashSet<>();
         Role roleAdmin = roleRepo.findByName(ERole.ROLE_ADMIN).get();
         Role roleInternal = roleRepo.findByName(ERole.ROLE_INTERNAL).get();

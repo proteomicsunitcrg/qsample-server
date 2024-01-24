@@ -21,7 +21,7 @@ public class ModificationFile {
     private RequestFile file;
 
     //additional
-    private Long value;
+    private Double value;
 
     @Id
     @GeneratedValue
@@ -53,15 +53,15 @@ public class ModificationFile {
     }
 
     @Column(name = "value")
-    public Long getValue() {
+    public Double getValue() {
         return value;
     }
 
-    public void setValue(Long value) {
+    public void setValue(Double value) {
         this.value = value;
     }
 
-    public ModificationFile(Long id, Modification modification, RequestFile file, Long value) {
+    public ModificationFile(Long id, Modification modification, RequestFile file, Double value) {
         this.id = id;
         this.modification = modification;
         this.file = file;
