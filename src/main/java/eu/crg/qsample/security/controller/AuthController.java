@@ -16,7 +16,6 @@ import eu.crg.qsample.security.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
@@ -151,10 +151,14 @@ public class AuthController {
         return userService.changePassword(email.getUsername(), email.getPassword());
     }
 
-    // TODO: To work on adding new user
-    @PreAuthorize("hasRole('MANAGER')") // TODO: This can be commented for testing
+    @PreAuthorize("hasRole('MANAGER')") // This can be commented for testing
     @PostMapping("/addUser")
     public User addUser(@RequestBody User newUser) {
+        // We use a provided password and we encode it
+        String encodedPassword = encoder.encode(newUser.getPassword());
+        UUID apiKey = UUID.randomUUID();
+        newUser.setPassword(encodedPassword);
+        newUser.setApiKey(apiKey);
         return userService.addUser(newUser);
     }
 
