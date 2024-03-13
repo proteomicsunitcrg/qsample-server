@@ -1247,7 +1247,8 @@ CREATE TABLE `user` (
   `username` varchar(50) NOT NULL,
   `groupp` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UK_2lxq4yoyabuji9s2a1i0c8938` (`api_key`)
+  UNIQUE KEY `UK_2lxq4yoyabuji9s2a1i0c8938` (`api_key`),
+  UNIQUE KEY `UK_username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
