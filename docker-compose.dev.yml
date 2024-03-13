@@ -10,7 +10,7 @@ services:
       # Where data will be stored
       - ./mysql:/var/lib/mysql
       # Custom conf for MySQL server
-      - ./custom.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf # config mysql server
+      - ./custom.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
     expose:
       - 3306
     ports:
@@ -32,11 +32,11 @@ services:
           - database
     # Below, compatible with depends in new docker compose versions (starting from 3.9)
     # Situation: https://stackoverflow.com/questions/71060072/docker-compose-depends-on-with-condition-invalid-type-should-be-an-array
-    # healthcheck:
-    #     test: ["CMD-SHELL", "mysql -h localhost -u root -p$${MYSQL_ROOT_PASSWORD} $${MYSQL_DATABASE} -e 'SELECT COUNT(*) FROM user limit 1;' || exit 1" ]
-    #     interval: 90s
-    #     timeout: 40s
-    #     retries: 20
+    healthcheck:
+        test: ["CMD-SHELL", "mysql -h localhost -u root -p$${MYSQL_ROOT_PASSWORD} $${MYSQL_DATABASE} -e 'SELECT COUNT(*) FROM user limit 1;' || exit 1" ]
+        interval: 30s
+        timeout: 40s
+        retries: 20
   app:
     # image: qsample:latest
     build: 
@@ -59,9 +59,9 @@ services:
     # More details in the documentation
     # user: "${UID}:${GID}"
     depends_on:
-      - db
-      # db:
-      #  condition: service_healthy
+      # - db
+      db:
+       condition: service_healthy
     ports:
       # Ports exposed outside, they should match config
       - 8099:8099

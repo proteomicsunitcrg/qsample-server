@@ -1226,7 +1226,7 @@ CREATE TABLE `trace_color_seq` (
 
 LOCK TABLES `trace_color_seq` WRITE;
 /*!40000 ALTER TABLE `trace_color_seq` DISABLE KEYS */;
-INSERT INTO `trace_color_seq` VALUES (1),(1);
+INSERT INTO `trace_color_seq` VALUES (1);
 /*!40000 ALTER TABLE `trace_color_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1257,7 +1257,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (26,942,'51838265-6475-4237-8d58-8c5bbc053c1f','admin','admin','$2a$10$zBX52L1fispvDUi6BqArKuCX3jY1nURmp6YnWtk1zvnIGPDzMo6.m','admin@admin.com');
+INSERT INTO `user` VALUES (26,942,'51838265-6475-4237-8d58-8c5bbc053c1f','admin','admin','$2a$10$zBX52L1fispvDUi6BqArKuCX3jY1nURmp6YnWtk1zvnIGPDzMo6.m','admin@admin.com',NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
