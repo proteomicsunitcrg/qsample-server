@@ -12,7 +12,7 @@ SET @preparedStatement = (SELECT IF(
       AND (constraint_name = @keyname)
   ) > 0,
   "SELECT 1",
-  CONCAT("ALTER TABLE ", @tablename, " ADD CONSTRAINT ", @keyname, " UNIQUE (", @columnname, ")"; )
+  CONCAT("ALTER TABLE ", @tablename, " ADD CONSTRAINT ", @keyname, " UNIQUE (", @columnname, ");" )
 ));
 PREPARE alterIfNotExists FROM @preparedStatement;
 EXECUTE alterIfNotExists;

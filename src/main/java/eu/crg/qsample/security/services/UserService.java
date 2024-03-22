@@ -228,4 +228,19 @@ public class UserService {
             throw new NotFoundException("User doesnt found");
         }
     }
+
+    // Remove user
+    public boolean deleteUser(User user) {
+        Optional<User> useropt = getUserByApiKey(user.getApiKey());
+        if (useropt.isPresent()) {
+            String username = user.getUsername();
+            if (userRepo.deleteByUsername(username)) {
+                return true;
+            } else {
+                throw new NotFoundException("Error deleting user");
+            }
+        } else {
+            throw new NotFoundException("User doesnt found");
+        }
+    }
 }

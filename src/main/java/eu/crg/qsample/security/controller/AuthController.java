@@ -16,7 +16,6 @@ import eu.crg.qsample.security.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -161,6 +160,15 @@ public class AuthController {
         newUser.setPassword(encodedPassword);
         newUser.setApiKey(apiKey);
         return userService.addUser(newUser);
+    }
+
+    // @PreAuthorize("hasRole('MANAGER')") // This can be commented for testing
+    @PostMapping("/deleteUser")
+    public ResponseEntity<?> deleteUser(@RequestBody User user) {
+        if (userService.deleteUser(user)) {
+            return ResponseEntity.ok(new MessageResponse("User successfully deleted!"));
+        }
+        return null;
     }
 
     /**

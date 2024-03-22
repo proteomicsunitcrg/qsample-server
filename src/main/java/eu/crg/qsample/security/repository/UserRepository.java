@@ -20,4 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByAgendoId(Long agendoId);
 
     Optional<User> findByApiKey(UUID apiKey);
+
+	Boolean deleteByUsername(String username);
 }
