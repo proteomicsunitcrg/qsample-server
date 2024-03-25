@@ -231,12 +231,12 @@ public class UserService {
 
     // Remove user
     public boolean deleteUser(User user) {
-        Optional<User> useropt = getUserByApiKey(user.getApiKey());
-        if (useropt.isPresent()) {
-            String username = user.getUsername();
-            if (userRepo.deleteByUsername(username)) {
-                return true;
-            } else {
+        Optional<User> useropt = userRepo.findByUsername(user.getUsername());
+        if (useropt.get().getId()!= null) {
+            try {
+                userRepo.deleteById(useropt.get().getId());
+				return true;
+            } catch (Exception e) {
                 throw new NotFoundException("Error deleting user");
             }
         } else {
