@@ -16,6 +16,7 @@ import eu.crg.qsample.security.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -151,7 +152,7 @@ public class AuthController {
         return userService.changePassword(email.getUsername(), email.getPassword());
     }
 
-    // @PreAuthorize("hasRole('MANAGER')") // This can be commented for testing
+    @PreAuthorize("hasRole('MANAGER')") // This can be commented for testing
     @PostMapping("/addUser")
     public User addUser(@RequestBody User newUser) {
         // We use a provided password and we encode it
@@ -162,14 +163,14 @@ public class AuthController {
         return userService.addUser(newUser);
     }
 
-    // @PreAuthorize("hasRole('MANAGER')") // This can be commented for testing
+    @PreAuthorize("hasRole('MANAGER')") // This can be commented for testing
     @PostMapping("/deleteUser")
     public ResponseEntity<?> deleteUser(@RequestBody User user) {
         if (userService.deleteUser(user)) {
             return ResponseEntity.ok(new MessageResponse("User successfully deleted!"));
         } else {
-            return ResponseEntity.ok(new MessageResponse("User cannot be deleted!"));
-		}
+            return ResponseEntity.badRequest().body(new MessageResponse("User cannot be deleted!"));
+        }
     }
 
     /**
