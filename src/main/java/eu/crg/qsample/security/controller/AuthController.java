@@ -167,8 +167,9 @@ public class AuthController {
     public ResponseEntity<?> deleteUser(@RequestBody User user) {
         if (userService.deleteUser(user)) {
             return ResponseEntity.ok(new MessageResponse("User successfully deleted!"));
-        }
-        return null;
+        } else {
+            return ResponseEntity.ok(new MessageResponse("User cannot be deleted!"));
+		}
     }
 
     /**
