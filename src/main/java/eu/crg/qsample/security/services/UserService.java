@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.Collection;
 
 @Service
 public class UserService {
@@ -214,7 +215,7 @@ public class UserService {
             }
             return pwdTokenOpt.get();
         } else {
-            throw new NotFoundException("Token doesnt found");
+            throw new NotFoundException("Token not found");
         }
     }
 
@@ -225,7 +226,29 @@ public class UserService {
             useropt.get().setPassword(encodedPassword);
             return userRepo.save(useropt.get());
         } else {
-            throw new NotFoundException("User doesnt found");
+            throw new NotFoundException("User not found");
+        }
+    }
+
+    // Remove user
+    public boolean deleteUser(User user) {
+        Optional<User> useropt = userRepo.findByUsername(user.getUsername());
+        if (useropt.get().getId() != null) {
+            // TODO: Avoid if user is admin
+            Collection<Role> roles = useropt.get().getRoles();
+            Role roleAdmin = roleRepo.findByName(ERole.ROLE_ADMIN).get();
+			if (roles.contains(roleAdmin)) {
+				return false;
+            } else {
+            try {
+                userRepo.deleteById(useropt.get().getId());
+                return true;
+            } catch (Exception e) {
+                throw new DataIntegrityViolationException("Error deleting user");
+            }
+			}
+        } else {
+            throw new NotFoundException("User not found");
         }
     }
 }

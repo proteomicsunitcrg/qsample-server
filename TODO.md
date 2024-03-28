@@ -1,3 +1,19 @@
-* Provide recipe to use under a nginx?
-* Generate docker-compose.yml
-  	* Move application.yml as a volume for further config: https://stackoverflow.com/questions/46057625/externalising-spring-boot-properties-when-deploying-to-docker
+# User manager
+
+```
+curl -X POST -H "Content-Type: application/json" -d @./username.json http://localhost:8099/api/auth/addUser
+```
+
+`username.json`
+```json
+{
+  "firstname": "John",
+  "lastname": "Doe",
+  "username": "john@doe.com",
+  "password": "123456",
+  "agendo_id": 666
+}
+```
+
+
+

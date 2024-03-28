@@ -47,7 +47,7 @@ spring:
     flyway:
       locations:
         - classpath:db/migration
-      enabled: false
+      enabled: true
       baselineOnMigrate: true
       validate-on-migrate: true
       outOfOrder: false
