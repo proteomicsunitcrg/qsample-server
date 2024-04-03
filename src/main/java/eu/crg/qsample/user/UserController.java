@@ -27,7 +27,7 @@ public class UserController {
     @Autowired UserService userService;
 
     @GetMapping("")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MANAGER')")
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @PostMapping("/modifyRole/{to}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MANAGER')")
     public User modifyRole(@RequestBody User user, @PathVariable String to) {
         return userService.modifyRole(user, to);
     }
