@@ -1,0 +1,9 @@
+[mysqld]
+innodb_buffer_pool_instances    = 2     # Use 1 instance per 1GB of InnoDB pool size
+innodb_buffer_pool_size         = 1G    # Use up to 70-80% of RAM
+innodb_file_per_table           = 1
+innodb_flush_log_at_trx_commit  = 0
+innodb_flush_method             = O_DIRECT
+innodb_log_buffer_size          = 16M
+innodb_log_file_size            = 512M
+innodb_stats_on_metadata        = 0
