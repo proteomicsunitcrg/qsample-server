@@ -1058,6 +1058,7 @@ CREATE TABLE `request_local` (
   `taxonomy` varchar(255) DEFAULT NULL,
   `application_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `UK_request_code` (`request_code`),
   KEY `FKp73aox9pm50r87pd7gt6euxfu` (`application_id`),
   CONSTRAINT `FKp73aox9pm50r87pd7gt6euxfu` FOREIGN KEY (`application_id`) REFERENCES `application` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
