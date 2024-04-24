@@ -20,13 +20,13 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.Collection;
 
 @Service
 public class UserService {
@@ -116,8 +116,16 @@ public class UserService {
         return userRepo.save(newUser);
     }
 
-    // TODO: Check creation of user here
+    // Create user from API - default Internal for now
     public User addUser(User newUser) {
+
+        // TODO: This might need to be reconsidered when External User back
+        Set<Role> roles = new HashSet<>();
+        Role roleInternal = roleRepo.findByName(ERole.ROLE_INTERNAL).get();
+        Role roleUser = roleRepo.findByName(ERole.ROLE_USER).get();
+        roles.add(roleInternal);
+        roles.add(roleUser);
+        newUser.setRoles(roles);
         return userRepo.save(newUser);
     }
 
@@ -234,19 +242,18 @@ public class UserService {
     public boolean deleteUser(User user) {
         Optional<User> useropt = userRepo.findByUsername(user.getUsername());
         if (useropt.get().getId() != null) {
-            // TODO: Avoid if user is admin
             Collection<Role> roles = useropt.get().getRoles();
             Role roleAdmin = roleRepo.findByName(ERole.ROLE_ADMIN).get();
-			if (roles.contains(roleAdmin)) {
-				return false;
+            if (roles.contains(roleAdmin)) {
+                return false;
             } else {
-            try {
-                userRepo.deleteById(useropt.get().getId());
-                return true;
-            } catch (Exception e) {
-                throw new DataIntegrityViolationException("Error deleting user");
+                try {
+                    userRepo.deleteById(useropt.get().getId());
+                    return true;
+                } catch (Exception e) {
+                    throw new DataIntegrityViolationException("Error deleting user");
+                }
             }
-			}
         } else {
             throw new NotFoundException("User not found");
         }
