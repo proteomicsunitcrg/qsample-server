@@ -44,6 +44,10 @@ services:
       context: .
       args:
         QSAMPLE_API_PREFIX: http://localhost:8099/ #TODO: to be replaced with a fully running time system
+    develop:
+      watch:
+        - action: rebuild
+          path: src/main/java
     restart: always
     volumes:
       - type: bind
