@@ -833,7 +833,7 @@ CREATE TABLE `modification_seq` (
 
 LOCK TABLES `modification_seq` WRITE;
 /*!40000 ALTER TABLE `modification_seq` DISABLE KEYS */;
-INSERT INTO `modification_seq` VALUES (42),(1);
+INSERT INTO `modification_seq` VALUES (58),(1);
 /*!40000 ALTER TABLE `modification_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
