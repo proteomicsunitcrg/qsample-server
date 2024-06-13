@@ -3,6 +3,29 @@ insert ignore into `context_source` (id, abbreviated, api_key, charge, mz, name,
 update `plot` set name='Number of modification sites' where id=6;
 insert ignore into `plot` (id, api_key, param_id, name) values( 7, '66bdbd2e-cd14-4895-b960-468f33a6e379', 1, "Number of modified peptides");
 insert ignore into `plot_context_source` (plot_id, context_source_id) values(7,25);
+
+-- ALTER TABLE `wetlab_plot` ADD CONSTRAINT wetlab_plot_key PRIMARY KEY (wet_lab_id,plot_id);
+SET @dbname = DATABASE();
+SET @tablename = "wetlab_plot";
+SET @columnname1 = "wet_lab_id";
+SET @columnname2 = "plot_id";
+SET @keyname = "wetlab_plot_key";
+SET @preparedStatement = (SELECT IF(
+  (
+    SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+    WHERE
+      (table_name = @tablename)
+      AND (table_schema = @dbname)
+      AND (constraint_name = @keyname)
+  ) > 0,
+  "SELECT 1",
+  CONCAT("ALTER TABLE ", @tablename, " ADD CONSTRAINT ", @keyname, " UNIQUE (", @columnname1, ", ", @columnname2, ");" )
+));
+PREPARE alterIfNotExists FROM @preparedStatement;
+EXECUTE alterIfNotExists;
+DEALLOCATE PREPARE alterIfNotExists;
+
+
 insert ignore into `wetlab_plot` (wet_lab_id,plot_id) values(4,7);
 INSERT ignore INTO `file` (dtype, id, checksum, creation_date, filename, wet_lab_type, request_code, file_info_id, replicate, week, year) values ("RequestFile", 3352, "37e94055f16898f503b6203c0f25fcb0", DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY), "2021LT001_TMT_TEST.raw", NULL, "2021LT001", 606, NULL, NULL, NULL);
 INSERT ignore INTO `file` (dtype, id, checksum, creation_date, filename, wet_lab_type, request_code, file_info_id, replicate, week, year) values("WetLabFile", 3353, "72dbef3bf2a9b20ec3fe3b80621d673f", DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY), "20220329_QCPL_W23_R1_test.raw", 4, NULL, NULL, 1, 23, 2022);

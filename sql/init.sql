@@ -1396,7 +1396,8 @@ CREATE TABLE `wetlab_plot` (
   KEY `FKg61sv5eqdbpsytd5lravvkf0j` (`plot_id`),
   KEY `FK79plxrl3k35xg5hme4xu0hidx` (`wet_lab_id`),
   CONSTRAINT `FK79plxrl3k35xg5hme4xu0hidx` FOREIGN KEY (`wet_lab_id`) REFERENCES `wetlab` (`id`),
-  CONSTRAINT `FKg61sv5eqdbpsytd5lravvkf0j` FOREIGN KEY (`plot_id`) REFERENCES `plot` (`id`)
+  CONSTRAINT `FKg61sv5eqdbpsytd5lravvkf0j` FOREIGN KEY (`plot_id`) REFERENCES `plot` (`id`),
+  CONSTRAINT `wetlab_plot_key` PRIMARY KEY (`wet_lab_id`, `plot_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
