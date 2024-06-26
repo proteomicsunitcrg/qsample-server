@@ -17,7 +17,7 @@
 4. Build `docker compose build --no-cache`
 5. Run `docker compose -f docker-compose.yml up -d`
 
-For more detailed documentation please check the [wiki](https://github.com/proteomicsunitcrg/qsample-server/wiki/Point-5:-Server-installation). 
+For more detailed documentation check the [wiki](https://github.com/proteomicsunitcrg/qsample-server/wiki). 
    
 ## Credits
 
