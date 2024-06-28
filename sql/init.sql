@@ -94,7 +94,7 @@ CREATE TABLE `application_constraint_seq` (
 
 LOCK TABLES `application_constraint_seq` WRITE;
 /*!40000 ALTER TABLE `application_constraint_seq` DISABLE KEYS */;
-INSERT INTO `application_constraint_seq` VALUES (1),(1);
+INSERT INTO `application_constraint_seq` VALUES (1);
 /*!40000 ALTER TABLE `application_constraint_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -116,7 +116,7 @@ CREATE TABLE `application_seq` (
 
 LOCK TABLES `application_seq` WRITE;
 /*!40000 ALTER TABLE `application_seq` DISABLE KEYS */;
-INSERT INTO `application_seq` VALUES (26),(1);
+INSERT INTO `application_seq` VALUES (26);
 /*!40000 ALTER TABLE `application_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -169,7 +169,7 @@ CREATE TABLE `context_source_seq` (
 
 LOCK TABLES `context_source_seq` WRITE;
 /*!40000 ALTER TABLE `context_source_seq` DISABLE KEYS */;
-INSERT INTO `context_source_seq` VALUES (1),(1);
+INSERT INTO `context_source_seq` VALUES (1);
 /*!40000 ALTER TABLE `context_source_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -234,7 +234,7 @@ CREATE TABLE `data_seq` (
 
 LOCK TABLES `data_seq` WRITE;
 /*!40000 ALTER TABLE `data_seq` DISABLE KEYS */;
-INSERT INTO `data_seq` VALUES (24826),(1);
+INSERT INTO `data_seq` VALUES (51456);
 /*!40000 ALTER TABLE `data_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -281,7 +281,7 @@ CREATE TABLE `favorite_request_seq` (
 
 LOCK TABLES `favorite_request_seq` WRITE;
 /*!40000 ALTER TABLE `favorite_request_seq` DISABLE KEYS */;
-INSERT INTO `favorite_request_seq` VALUES (60),(1);
+INSERT INTO `favorite_request_seq` VALUES (60);
 /*!40000 ALTER TABLE `favorite_request_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -397,7 +397,7 @@ CREATE TABLE `file_info_seq` (
 
 LOCK TABLES `file_info_seq` WRITE;
 /*!40000 ALTER TABLE `file_info_seq` DISABLE KEYS */;
-INSERT INTO `file_info_seq` VALUES (592),(1);
+INSERT INTO `file_info_seq` VALUES (1);
 /*!40000 ALTER TABLE `file_info_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -419,7 +419,7 @@ CREATE TABLE `file_seq` (
 
 LOCK TABLES `file_seq` WRITE;
 /*!40000 ALTER TABLE `file_seq` DISABLE KEYS */;
-INSERT INTO `file_seq` VALUES (3348),(1);
+INSERT INTO `file_seq` VALUES (4873);
 /*!40000 ALTER TABLE `file_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -491,7 +491,7 @@ CREATE TABLE `guide_set_seq` (
 
 LOCK TABLES `guide_set_seq` WRITE;
 /*!40000 ALTER TABLE `guide_set_seq` DISABLE KEYS */;
-INSERT INTO `guide_set_seq` VALUES (50),(1);
+INSERT INTO `guide_set_seq` VALUES (1);
 /*!40000 ALTER TABLE `guide_set_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -513,7 +513,7 @@ CREATE TABLE `hibernate_sequence` (
 
 LOCK TABLES `hibernate_sequence` WRITE;
 /*!40000 ALTER TABLE `hibernate_sequence` DISABLE KEYS */;
-INSERT INTO `hibernate_sequence` VALUES (8027),(1),(1),(1),(1),(1);
+INSERT INTO `hibernate_sequence` VALUES (8027);
 /*!40000 ALTER TABLE `hibernate_sequence` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -621,7 +621,7 @@ CREATE TABLE `injection_conditions_qc_seq` (
 
 LOCK TABLES `injection_conditions_qc_seq` WRITE;
 /*!40000 ALTER TABLE `injection_conditions_qc_seq` DISABLE KEYS */;
-INSERT INTO `injection_conditions_qc_seq` VALUES (24),(1);
+INSERT INTO `injection_conditions_qc_seq` VALUES (24);
 /*!40000 ALTER TABLE `injection_conditions_qc_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -643,7 +643,7 @@ CREATE TABLE `injection_conditions_seq` (
 
 LOCK TABLES `injection_conditions_seq` WRITE;
 /*!40000 ALTER TABLE `injection_conditions_seq` DISABLE KEYS */;
-INSERT INTO `injection_conditions_seq` VALUES (127),(1);
+INSERT INTO `injection_conditions_seq` VALUES (127);
 /*!40000 ALTER TABLE `injection_conditions_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -717,7 +717,7 @@ CREATE TABLE `instrument_seq` (
 
 LOCK TABLES `instrument_seq` WRITE;
 /*!40000 ALTER TABLE `instrument_seq` DISABLE KEYS */;
-INSERT INTO `instrument_seq` VALUES (5),(1);
+INSERT INTO `instrument_seq` VALUES (5);
 /*!40000 ALTER TABLE `instrument_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -763,7 +763,7 @@ CREATE TABLE `method_seq` (
 
 LOCK TABLES `method_seq` WRITE;
 /*!40000 ALTER TABLE `method_seq` DISABLE KEYS */;
-INSERT INTO `method_seq` VALUES (58),(1);
+INSERT INTO `method_seq` VALUES (57);
 /*!40000 ALTER TABLE `method_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -841,7 +841,7 @@ CREATE TABLE `modification_seq` (
 
 LOCK TABLES `modification_seq` WRITE;
 /*!40000 ALTER TABLE `modification_seq` DISABLE KEYS */;
-INSERT INTO `modification_seq` VALUES (58),(1);
+INSERT INTO `modification_seq` VALUES (58);
 /*!40000 ALTER TABLE `modification_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -888,7 +888,7 @@ CREATE TABLE `param_seq` (
 
 LOCK TABLES `param_seq` WRITE;
 /*!40000 ALTER TABLE `param_seq` DISABLE KEYS */;
-INSERT INTO `param_seq` VALUES (1),(1);
+INSERT INTO `param_seq` VALUES (2);
 /*!40000 ALTER TABLE `param_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -943,7 +943,7 @@ CREATE TABLE `plot` (
 
 LOCK TABLES `plot` WRITE;
 /*!40000 ALTER TABLE `plot` DISABLE KEYS */;
-INSERT INTO `plot` VALUES (1,'5008da3a-dbcd-49c3-a008-db34c4b0bb39',1,'Number of protein groups'),(3,'aa7c6f75-0442-4e66-a8fd-1e564831c6da',1,'Number of peptides'),(4,'e10d8581-326b-4eae-8f9b-b21486bf5a9e',1,'Percentage Propionyl'),(5,'66bdbd2e-ab13-4585-b940-463f33a5e344',1,'Percentage PIC'),(6,'e4eb3ae0-a309-43b3-8108-543b16e863c1',1,'Number of modification sites STY');
+INSERT INTO `plot` VALUES (1,'5008da3a-dbcd-49c3-a008-db34c4b0bb39',1,'Number of protein groups'),(3,'aa7c6f75-0442-4e66-a8fd-1e564831c6da',1,'Number of peptides'),(4,'e10d8581-326b-4eae-8f9b-b21486bf5a9e',1,'Percentage Propionyl'),(5,'66bdbd2e-ab13-4585-b940-463f33a5e344',1,'Percentage PIC'),(6,'e4eb3ae0-a309-43b3-8108-543b16e863c1',1,'Number of modification sites STY'),( 7,'66bdbd2e-cd14-4895-b960-468f33a6e379', 1, "Number of modified peptides");
 /*!40000 ALTER TABLE `plot` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -992,7 +992,7 @@ CREATE TABLE `plot_seq` (
 
 LOCK TABLES `plot_seq` WRITE;
 /*!40000 ALTER TABLE `plot_seq` DISABLE KEYS */;
-INSERT INTO `plot_seq` VALUES (1),(1);
+INSERT INTO `plot_seq` VALUES (8);
 /*!40000 ALTER TABLE `plot_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1044,7 +1044,7 @@ CREATE TABLE `quantification_seq` (
 
 LOCK TABLES `quantification_seq` WRITE;
 /*!40000 ALTER TABLE `quantification_seq` DISABLE KEYS */;
-INSERT INTO `quantification_seq` VALUES (1010391),(1);
+INSERT INTO `quantification_seq` VALUES (1545793);
 /*!40000 ALTER TABLE `quantification_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1185,7 +1185,7 @@ CREATE TABLE `threshold_seq` (
 
 LOCK TABLES `threshold_seq` WRITE;
 /*!40000 ALTER TABLE `threshold_seq` DISABLE KEYS */;
-INSERT INTO `threshold_seq` VALUES (23),(1);
+INSERT INTO `threshold_seq` VALUES (1);
 /*!40000 ALTER TABLE `threshold_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1235,7 +1235,7 @@ CREATE TABLE `trace_color_seq` (
 
 LOCK TABLES `trace_color_seq` WRITE;
 /*!40000 ALTER TABLE `trace_color_seq` DISABLE KEYS */;
-INSERT INTO `trace_color_seq` VALUES (1);
+INSERT INTO `trace_color_seq` VALUES (2);
 /*!40000 ALTER TABLE `trace_color_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1289,7 +1289,7 @@ CREATE TABLE `user_seq` (
 
 LOCK TABLES `user_seq` WRITE;
 /*!40000 ALTER TABLE `user_seq` DISABLE KEYS */;
-INSERT INTO `user_seq` VALUES (27),(1);
+INSERT INTO `user_seq` VALUES (27);
 /*!40000 ALTER TABLE `user_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1338,7 +1338,7 @@ CREATE TABLE `wet_lab_seq` (
 
 LOCK TABLES `wet_lab_seq` WRITE;
 /*!40000 ALTER TABLE `wet_lab_seq` DISABLE KEYS */;
-INSERT INTO `wet_lab_seq` VALUES (1),(1);
+INSERT INTO `wet_lab_seq` VALUES (6);
 /*!40000 ALTER TABLE `wet_lab_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
