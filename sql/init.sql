@@ -259,7 +259,7 @@ CREATE TABLE `favorite_request` (
 
 LOCK TABLES `favorite_request` WRITE;
 /*!40000 ALTER TABLE `favorite_request` DISABLE KEYS */;
-INSERT INTO `favorite_request` VALUES (59,8017,'2022MQ777');
+INSERT INTO `favorite_request` VALUES (59,NULL,'2022MQ777');
 /*!40000 ALTER TABLE `favorite_request` ENABLE KEYS */;
 UNLOCK TABLES;
 
