@@ -249,7 +249,8 @@ CREATE TABLE `favorite_request` (
   `id` bigint(20) NOT NULL,
   `agendo_id` bigint(20) DEFAULT NULL,
   `request_code` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UK_request_code` (`request_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
