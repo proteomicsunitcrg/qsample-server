@@ -249,7 +249,8 @@ CREATE TABLE `favorite_request` (
   `id` bigint(20) NOT NULL,
   `agendo_id` bigint(20) DEFAULT NULL,
   `request_code` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UK_request_code` (`request_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -301,6 +302,7 @@ CREATE TABLE `favorite_request_users` (
   PRIMARY KEY (`id`),
   KEY `FKss42oap5dsfcmaseto0hf317e` (`favorite_request_id`),
   KEY `FKk0wpl0unphxnfdgccoco1g0us` (`user_id`),
+  UNIQUE KEY `UK_fav_user` (`favorite_request_id`, `user_id`),
   CONSTRAINT `FKk0wpl0unphxnfdgccoco1g0us` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FKss42oap5dsfcmaseto0hf317e` FOREIGN KEY (`favorite_request_id`) REFERENCES `favorite_request` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

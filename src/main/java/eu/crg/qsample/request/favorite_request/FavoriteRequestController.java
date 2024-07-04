@@ -61,9 +61,10 @@ public class FavoriteRequestController {
         return favoriteRequestService.getFavoriteRequestRelationByAgendoId(agendoId);
     }
 
-   @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER')")
     @GetMapping(value = "/getByRequestCode/{requestCode}")
-    public FavoriteRequestsUsers getFavoriteRequestRelationByRequestCode(@PathVariable String requestCode) {
+    public FavoriteRequestsUsers getFavoriteRequestRelationByRequestCode(
+            @PathVariable String requestCode) {
         return favoriteRequestService.getFavoriteRequestRelationByRequestCode(requestCode);
     }
 

@@ -32,7 +32,7 @@ public class FavoriteRequestService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User u = userRepository.findByUsername(authentication.getName()).get();
         Optional<FavoriteRequest> favrequest =
-                favoriteRequestRepository.findOneByAgendoId(favoriteRequest.getAgendoId());
+                favoriteRequestRepository.findOneByRequestCode(favoriteRequest.getRequestCode());
         if (favrequest.isPresent()) {
             FavoriteRequestsUsers newRelation =
                     new FavoriteRequestsUsers(null, favrequest.get(), u, false);
@@ -85,20 +85,20 @@ public class FavoriteRequestService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User u = userRepository.findByUsername(authentication.getName()).get();
         Optional<FavoriteRequestsUsers> optReq =
-                favoriteRequestUsersRepository.findOneByFavoriteRequestAgendoIdAndUser(
-                        favRequest.getAgendoId(), u);
+                favoriteRequestUsersRepository.findOneByFavoriteRequestRequestCodeAndUser(
+                        favRequest.getRequestCode(), u);
         if (optReq.isPresent()) { // delete the relation
             favoriteRequestUsersRepository.delete(optReq.get());
         } else {
             return false; // if not found means that something is wrong
         }
         Optional<List<FavoriteRequestsUsers>> optCheckLast =
-                favoriteRequestUsersRepository.findByFavoriteRequestAgendoId(
-                        favRequest.getAgendoId()); // get all the relations
+                favoriteRequestUsersRepository.findByFavoriteRequestRequestCode(
+                        favRequest.getRequestCode()); // get all the relations
         if (!optCheckLast
                 .isPresent()) { // if no relations means that the favrequest doesnt have any user
             Optional<FavoriteRequest> favRequestOpt =
-                    favoriteRequestRepository.findOneByAgendoId(favRequest.getAgendoId());
+                    favoriteRequestRepository.findOneByRequestCode(favRequest.getRequestCode());
             if (favRequestOpt.isPresent()) { // so we find it and then delete it
                 favoriteRequestRepository.delete(favRequestOpt.get());
             }
@@ -172,7 +172,7 @@ public class FavoriteRequestService {
         return miniRequests;
     }
 
-     public FavoriteRequestsUsers getFavoriteRequestRelationByAgendoId(Long agendoId) {
+    public FavoriteRequestsUsers getFavoriteRequestRelationByAgendoId(Long agendoId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User u = userRepository.findByUsername(authentication.getName()).get();
         Optional<FavoriteRequestsUsers> favRequestOpt =
@@ -184,11 +184,12 @@ public class FavoriteRequestService {
         }
     }
 
-   public FavoriteRequestsUsers getFavoriteRequestRelationByRequestCode(String requestCode) {
+    public FavoriteRequestsUsers getFavoriteRequestRelationByRequestCode(String requestCode) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User u = userRepository.findByUsername(authentication.getName()).get();
         Optional<FavoriteRequestsUsers> favRequestOpt =
-                favoriteRequestUsersRepository.findOneByFavoriteRequestRequestCodeAndUser(requestCode, u);
+                favoriteRequestUsersRepository.findOneByFavoriteRequestRequestCodeAndUser(
+                        requestCode, u);
         if (favRequestOpt.isPresent()) {
             return favRequestOpt.get();
         } else {

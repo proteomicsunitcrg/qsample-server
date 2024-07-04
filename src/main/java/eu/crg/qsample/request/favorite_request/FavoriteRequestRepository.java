@@ -15,6 +15,8 @@ public interface FavoriteRequestRepository extends CrudRepository<FavoriteReques
 
     Optional<FavoriteRequest>findOneByAgendoId(Long agendoId);
 
+	Optional<FavoriteRequest>findOneByRequestCode(String requestCode);
+
     // Optional<List<FavoriteRequest>> findAllByUsers(User u);
 
     // Optional <List<FavoriteRequest>>findAllByRequestCode(String requestCode);

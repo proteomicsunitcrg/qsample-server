@@ -22,6 +22,9 @@ public interface FavoriteRequestUsersRepository
 
     public Optional<List<FavoriteRequestsUsers>> findByFavoriteRequestAgendoId(Long agendoId);
 
+    public Optional<List<FavoriteRequestsUsers>> findByFavoriteRequestRequestCode(
+            String requestCode);
+
     public List<FavoriteRequestsUsers> findByFavoriteRequestRequestCodeAndNotify(
             String requestCode, boolean notify);
 }
