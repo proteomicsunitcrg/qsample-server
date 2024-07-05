@@ -36,6 +36,7 @@ src/main/resources/static
 
 docker-compose.agendo.yml
 docker-compose.crg.yml
+docker-compose.flyway.agendo.yml
 src/main/resources/application.yml
 src/main/resources/application.agendo.yml
 mysql/
