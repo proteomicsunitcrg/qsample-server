@@ -65,7 +65,7 @@ public class QuantificationController {
     @GetMapping(value = "/PCA/{requestcode}")
     @PreAuthorize("hasRole('INTERNAL')")
     public List<List<Double>> getPCA(@PathVariable(name = "requestcode") String requestCode, @RequestParam(name = "checksums[]") List <String> checksums) {
-        System.out.println(checksums.size());
+        // System.out.println(checksums.size());
         return quantificationService.pca(requestCode, checksums);
     }
 

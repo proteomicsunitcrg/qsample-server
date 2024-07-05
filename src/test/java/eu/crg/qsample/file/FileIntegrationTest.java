@@ -65,8 +65,6 @@ public class FileIntegrationTest {
         String response = mockMvc.perform(rb).andReturn().getResponse().getContentAsString();
         Gson gson = new Gson();
         JwtResponse jsonResponse = gson.fromJson(response, JwtResponse.class);
-        System.out.println(response + "MECAGO");
-        System.out.println(jsonResponse.toString() + "CACAACACA");
         return jsonResponse.getAccessToken();
     }
 

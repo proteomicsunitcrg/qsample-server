@@ -35,7 +35,7 @@ public class ThresholdService {
                 }
             }
             if (plot.getContextSource().size()>1) {
-                System.out.println("Plot has more than one cs");
+                // System.out.println("Plot has more than one cs");
                 return null;
             }
             Optional <Threshold> threshold = thresholdRepository.findOneByThresholdParamsContextSourceAndParamAndWetLab(plot.getContextSource().get(0), plot.getParam(), wetlab.get());
@@ -48,11 +48,11 @@ public class ThresholdService {
                 }
                 return null;
             } else {
-                System.out.println("No threshold found");
+                // System.out.println("No threshold found");
                 return null;
             }
         }
-        System.out.println("Wetlab not found");
+        // System.out.println("Wetlab not found");
         return null;
     }
 

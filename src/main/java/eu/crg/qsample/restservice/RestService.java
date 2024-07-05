@@ -66,7 +66,7 @@ public class RestService {
         final ResponseEntity<String> response = restTemplate
                 .exchange(url + "/requests/facility/"+facility+"/"+dateFrom+"/"+dateTo, HttpMethod.GET, entity, String.class);
         // System.out.println(response.getBody());
-        System.out.println(url + "/requests/facility/"+facility+"/"+dateFrom+"/"+dateTo);
+        // System.out.println(url + "/requests/facility/"+facility+"/"+dateFrom+"/"+dateTo);
         return response.getBody();
     }
 
@@ -94,7 +94,7 @@ public class RestService {
         headers.set("From", "Y3Jn");
         headers.set("Authorization", "Basic " + mountBasicAuth(agendoUser, agendoPass));
         final HttpEntity entity = new HttpEntity(headers);
-        System.out.println("https://api.qcloud2.crg.eu/mirrorLogin?username={username}&password={password}");
+        // System.out.println("https://api.qcloud2.crg.eu/mirrorLogin?username={username}&password={password}");
         final ResponseEntity<AgendoAuthResponse> response = restTemplate.exchange("https://api.qcloud2.crg.eu/mirrorLogin?username={username}&password={password}", HttpMethod.GET, entity,
                 AgendoAuthResponse.class, username, password);
         // System.out.println(response.getBody().getUser().getEmail());

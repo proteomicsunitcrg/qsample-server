@@ -68,7 +68,7 @@ public class RequestService {
         List<RequestLocal> requestList = requestRepository.findAllByCreationDateBetween(startDate, endDate);
         List<MiniRequest> miniRequestList = new ArrayList<>();
         for (RequestLocal req : requestList) {
-            System.out.println(req.getRequestCode());
+            // System.out.println(req.getRequestCode());
             // Format string and remove dots of create_date
             miniRequestList.add(
                     new MiniRequest(req.getId(), req.getApplication().getName(), req.getCreator(), req.getCreator(),

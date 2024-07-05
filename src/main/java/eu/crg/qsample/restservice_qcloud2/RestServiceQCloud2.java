@@ -49,7 +49,7 @@ public class RestServiceQCloud2 {
     }
 
     public List<QCloud2File> getFiles(String requestCode) {
-        System.out.println(url + "?requestCode=" + requestCode);
+        // System.out.println(url + "?requestCode=" + requestCode);
         final HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Basic " + mountBasicAuth(username, password));
         final HttpEntity entity = new HttpEntity(headers);
