@@ -83,12 +83,12 @@ public class FileService {
     boolean qcloud2Disabled;
 
     public File insertDummyFileData() {
-        System.out.println(csRepo.findById(1l).get().toString());
+        // System.out.println(csRepo.findById(1l).get().toString());
         File file1 = new WetLabFile(null, "check1", new Date(), "dummy1", wetlabRepo.findById(1l).get());
         fileRepository.save(file1);
         Data data1 = new Data(null, paramRepo.findById(1l).get(), csRepo.findById(1l).get(), file1, 23f, 12f,
                 InstrumentStatus.OK);
-        System.out.println(data1.getContextSource().getName());
+        // System.out.println(data1.getContextSource().getName());
         dataRepo.save(data1);
         return null;
     }
@@ -195,7 +195,7 @@ public class FileService {
     }
 
     public List<WetLabFile> getWetlabFileDashboard(Date startDate, Date endDate, String filename, Long wetlabId) {
-        System.out.println(wetlabId);
+        // System.out.println(wetlabId);
         if (wetlabId == 0l) {
             return fileRepository.findAllByCreationDateBetweenAndFilenameContainsOrderByCreationDateDesc(endDate, startDate, filename);
         }

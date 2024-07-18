@@ -37,21 +37,21 @@ public class DataController {
     public List<PlotTraceWetlab> getTrace(@PathVariable @DateTimeFormat(iso = ISO.DATE_TIME) java.util.Date startDate,
             @PathVariable @DateTimeFormat(iso = ISO.DATE_TIME) java.util.Date endDate, @PathVariable Long plotId,
             @PathVariable UUID wetLabApiKey) {
-        System.out.println("INSIDE1------------------------------>");
+        // System.out.println("INSIDE1------------------------------>");
         return dataService.getTraceData(startDate, endDate, plotId, wetLabApiKey);
     }
 
     @GetMapping("/tracesRequest/{paramId}/{requestCode}")
     @PreAuthorize("hasRole('USER')")
     public List<PlotTrace> getTraceRequest(@PathVariable Long paramId, @PathVariable String requestCode, @RequestParam(name = "csIds") List<Long> csIds, @RequestParam(defaultValue = "filename") String order) {
-        System.out.println("INSIDE2----------------------------->");
+        // System.out.println("INSIDE2----------------------------->");
         return dataService.getTraceDataRequest(csIds, paramId, requestCode, order);
     }
 
     @RequestMapping(value = "/pipeline", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ADMIN')")
     public void insertDataFromPipeline(@RequestBody DataFromPipeline dataFromPipeline) {
-        System.out.println("INSIDE3------------------------------>");
+        // System.out.println("INSIDE3------------------------------>");
         dataService.insertDataFromPipeline(dataFromPipeline);
     }
 
@@ -61,19 +61,19 @@ public class DataController {
     @RequestMapping(value = "/pipelineRequest", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ADMIN')")
     public void insertDataFromPipelineRequest(@RequestBody DataFromPipeline dataFromPipeline) {
-        System.out.println("INSIDE4------------------------------>");
+        // System.out.println("INSIDE4------------------------------>");
         dataService.insertDataFromPipelineRequest(dataFromPipeline);
     }
 
     @ExceptionHandler(NotFoundException.class)
     void handleNotFoundException(HttpServletResponse response, Exception e) throws IOException {
-        System.out.println("INSIDE5------------------------------>");
+        // System.out.println("INSIDE5------------------------------>");
         response.sendError(HttpStatus.NOT_FOUND.value(), "Nothing found with this parameters");
     }
 
     @ExceptionHandler(DataRetrievalFailureException.class)
     void handleDataRetrievalFailureException(HttpServletResponse response, Exception e) throws IOException {
-        System.out.println("INSIDE6------------------------------>");
+        // System.out.println("INSIDE6------------------------------>");
         response.sendError(HttpStatus.NOT_FOUND.value(), "File not found");
     }
 

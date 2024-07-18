@@ -25,13 +25,13 @@ public class WetLabUnitTest {
     @Test
     public void getWetLabByApiKeyFound() {
         WetLab wetlab = wetlabService.getByApiKey(UUID.fromString("6170694b-6579-3100-0000-000000000000"));
-        System.out.println(wetlab.getName());
+        // System.out.println(wetlab.getName());
     }
 
     @Test(expected = NotFoundException.class)
     public void getWetLabByApiKeyNotFound() { // This UUID not exist
         WetLab wetlab = wetlabService.getByApiKey(UUID.fromString("6170694b-6679-3100-0000-000000000000"));
-        System.out.println(wetlab.getName());
+        // System.out.println(wetlab.getName());
     }
 
 

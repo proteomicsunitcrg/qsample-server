@@ -58,7 +58,7 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        System.out.println("login try");
+        // System.out.println("login try");
         Optional<User> userOpt = userRepository.findByUsername(loginRequest.getUsername());
 
         if (!userOpt.isPresent()) { // The user doesnt exist, trying signup
@@ -74,7 +74,7 @@ public class AuthController {
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        System.out.println(userDetails.toString());
+        // System.out.println(userDetails.toString());
         List<String> roles =
                 userDetails.getAuthorities().stream()
                         .map(item -> item.getAuthority())
@@ -86,7 +86,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody LoginRequest signUpRequest) {
-        System.out.println("signup try");
+        // System.out.println("signup try");
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity.badRequest()
                     .body(new MessageResponse("Error: Username is already taken!"));
@@ -108,7 +108,7 @@ public class AuthController {
      */
     @PostMapping("/signupDummyLMAO")
     public ResponseEntity<?> registerUserDummy(@Valid @RequestBody LoginRequest signUpRequest) {
-        System.out.println("signup try");
+        // System.out.println("signup try");
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity.badRequest()
                     .body(new MessageResponse("Error: Username is already taken!"));
@@ -127,9 +127,9 @@ public class AuthController {
      */
     @PostMapping("/firstsignup")
     public ResponseEntity<?> setFirstUserToDB() {
-        System.out.println("Start /firstsignup entry point...");
+        // System.out.println("Start /firstsignup entry point...");
         userService.addLocalUser();
-        System.out.println("End /firstsignup entry point.");
+        // System.out.println("End /firstsignup entry point.");
         return ResponseEntity.ok(new MessageResponse("First signup successfull!"));
     }
 

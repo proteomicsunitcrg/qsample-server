@@ -21,7 +21,7 @@ public class FileInfoService {
     public void insertFileInfoFromPipeline(FileInfoFromPipeline fileInfoPipeline) {
         Optional<RequestFile> fileOpt = fileRepository.findOneByChecksum(fileInfoPipeline.getFile().getChecksum());
         if (!fileOpt.isPresent()) {
-            System.out.println("File not found");
+            // System.out.println("File not found");
             throw new DataRetrievalFailureException("File not found");
         }
         fileOpt.get().setFileInfo(fileInfoRepository.save(fileInfoPipeline.getInfo()));

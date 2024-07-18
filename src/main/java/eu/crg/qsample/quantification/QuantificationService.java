@@ -64,7 +64,7 @@ public class QuantificationService {
         Optional<RequestFile> fileOpt = requestFileRepo
                 .findOneByChecksum(quantificationFromPipeline.getFile().getChecksum());
         if (!fileOpt.isPresent()) {
-            System.out.println("File not found");
+            // System.out.println("File not found");
             throw new DataRetrievalFailureException("File not found");
         }
         quantificationFromPipeline.setFile(fileOpt.get());
@@ -174,7 +174,7 @@ public class QuantificationService {
 
     public List<List<Double>> pca(String requestCode, List<String> checksums) {
         HeatmapData heatmapData = heatmap2(requestCode, checksums, 20, "filename");
-        System.out.println(heatmapData.getData().toString());
+        // System.out.println(heatmapData.getData().toString());
         return heatmapData.getData();
     }
 
@@ -195,7 +195,7 @@ public class QuantificationService {
         // struct to store the file with his
         // quantification abundance
         if (files.isPresent()) {
-            System.out.println("I have files");
+            // System.out.println("I have files");
             for (RequestFile file : files.get()) {
                 List<Quantification> quantInAllFiles = new ArrayList<>(); // List to store the
                 // consensued file quantification

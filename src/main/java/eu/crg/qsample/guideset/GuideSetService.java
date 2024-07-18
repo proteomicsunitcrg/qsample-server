@@ -82,7 +82,7 @@ public class GuideSetService {
                     thresholdParamsRepository.save(new ThresholdParams(new ThresholdParamsId(thres.getId(), entry.getKey().getId()), getSTD(entry.getValue()), getAverage(entry.getValue()), entry.getKey(), true));
                 }
             }
-            System.out.println(hash.toString());
+            // System.out.println(hash.toString());
 
 
             return guideSet;
