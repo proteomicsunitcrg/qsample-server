@@ -169,7 +169,7 @@ CREATE TABLE `context_source_seq` (
 
 LOCK TABLES `context_source_seq` WRITE;
 /*!40000 ALTER TABLE `context_source_seq` DISABLE KEYS */;
-INSERT INTO `context_source_seq` VALUES (1);
+INSERT INTO `context_source_seq` VALUES (26);
 /*!40000 ALTER TABLE `context_source_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
