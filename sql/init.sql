@@ -826,6 +826,29 @@ INSERT INTO `modification_file` VALUES (8027,0.0605,4836,42),(8028,0.1188,4836,4
 UNLOCK TABLES;
 
 --
+-- Table structure for table `modification_file_seq`
+--
+
+DROP TABLE IF EXISTS `modification_file_seq`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `modification_file_seq` (
+  `next_val` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `modification_file_seq`
+--
+
+LOCK TABLES `modification_file_seq` WRITE;
+/*!40000 ALTER TABLE `modification_file_seq` DISABLE KEYS */;
+INSERT INTO `modification_file_seq` VALUES (18034);
+/*!40000 ALTER TABLE `modification_file_seq` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+--
 -- Table structure for table `modification_seq`
 --
 
