@@ -1,16 +1,18 @@
 package eu.crg.qsample.modification;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import eu.crg.qsample.file.RequestFile;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import eu.crg.qsample.file.RequestFile;
+import javax.persistence.SequenceGenerator;
 
 @Entity
 @Table(name = "modification_file")
@@ -20,11 +22,16 @@ public class ModificationFile {
     private Modification modification;
     private RequestFile file;
 
-    //additional
+    // additional
     private Double value;
 
     @Id
-    @GeneratedValue
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "modification_file_seq")
+    @SequenceGenerator(
+            name = "modification_file_seq",
+            sequenceName = "modification_file_seq",
+            allocationSize = 1)
     public Long getId() {
         return id;
     }
@@ -68,8 +75,5 @@ public class ModificationFile {
         this.value = value;
     }
 
-    public ModificationFile() {
-    }
-
-
+    public ModificationFile() {}
 }
