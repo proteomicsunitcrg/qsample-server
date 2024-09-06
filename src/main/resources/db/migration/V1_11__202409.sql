@@ -1,4 +1,4 @@
--- ALTER table `user` add column `groupp` varchar(255) default NULL;
+-- RENAME TABLE `wet_lab_seq` to `wetlab_seq`;
 SET @dbname = DATABASE();
 SET @tablename = "wet_lab_seq";
 SET @tablenamenew = "wetlab_seq";
