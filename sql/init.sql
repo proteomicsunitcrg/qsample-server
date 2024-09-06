@@ -1346,25 +1346,25 @@ INSERT INTO `users_roles` VALUES (26,1),(26,5),(26,4),(26,3);
 UNLOCK TABLES;
 
 --
--- Table structure for table `wet_lab_seq`
+-- Table structure for table `wetlab_seq`
 --
 
-DROP TABLE IF EXISTS `wet_lab_seq`;
+DROP TABLE IF EXISTS `wetlab_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `wet_lab_seq` (
+CREATE TABLE `wetlab_seq` (
   `next_val` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `wet_lab_seq`
+-- Dumping data for table `wetlab_seq`
 --
 
-LOCK TABLES `wet_lab_seq` WRITE;
-/*!40000 ALTER TABLE `wet_lab_seq` DISABLE KEYS */;
-INSERT INTO `wet_lab_seq` VALUES (6);
-/*!40000 ALTER TABLE `wet_lab_seq` ENABLE KEYS */;
+LOCK TABLES `wetlab_seq` WRITE;
+/*!40000 ALTER TABLE `wetlab_seq` DISABLE KEYS */;
+INSERT INTO `wetlab_seq` VALUES (6);
+/*!40000 ALTER TABLE `wetlab_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
