@@ -137,6 +137,7 @@ CREATE TABLE `context_source` (
   `trace_color_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKk6d0ww18rgc22m9s351or4hqu` (`trace_color_id`),
+  UNIQUE KEY `UK_name` (`name`),
   CONSTRAINT `FKk6d0ww18rgc22m9s351or4hqu` FOREIGN KEY (`trace_color_id`) REFERENCES `trace_color` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -148,6 +149,17 @@ CREATE TABLE `context_source` (
 LOCK TABLES `context_source` WRITE;
 /*!40000 ALTER TABLE `context_source` DISABLE KEYS */;
 INSERT INTO `context_source` VALUES (1,'# proteins','5008da3a-dbcd-49c3-a008-db34c4b0bb39',NULL,NULL,'Total number of identified grouped proteins',1),(2,'# peptides','958ce553-ad1a-493f-9af0-ffac364a7075',NULL,NULL,'Total number of identified peptides',1),(3,'+2','2fc40f2d-ccce-4bc9-bfb6-92e4c29e405c',NULL,NULL,'Charge +2',1),(4,'+3','8b17a1e5-5240-4bc5-85f3-47216f82093d',NULL,NULL,'Charge +3',1),(5,'+4','4ee9389c-aaad-4478-a4d4-dd6fb9fdea98',NULL,NULL,'Charge +4',1),(6,'Missed cleavages','e5ee7fa8-8731-4b8e-b5d0-a3d148c524fb',NULL,NULL,'Missed cleavages',1),(7,'Base peak intensity (removed log 04/04/22)','f9e4aaa0-c22f-445f-89b9-823469d43a73',NULL,NULL,'Base peak intensity (removed log 04/04/22)',1),(8,'Percentage Propionyl','520fbca9-b4bb-480b-87c7-ef914a26c208',NULL,NULL,'Percentage Propionyl',1),(9,'Percentage PIC','f28e5aca-c4bb-4ca0-a90a-94d36a2f7e64',NULL,NULL,'Percentage PIC',1),(10,'K(Carbamyl)','f5d89e95-2318-4b83-95f2-1f5b6491712a',NULL,NULL,'Percentage K(Carbamyl)',1),(11,'N-terminal (Carbamyl)','0075a453-9c3f-4b6b-8d93-3cb3e12e5e71',NULL,NULL,'Percentage .(Carbamyl))',1),(12,'R(Carbamyl)','87138f68-7b72-42f9-9ae2-c0d1a8229fd1',NULL,NULL,'Percentage R(Carbamyl))',1),(13,'N(Deamidated)','aa5ef26c-77dd-48a4-9eff-8c1046326635',NULL,NULL,'Percentage N(Deamidated))',1),(14,'K(Formyl)','ba8ad35b-1613-4881-903d-b6392efcf516',NULL,NULL,'Percentage K(Formyl))',1),(15,'N-terminal (Formyl)','e87e83dd-2db3-42ba-b09b-1cf6f7e2889b',NULL,NULL,'Percentage .(Formyl))',1),(16,'S(Formyl)','a82b23ab-bd4f-498e-8bec-68f1b743d1a9',NULL,NULL,'Percentage S(Formyl))',1),(17,'T(Formyl)','7722872a-c5ad-4590-9253-7a532a8c99fd',NULL,NULL,'Percentage T(Formyl))',1),(18,'pyro-Glu','89230c47-5d32-47df-83b4-c80956a8efaf',NULL,NULL,'Percentage pyro-Glu)',1),(19,'TIC (removed log 04/04/22)','ce09aa9a-f314-4bfa-b485-5d083b4ca24e',NULL,NULL,'TIC (removed log 04/04/22)',1),(20,'0','4ceda959-a107-4272-8896-d1f3d4826b99',NULL,NULL,'# missed cleavages = 0',1),(21,'1','7b8d2a03-9f6f-473e-8362-c450df636714',NULL,NULL,'# missed cleavages = 1',1),(22,'2','d9486250-e8b7-4205-a5cb-7b7e6e6d2043',NULL,NULL,'# missed cleavages = 2',1),(23,'3','ee25bc58-87a9-4bb1-894b-ba4b1f417998',NULL,NULL,'# missed cleavages = 3',1),(24,'Total number of phospho sites','7dafa69c-22d0-4464-9583-c9e143292f8a',NULL,NULL,'Total number of phospho sites',1),(25,'Total number of phospho peptides','e01c53fd-7f11-4513-8e0b-2be6bcee11be',NULL,NULL,'Total number of phospho peptides',1);
+insert into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (26,"Formylation","c02a6343-7f67-4624-bfb4-46bbf42841cb",NULL,NULL,"Formylation",1);
+insert into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (27,"Carbamyl","84dfec61-02b1-4e02-bab0-b70d7bc61d5c",NULL,NULL,"Carbamyl",1);
+insert into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (28,"Oxidation","1efc7682-3065-43c7-820e-2f72062308b8",NULL,NULL,"Oxidation",1);
+insert into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (29,"Ammonia loss","e567294f-89ca-44e8-82f2-7f3efccfc0a5",NULL,NULL,"Ammonia loss",1);
+insert into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (30,"Acetyl","23edd582-90b0-40cf-ac18-2e82e2e69020",NULL,NULL,"Acetyl",1);
+insert into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (31,"Deamidation","c60eda81-fa2d-4fb8-8e64-ed6a35b9c8b1",NULL,NULL,"Deamidation",1);
+insert into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (32,"Amidation","4c65ea89-0572-4d2f-b942-d9e39ee89f44",NULL,NULL,"Amidation",1);
+insert into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (33,"Isotopic peak error","f5162bac-eeb7-40b8-90cd-d99e39850bf2",NULL,NULL,"Isotopic peak error",1);
+insert into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (34,"Didehydrobutyrine/Water loss","7060666b-a06d-44dd-9d6c-47d11c0758df",NULL,NULL,"Didehydrobutyrine/Water loss",1);
+insert into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (35,"Methyl","3f25cf4f-0306-4897-a839-2b8fd15f7365",NULL,NULL,"Methyl",1);
+insert into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (36,"Carbamidomethyl/Addition of G","2ad85cf9-debb-4ffb-b99d-ab22536b6053",NULL,NULL,"Carbamidomethyl/Addition of G",1);
 /*!40000 ALTER TABLE `context_source` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -169,7 +181,7 @@ CREATE TABLE `context_source_seq` (
 
 LOCK TABLES `context_source_seq` WRITE;
 /*!40000 ALTER TABLE `context_source_seq` DISABLE KEYS */;
-INSERT INTO `context_source_seq` VALUES (26);
+INSERT INTO `context_source_seq` VALUES (37);
 /*!40000 ALTER TABLE `context_source_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -765,7 +777,7 @@ CREATE TABLE `method_seq` (
 
 LOCK TABLES `method_seq` WRITE;
 /*!40000 ALTER TABLE `method_seq` DISABLE KEYS */;
-INSERT INTO `method_seq` VALUES (57);
+INSERT INTO `method_seq` VALUES (69);
 /*!40000 ALTER TABLE `method_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -792,6 +804,17 @@ CREATE TABLE `modification` (
 LOCK TABLES `modification` WRITE;
 /*!40000 ALTER TABLE `modification` DISABLE KEYS */;
 INSERT INTO `modification` VALUES (1,'PHOSPHO (S)','total-numbers'),(2,'PHOSPHO (T)','total-numbers'),(3,'PHOSPHO (Y)','total-numbers'),(4,'Phenylisocyanate (N-term)','total-numbers'),(5,'Propionyl (K)','total-numbers'),(6,'Propionyl (Protein N-term)','total-numbers'),(7,'Label:13C(6)15N(2) (K)','total-numbers'),(8,'Label:13C(6)15N(4) (R)','total-numbers'),(9,'TMT6plex (K)','total-numbers'),(10,'TMT6plex (N-term)','total-numbers'),(12,'Dimethyl (K)','total-numbers'),(13,'Trimethyl (K)','total-numbers'),(14,'Acetyl (K)','total-numbers'),(16,'Propionyl+Methyl','total-numbers'),(25,'Sum. area Propionyl N-term','histones-biological'),(26,'Sum. area not Propionyl N-term','histones-biological'),(27,'Sum. area PIC precursors N-term','histones-tailored'),(28,'Sum. area not PIC precursors N-term','histones-tailored'),(29,'N-term Propionyl','total-numbers'),(30,'N-term no Propionyl','total-numbers'),(31,'N-term PIC','total-numbers'),(32,'N-term no PIC','total-numbers'),(33,'K(Carbamyl)','sec-react'),(34,'.(Carbamyl)','sec-react'),(35,'R(Carbamyl)','sec-react'),(36,'N(Deamidated)','sec-react'),(37,'K(Formyl)','sec-react'),(38,'.(Formyl)','sec-react'),(39,'S(Formyl)','sec-react'),(40,'T(Formyl)','sec-react'),(41,'pyro-Glu','sec-react'),(42,'PEG+1H','polymer-contaminants'),(43,'PEG+2H','polymer-contaminants'),(44,'PEG+3H','polymer-contaminants'),(45,'PPG','polymer-contaminants'),(46,'Triton X-100','polymer-contaminants'),(47,'Triton X-100 (Reduced)','polymer-contaminants'),(48,'Triton X-100 (Na)','polymer-contaminants'),(49,'Triton X-100 (Reduced, Na)','polymer-contaminants'),(50,'Triton X-101','polymer-contaminants'),(51,'Triton X-101 (Reduced)','polymer-contaminants'),(52,'Polysiloxane','polymer-contaminants'),(53,'Tween-20','polymer-contaminants'),(54,'Tween-40','polymer-contaminants'),(55,'Tween-60','polymer-contaminants'),(56,'Tween-80','polymer-contaminants'),(57,'IGEPAL CA-630 (NP-40)','polymer-contaminants');
+insert into modification (id, name, type) values (58, "Formylation", "sec_react");
+insert into modification (id, name, type) values (59, "Carbamyl", "sec_react");
+insert into modification (id, name, type) values (60, "Oxidation", "sec_react");
+insert into modification (id, name, type) values (61, "Ammonia loss", "sec_react");
+insert into modification (id, name, type) values (62, "Acetyl", "sec_react");
+insert into modification (id, name, type) values (63, "Deamidation", "sec_react");
+insert into modification (id, name, type) values (64, "Amidation", "sec_react");
+insert into modification (id, name, type) values (65, "Isotopic peak error", "sec_react");
+insert into modification (id, name, type) values (66, "Didehydrobutyrine/Water loss", "sec_react");
+insert into modification (id, name, type) values (67, "Methyl", "sec_react");
+insert into modification (id, name, type) values (68, "Carbamidomethyl/Addition of G", "sec_react");
 /*!40000 ALTER TABLE `modification` ENABLE KEYS */;
 UNLOCK TABLES;
 
