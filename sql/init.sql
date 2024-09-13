@@ -948,7 +948,7 @@ CREATE TABLE `modification_file_seq` (
 
 LOCK TABLES `modification_file_seq` WRITE;
 /*!40000 ALTER TABLE `modification_file_seq` DISABLE KEYS */;
-INSERT INTO `modification_file_seq` VALUES (8318);
+INSERT INTO `modification_file_seq` VALUES (18034);
 /*!40000 ALTER TABLE `modification_file_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
