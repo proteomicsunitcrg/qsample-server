@@ -35,7 +35,7 @@ insert ignore into context_source (id,abbreviated,api_key,charge,mz,name,trace_c
 
 SELECT @nlcsid := MAX(id) FROM context_source;
 TRUNCATE table context_source_seq;
-INSERT INTO context_file_seq (next_val) values ( @nlcsid + 1 );
+INSERT INTO context_source_seq (next_val) values ( @nlcsid + 1 );
 
 
 SELECT @mid := MAX(id) FROM modification;
