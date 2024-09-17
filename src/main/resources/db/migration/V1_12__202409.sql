@@ -19,7 +19,7 @@ EXECUTE alterIfNotExists;
 DEALLOCATE PREPARE alterIfNotExists;
 
 
-SELECT @lcsid := MAX(id) FROM context_source;
+SELECT MAX(id) FROM context_source INTO @lcsid;
 
 insert ignore into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (@lcsid + 1,"Formylation","c02a6343-7f67-4624-bfb4-46bbf42841cb",NULL,NULL,"Formylation",1);
 insert ignore into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (@lcsid + 2,"Carbamyl","84dfec61-02b1-4e02-bab0-b70d7bc61d5c",NULL,NULL,"Carbamyl",1);
@@ -33,12 +33,12 @@ insert ignore into context_source (id,abbreviated,api_key,charge,mz,name,trace_c
 insert ignore into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (@lcsid + 10,"Methyl","3f25cf4f-0306-4897-a839-2b8fd15f7365",NULL,NULL,"Methyl",1);
 insert ignore into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (@lcsid + 11,"Carbamidomethyl/Addition of G","2ad85cf9-debb-4ffb-b99d-ab22536b6053",NULL,NULL,"Carbamidomethyl/Addition of G",1);
 
-SELECT @nlcsid := MAX(id) FROM context_source;
+SELECT MAX(id) FROM context_source INTO @nlcsid;
 TRUNCATE table context_source_seq;
 INSERT INTO context_source_seq (next_val) values ( @nlcsid + 1 );
 
 
-SELECT @mid := MAX(id) FROM modification;
+SELECT MAX(id) FROM modification INTO @mid;
 
 insert ignore into modification (id, name, type) values (@mid + 1, "Formylation", "sec_react");
 insert ignore into modification (id, name, type) values (@mid + 2, "Carbamyl", "sec_react");
@@ -52,11 +52,11 @@ insert ignore into modification (id, name, type) values (@mid + 9, "Didehydrobut
 insert ignore into modification (id, name, type) values (@mid + 10, "Methyl", "sec_react");
 insert ignore into modification (id, name, type) values (@mid + 11, "Carbamidomethyl/Addition of G", "sec_react");
 
-SELECT @nmid := MAX(id) FROM modification;
+SELECT MAX(id) FROM modification INTO @nmid;
 TRUNCATE table modification_seq;
 INSERT INTO modification_seq (next_val) values ( @nmid + 1 );
 
-SELECT @mfid := MAX(id) FROM modification_file;
+SELECT MAX(id) FROM modification_file INTO @mfid;
 
 insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 1, 0.656, 3359, @mid + 1);
 insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 2, 0.167, 4836, @mid + 1);
@@ -99,12 +99,12 @@ insert ignore into modification_file (id, value, file_id, modification_id) value
 insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 39, 0.075, 4837, @mid + 11);
 insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 40, 0.137, 4838, @mid + 11);
 
-SELECT @nmfid := MAX(id) FROM modification_file;
+SELECT MAX(id) FROM modification_file INTO @nmfid;
 TRUNCATE table modification_file_seq;
 INSERT INTO modification_file_seq (next_val) values ( @nmfid + 1 );
 
 
-SELECT @did := MAX(id) FROM data;
+SELECT MAX(id) FROM data INTO @did;
 
 
 insert ignore into data (context_source_id, file_id, param_id, calculated_value, non_conformity_status, value, id, std) values
@@ -149,6 +149,6 @@ insert ignore into data (context_source_id, file_id, param_id, calculated_value,
 (@lcsid + 11, 4837, 1, 0.075, 'OK', 0.075, @did + 39, NULL),
 (@lcsid + 11, 4838, 1, 0.137, 'OK', 0.137, @did + 40, NULL);
 
-SELECT @ndid := MAX(id) FROM data;
+SELECT MAX(id) FROM data INTO @ndid;
 TRUNCATE table data_seq;
 INSERT INTO data_seq (next_val) values ( @ndid + 1 );
