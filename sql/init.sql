@@ -227,43 +227,34 @@ INSERT INTO `data` VALUES (25,3336,1,1665,'OK',1665,24857,NULL);
 INSERT INTO `data` VALUES (25,3331,1,2161,'OK',2161,24861,NULL);
 
 insert into data (context_source_id, file_id, param_id, calculated_value, non_conformity_status, value, id, std) values
-(26, 3359, 1, 0.656, 'OK', 0.656, 25059, NULL),
 (26, 4836, 1, 0.167, 'OK', 0.167, 25113, NULL),
 (26, 4837, 1, 0.049, 'OK', 0.049, 25131, NULL),
 (26, 4838, 1, 0.108, 'OK', 0.108, 25149, NULL),
 (27, 4836, 1, 1.133, 'OK', 1.133, 25114, NULL),
 (27, 4837, 1, 1.063, 'OK', 1.063, 25132, NULL),
 (27, 4838, 1, 1.54, 'OK', 1.54, 25150, NULL),
-(28, 3359, 1, 8.882, 'OK', 8.882, 25060, NULL),
 (28, 4836, 1, 0.04, 'OK', 0.04, 25115, NULL),
 (28, 4837, 1, 0.039, 'OK', 0.039, 25133, NULL),
 (28, 4838, 1, 0.065, 'OK', 0.065, 25151, NULL),
-(29, 3359, 1, 1.18, 'OK', 1.18, 25061, NULL),
 (29, 4836, 1, 0.18, 'OK', 0.18, 25116, NULL),
 (29, 4837, 1, 0.219, 'OK', 0.219, 25134, NULL),
 (29, 4838, 1, 0.371, 'OK', 0.371, 25152, NULL),
 (30, 4836, 1, 0.047, 'OK', 0.047, 25117, NULL),
 (30, 4837, 1, 0.036, 'OK', 0.036, 25135, NULL),
 (30, 4838, 1, 0.051, 'OK', 0.051, 25153, NULL),
-(31, 3359, 1, 3.114, 'OK', 3.114, 25062, NULL),
 (31, 4836, 1, 0.167, 'OK', 0.167, 25118, NULL),
 (31, 4837, 1, 0.111, 'OK', 0.111, 25136, NULL),
 (31, 4838, 1, 0.239, 'OK', 0.239, 25154, NULL),
-(32, 3359, 1, 1.508, 'OK', 1.508, 25063, NULL),
 (32, 4836, 1, 0.593, 'OK', 0.593, 25119, NULL),
 (32, 4837, 1, 0.71, 'OK', 0.71, 25137, NULL),
 (32, 4838, 1, 0.796, 'OK', 0.796, 25155, NULL),
-(33, 3359, 1, 3.835, 'OK', 3.835, 25064, NULL),
 (33, 4836, 1, 2.422, 'OK', 2.422, 25120, NULL),
 (33, 4837, 1, 1.993, 'OK', 1.993, 25138, NULL),
 (33, 4838, 1, 2.223, 'OK', 2.223, 25156, NULL),
-(34, 3359, 1, 0.393, 'OK', 0.393, 25065, NULL),
 (34, 4836, 1, 0.043, 'OK', 0.043, 25121, NULL),
 (34, 4837, 1, 0.036, 'OK', 0.036, 25139, NULL),
 (34, 4838, 1, 0.075, 'OK', 0.075, 25157, NULL),
-(35, 3359, 1, 0.524, 'OK', 0.524, 25066, NULL),
 (35, 4838, 1, 0.032, 'OK', 0.032, 25158, NULL),
-(36, 3359, 1, 0.688, 'OK', 0.688, 25067, NULL),
 (36, 4836, 1, 0.08, 'OK', 0.08, 25122, NULL),
 (36, 4837, 1, 0.075, 'OK', 0.075, 25140, NULL),
 (36, 4838, 1, 0.137, 'OK', 0.137, 25159, NULL);
@@ -887,43 +878,34 @@ CREATE TABLE `modification_file` (
 LOCK TABLES `modification_file` WRITE;
 /*!40000 ALTER TABLE `modification_file` DISABLE KEYS */;
 INSERT INTO `modification_file` VALUES (8027,0.0605,4836,42),(8028,0.1188,4836,43),(8029,0.0313,4836,44),(8030,0.004,4836,45),(8031,0.022,4836,46),(8032,0.0035,4836,47),(8033,0.0176,4836,48),(8034,0.0094,4836,49),(8035,0.0272,4836,50),(8036,0.0062,4836,51),(8037,12.5793,4836,52),(8038,0.0755,4836,53),(8039,0.0075,4836,54),(8040,0.0029,4836,55),(8041,0.0029,4836,56),(8042,0.0272,4836,57),(8043,0.0635,4837,42),(8044,0.1007,4837,43),(8045,0.0364,4837,44),(8046,0.0027,4837,45),(8047,0.02,4837,46),(8048,0.0027,4837,47),(8049,0.0092,4837,48),(8050,0.0117,4837,49),(8051,0.115,4837,50),(8052,0.0067,4837,51),(8053,10.8906,4837,52),(8054,0.0688,4837,53),(8055,0.0228,4837,54),(8056,0.0028,4837,55),(8057,0.0034,4837,56),(8058,0.115,4837,57),(8059,0.0603,4838,42),(8060,0.0975,4838,43),(8061,0.0491,4838,44),(8062,0.002,4838,45),(8063,0.0118,4838,46),(8064,0.0015,4838,47),(8065,0.0072,4838,48),(8066,0.0064,4838,49),(8067,0.0074,4838,50),(8068,0.0031,4838,51),(8069,3.5491,4838,52),(8070,0.0598,4838,53),(8071,0.01,4838,54),(8072,0.002,4838,55),(8073,0.0026,4838,56),(8074,0.0074,4838,57),(8075,0.0024,4872,42),(8076,0.0148,4872,43),(8077,0.0214,4872,44),(8078,0.002,4872,45),(8079,0.0011,4872,46),(8080,0.0034,4872,47),(8081,0.0018,4872,48),(8082,0.001,4872,49),(8083,0.0013,4872,50),(8084,0.0142,4872,51),(8085,0.1011,4872,52),(8086,0.0203,4872,53),(8087,0.0024,4872,54),(8088,0.0008,4872,55),(8089,0.0034,4872,56),(8090,0.0013,4872,57),(8091,0.0028,4870,42),(8092,0.0143,4870,43),(8093,0.0191,4870,44),(8094,0.0028,4870,45),(8095,0.0013,4870,46),(8096,0.0052,4870,47),(8097,0.0018,4870,48),(8098,0.0023,4870,49),(8099,0.0014,4870,50),(8100,0.0164,4870,51),(8101,0.1125,4870,52),(8102,0.0237,4870,53),(8103,0.0025,4870,54),(8104,0.001,4870,55),(8105,0.0038,4870,56),(8106,0.0014,4870,57),(8107,0.0032,4871,42),(8108,0.015,4871,43),(8109,0.0208,4871,44),(8110,0.0021,4871,45),(8111,0.0015,4871,46),(8112,0.0045,4871,47),(8113,0.0021,4871,48),(8114,0.0014,4871,49),(8115,0.0013,4871,50),(8116,0.0121,4871,51),(8117,0.0751,4871,52),(8118,0.027,4871,53),(8119,0.0032,4871,54),(8120,0.0008,4871,55),(8121,0.004,4871,56),(8122,0.0013,4871,57),(17997,418,4837,38),(17998,418,4836,38),(17999,645,4836,33),(18000,644,4836,35),(18001,845,4836,40),(18002,744,4836,36),(18003,1375,4837,34),(18004,826,4836,37),(18005,657,4837,33),(18006,903,4837,36),(18007,266,4837,41),(18008,702,4837,35),(18009,900,4837,37),(18010,886,4837,40),(18011,1299,4836,34),(18012,505,4838,38),(18013,1386,4836,39),(18014,1345,4837,39),(18015,201,4836,41),(18016,1581,4838,34),(18017,1051,4838,36),(18020,1450,4838,39),(18021,806,4838,33),(18022,290,4838,41),(18027,999,4838,40),(18031,822,4838,35),(18033,1055,4838,37);
-insert into modification_file (id, value, file_id, modification_id) values (8278, 0.656, 3359, 58);
 insert into modification_file (id, value, file_id, modification_id) values (8287, 0.167, 4836, 58);
 insert into modification_file (id, value, file_id, modification_id) values (8297, 0.049, 4837, 58);
 insert into modification_file (id, value, file_id, modification_id) values (8307, 0.108, 4838, 58);
 insert into modification_file (id, value, file_id, modification_id) values (8288, 1.133, 4836, 59);
 insert into modification_file (id, value, file_id, modification_id) values (8298, 1.063, 4837, 59);
 insert into modification_file (id, value, file_id, modification_id) values (8308, 1.54, 4838, 59);
-insert into modification_file (id, value, file_id, modification_id) values (8279, 8.882, 3359, 60);
 insert into modification_file (id, value, file_id, modification_id) values (8289, 0.04, 4836, 60);
 insert into modification_file (id, value, file_id, modification_id) values (8299, 0.039, 4837, 60);
 insert into modification_file (id, value, file_id, modification_id) values (8309, 0.065, 4838, 60);
-insert into modification_file (id, value, file_id, modification_id) values (8280, 1.18, 3359, 61);
 insert into modification_file (id, value, file_id, modification_id) values (8290, 0.18, 4836, 61);
 insert into modification_file (id, value, file_id, modification_id) values (8300, 0.219, 4837, 61);
 insert into modification_file (id, value, file_id, modification_id) values (8310, 0.371, 4838, 61);
 insert into modification_file (id, value, file_id, modification_id) values (8291, 0.047, 4836, 62);
 insert into modification_file (id, value, file_id, modification_id) values (8301, 0.036, 4837, 62);
 insert into modification_file (id, value, file_id, modification_id) values (8311, 0.051, 4838, 62);
-insert into modification_file (id, value, file_id, modification_id) values (8281, 3.147, 3359, 63);
 insert into modification_file (id, value, file_id, modification_id) values (8292, 0.167, 4836, 63);
 insert into modification_file (id, value, file_id, modification_id) values (8302, 0.111, 4837, 63);
 insert into modification_file (id, value, file_id, modification_id) values (8312, 0.239, 4838, 63);
-insert into modification_file (id, value, file_id, modification_id) values (8282, 1.508, 3359, 64);
 insert into modification_file (id, value, file_id, modification_id) values (8293, 0.593, 4836, 64);
 insert into modification_file (id, value, file_id, modification_id) values (8303, 0.71, 4837, 64);
 insert into modification_file (id, value, file_id, modification_id) values (8313, 0.796, 4838, 64);
-insert into modification_file (id, value, file_id, modification_id) values (8283, 3.835, 3359, 65);
 insert into modification_file (id, value, file_id, modification_id) values (8294, 2.422, 4836, 65);
 insert into modification_file (id, value, file_id, modification_id) values (8304, 1.993, 4837, 65);
 insert into modification_file (id, value, file_id, modification_id) values (8314, 2.223, 4838, 65);
-insert into modification_file (id, value, file_id, modification_id) values (8284, 0.623, 3359, 66);
 insert into modification_file (id, value, file_id, modification_id) values (8295, 0.043, 4836, 66);
 insert into modification_file (id, value, file_id, modification_id) values (8305, 0.036, 4837, 66);
 insert into modification_file (id, value, file_id, modification_id) values (8315, 0.075, 4838, 66);
-insert into modification_file (id, value, file_id, modification_id) values (8285, 0.524, 3359, 67);
 insert into modification_file (id, value, file_id, modification_id) values (8316, 0.032, 4838, 67);
-insert into modification_file (id, value, file_id, modification_id) values (8286, 0.688, 3359, 68);
 insert into modification_file (id, value, file_id, modification_id) values (8296, 0.08, 4836, 68);
 insert into modification_file (id, value, file_id, modification_id) values (8306, 0.075, 4837, 68);
 insert into modification_file (id, value, file_id, modification_id) values (8317, 0.137, 4838, 68);
