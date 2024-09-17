@@ -58,46 +58,46 @@ INSERT INTO modification_seq (next_val) values ( @nmid + 1 );
 
 SELECT @mfid := MAX(id) FROM modification_file;
 
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 1, 0.656, 3359, @mid + 1);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 2, 0.167, 4836, @mid + 1);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 3, 0.049, 4837, @mid + 1);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 4, 0.108, 4838, @mid + 1);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 5, 1.133, 4836, @mid + 2);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 6, 1.063, 4837, @mid + 2);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 7, 1.54, 4838, @mid + 2);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 8, 8.882, 3359, @mid + 3);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 9, 0.04, 4836, @mid + 3);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 10, 0.039, 4837, @mid + 3);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 11, 0.065, 4838, @mid + 3);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 12, 1.18, 3359, @mid + 4);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 13, 0.18, 4836, @mid + 4);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 14, 0.219, 4837, @mid + 4);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 15, 0.371, 4838, @mid + 4);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 16, 0.047, 4836, @mid + 5);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 17, 0.036, 4837, @mid + 5);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 18, 0.051, 4838, @mid + 5);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 19, 3.147, 3359, @mid + 6);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 20, 0.167, 4836, @mid + 6);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 21, 0.111, 4837, @mid + 6);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 22, 0.239, 4838, @mid + 6);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 23, 1.508, 3359, @mid + 7);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 24, 0.593, 4836, @mid + 7);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 25, 0.71, 4837, @mid + 7);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 26, 0.796, 4838, @mid + 7);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 27, 3.835, 3359, @mid + 8);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 28, 2.422, 4836, @mid + 8);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 29, 1.993, 4837, @mid + 8);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 30, 2.223, 4838, @mid + 8);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 31, 0.623, 3359, @mid + 9);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 32, 0.043, 4836, @mid + 9);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 33, 0.036, 4837, @mid + 9);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 34, 0.075, 4838, @mid + 9);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 35, 0.524, 3359, @mid + 10);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 36, 0.032, 4838, @mid + 10);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 37, 0.688, 3359, @mid + 11);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 38, 0.08, 4836, @mid + 11);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 39, 0.075, 4837, @mid + 11);
-insert into modification_file (id, value, file_id, modification_id) values (@mfid + 40, 0.137, 4838, @mid + 11);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 1, 0.656, 3359, @mid + 1);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 2, 0.167, 4836, @mid + 1);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 3, 0.049, 4837, @mid + 1);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 4, 0.108, 4838, @mid + 1);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 5, 1.133, 4836, @mid + 2);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 6, 1.063, 4837, @mid + 2);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 7, 1.54, 4838, @mid + 2);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 8, 8.882, 3359, @mid + 3);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 9, 0.04, 4836, @mid + 3);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 10, 0.039, 4837, @mid + 3);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 11, 0.065, 4838, @mid + 3);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 12, 1.18, 3359, @mid + 4);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 13, 0.18, 4836, @mid + 4);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 14, 0.219, 4837, @mid + 4);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 15, 0.371, 4838, @mid + 4);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 16, 0.047, 4836, @mid + 5);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 17, 0.036, 4837, @mid + 5);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 18, 0.051, 4838, @mid + 5);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 19, 3.147, 3359, @mid + 6);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 20, 0.167, 4836, @mid + 6);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 21, 0.111, 4837, @mid + 6);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 22, 0.239, 4838, @mid + 6);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 23, 1.508, 3359, @mid + 7);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 24, 0.593, 4836, @mid + 7);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 25, 0.71, 4837, @mid + 7);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 26, 0.796, 4838, @mid + 7);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 27, 3.835, 3359, @mid + 8);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 28, 2.422, 4836, @mid + 8);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 29, 1.993, 4837, @mid + 8);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 30, 2.223, 4838, @mid + 8);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 31, 0.623, 3359, @mid + 9);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 32, 0.043, 4836, @mid + 9);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 33, 0.036, 4837, @mid + 9);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 34, 0.075, 4838, @mid + 9);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 35, 0.524, 3359, @mid + 10);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 36, 0.032, 4838, @mid + 10);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 37, 0.688, 3359, @mid + 11);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 38, 0.08, 4836, @mid + 11);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 39, 0.075, 4837, @mid + 11);
+insert ignore into modification_file (id, value, file_id, modification_id) values (@mfid + 40, 0.137, 4838, @mid + 11);
 
 SELECT @nmfid := MAX(id) FROM modification_file;
 TRUNCATE table modification_file_seq;
@@ -107,7 +107,7 @@ INSERT INTO modification_file_seq (next_val) values ( @nmfid + 1 );
 SELECT @did := MAX(id) FROM data;
 
 
-insert into data (context_source_id, file_id, param_id, calculated_value, non_conformity_status, value, id, std) values
+insert ignore into data (context_source_id, file_id, param_id, calculated_value, non_conformity_status, value, id, std) values
 (@lcsid + 1, 3359, 1, 0.656, 'OK', 0.656, @did + 1, NULL),
 (@lcsid + 1, 4836, 1, 0.167, 'OK', 0.167, @did + 2, NULL),
 (@lcsid + 1, 4837, 1, 0.049, 'OK', 0.049, @did + 3, NULL),
