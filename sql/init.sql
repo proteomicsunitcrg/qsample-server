@@ -137,6 +137,7 @@ CREATE TABLE `context_source` (
   `trace_color_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKk6d0ww18rgc22m9s351or4hqu` (`trace_color_id`),
+  UNIQUE KEY `UK_name` (`name`),
   CONSTRAINT `FKk6d0ww18rgc22m9s351or4hqu` FOREIGN KEY (`trace_color_id`) REFERENCES `trace_color` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -148,6 +149,17 @@ CREATE TABLE `context_source` (
 LOCK TABLES `context_source` WRITE;
 /*!40000 ALTER TABLE `context_source` DISABLE KEYS */;
 INSERT INTO `context_source` VALUES (1,'# proteins','5008da3a-dbcd-49c3-a008-db34c4b0bb39',NULL,NULL,'Total number of identified grouped proteins',1),(2,'# peptides','958ce553-ad1a-493f-9af0-ffac364a7075',NULL,NULL,'Total number of identified peptides',1),(3,'+2','2fc40f2d-ccce-4bc9-bfb6-92e4c29e405c',NULL,NULL,'Charge +2',1),(4,'+3','8b17a1e5-5240-4bc5-85f3-47216f82093d',NULL,NULL,'Charge +3',1),(5,'+4','4ee9389c-aaad-4478-a4d4-dd6fb9fdea98',NULL,NULL,'Charge +4',1),(6,'Missed cleavages','e5ee7fa8-8731-4b8e-b5d0-a3d148c524fb',NULL,NULL,'Missed cleavages',1),(7,'Base peak intensity (removed log 04/04/22)','f9e4aaa0-c22f-445f-89b9-823469d43a73',NULL,NULL,'Base peak intensity (removed log 04/04/22)',1),(8,'Percentage Propionyl','520fbca9-b4bb-480b-87c7-ef914a26c208',NULL,NULL,'Percentage Propionyl',1),(9,'Percentage PIC','f28e5aca-c4bb-4ca0-a90a-94d36a2f7e64',NULL,NULL,'Percentage PIC',1),(10,'K(Carbamyl)','f5d89e95-2318-4b83-95f2-1f5b6491712a',NULL,NULL,'Percentage K(Carbamyl)',1),(11,'N-terminal (Carbamyl)','0075a453-9c3f-4b6b-8d93-3cb3e12e5e71',NULL,NULL,'Percentage .(Carbamyl))',1),(12,'R(Carbamyl)','87138f68-7b72-42f9-9ae2-c0d1a8229fd1',NULL,NULL,'Percentage R(Carbamyl))',1),(13,'N(Deamidated)','aa5ef26c-77dd-48a4-9eff-8c1046326635',NULL,NULL,'Percentage N(Deamidated))',1),(14,'K(Formyl)','ba8ad35b-1613-4881-903d-b6392efcf516',NULL,NULL,'Percentage K(Formyl))',1),(15,'N-terminal (Formyl)','e87e83dd-2db3-42ba-b09b-1cf6f7e2889b',NULL,NULL,'Percentage .(Formyl))',1),(16,'S(Formyl)','a82b23ab-bd4f-498e-8bec-68f1b743d1a9',NULL,NULL,'Percentage S(Formyl))',1),(17,'T(Formyl)','7722872a-c5ad-4590-9253-7a532a8c99fd',NULL,NULL,'Percentage T(Formyl))',1),(18,'pyro-Glu','89230c47-5d32-47df-83b4-c80956a8efaf',NULL,NULL,'Percentage pyro-Glu)',1),(19,'TIC (removed log 04/04/22)','ce09aa9a-f314-4bfa-b485-5d083b4ca24e',NULL,NULL,'TIC (removed log 04/04/22)',1),(20,'0','4ceda959-a107-4272-8896-d1f3d4826b99',NULL,NULL,'# missed cleavages = 0',1),(21,'1','7b8d2a03-9f6f-473e-8362-c450df636714',NULL,NULL,'# missed cleavages = 1',1),(22,'2','d9486250-e8b7-4205-a5cb-7b7e6e6d2043',NULL,NULL,'# missed cleavages = 2',1),(23,'3','ee25bc58-87a9-4bb1-894b-ba4b1f417998',NULL,NULL,'# missed cleavages = 3',1),(24,'Total number of phospho sites','7dafa69c-22d0-4464-9583-c9e143292f8a',NULL,NULL,'Total number of phospho sites',1),(25,'Total number of phospho peptides','e01c53fd-7f11-4513-8e0b-2be6bcee11be',NULL,NULL,'Total number of phospho peptides',1);
+insert into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (26,"Formylation","c02a6343-7f67-4624-bfb4-46bbf42841cb",NULL,NULL,"Formylation",1);
+insert into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (27,"Carbamyl","84dfec61-02b1-4e02-bab0-b70d7bc61d5c",NULL,NULL,"Carbamyl",1);
+insert into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (28,"Oxidation","1efc7682-3065-43c7-820e-2f72062308b8",NULL,NULL,"Oxidation",1);
+insert into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (29,"Ammonia loss","e567294f-89ca-44e8-82f2-7f3efccfc0a5",NULL,NULL,"Ammonia loss",1);
+insert into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (30,"Acetyl","23edd582-90b0-40cf-ac18-2e82e2e69020",NULL,NULL,"Acetyl",1);
+insert into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (31,"Deamidation","c60eda81-fa2d-4fb8-8e64-ed6a35b9c8b1",NULL,NULL,"Deamidation",1);
+insert into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (32,"Amidation","4c65ea89-0572-4d2f-b942-d9e39ee89f44",NULL,NULL,"Amidation",1);
+insert into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (33,"Isotopic peak error","f5162bac-eeb7-40b8-90cd-d99e39850bf2",NULL,NULL,"Isotopic peak error",1);
+insert into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (34,"Didehydrobutyrine/Water loss","7060666b-a06d-44dd-9d6c-47d11c0758df",NULL,NULL,"Didehydrobutyrine/Water loss",1);
+insert into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (35,"Methyl","3f25cf4f-0306-4897-a839-2b8fd15f7365",NULL,NULL,"Methyl",1);
+insert into context_source (id,abbreviated,api_key,charge,mz,name,trace_color_id) values (36,"Carbamidomethyl/Addition of G","2ad85cf9-debb-4ffb-b99d-ab22536b6053",NULL,NULL,"Carbamidomethyl/Addition of G",1);
 /*!40000 ALTER TABLE `context_source` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -169,7 +181,7 @@ CREATE TABLE `context_source_seq` (
 
 LOCK TABLES `context_source_seq` WRITE;
 /*!40000 ALTER TABLE `context_source_seq` DISABLE KEYS */;
-INSERT INTO `context_source_seq` VALUES (26);
+INSERT INTO `context_source_seq` VALUES (37);
 /*!40000 ALTER TABLE `context_source_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -213,6 +225,39 @@ INSERT INTO `data` VALUES (25,3334,1,2508,'OK',2508,24849,NULL);
 INSERT INTO `data` VALUES (25,3335,1,1809,'OK',1809,24853,NULL);
 INSERT INTO `data` VALUES (25,3336,1,1665,'OK',1665,24857,NULL);
 INSERT INTO `data` VALUES (25,3331,1,2161,'OK',2161,24861,NULL);
+
+insert into data (context_source_id, file_id, param_id, calculated_value, non_conformity_status, value, id, std) values
+(26, 4836, 1, 0.167, 'OK', 0.167, 25113, NULL),
+(26, 4837, 1, 0.049, 'OK', 0.049, 25131, NULL),
+(26, 4838, 1, 0.108, 'OK', 0.108, 25149, NULL),
+(27, 4836, 1, 1.133, 'OK', 1.133, 25114, NULL),
+(27, 4837, 1, 1.063, 'OK', 1.063, 25132, NULL),
+(27, 4838, 1, 1.54, 'OK', 1.54, 25150, NULL),
+(28, 4836, 1, 0.04, 'OK', 0.04, 25115, NULL),
+(28, 4837, 1, 0.039, 'OK', 0.039, 25133, NULL),
+(28, 4838, 1, 0.065, 'OK', 0.065, 25151, NULL),
+(29, 4836, 1, 0.18, 'OK', 0.18, 25116, NULL),
+(29, 4837, 1, 0.219, 'OK', 0.219, 25134, NULL),
+(29, 4838, 1, 0.371, 'OK', 0.371, 25152, NULL),
+(30, 4836, 1, 0.047, 'OK', 0.047, 25117, NULL),
+(30, 4837, 1, 0.036, 'OK', 0.036, 25135, NULL),
+(30, 4838, 1, 0.051, 'OK', 0.051, 25153, NULL),
+(31, 4836, 1, 0.167, 'OK', 0.167, 25118, NULL),
+(31, 4837, 1, 0.111, 'OK', 0.111, 25136, NULL),
+(31, 4838, 1, 0.239, 'OK', 0.239, 25154, NULL),
+(32, 4836, 1, 0.593, 'OK', 0.593, 25119, NULL),
+(32, 4837, 1, 0.71, 'OK', 0.71, 25137, NULL),
+(32, 4838, 1, 0.796, 'OK', 0.796, 25155, NULL),
+(33, 4836, 1, 2.422, 'OK', 2.422, 25120, NULL),
+(33, 4837, 1, 1.993, 'OK', 1.993, 25138, NULL),
+(33, 4838, 1, 2.223, 'OK', 2.223, 25156, NULL),
+(34, 4836, 1, 0.043, 'OK', 0.043, 25121, NULL),
+(34, 4837, 1, 0.036, 'OK', 0.036, 25139, NULL),
+(34, 4838, 1, 0.075, 'OK', 0.075, 25157, NULL),
+(35, 4838, 1, 0.032, 'OK', 0.032, 25158, NULL),
+(36, 4836, 1, 0.08, 'OK', 0.08, 25122, NULL),
+(36, 4837, 1, 0.075, 'OK', 0.075, 25140, NULL),
+(36, 4838, 1, 0.137, 'OK', 0.137, 25159, NULL);
 /*!40000 ALTER TABLE `data` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -765,7 +810,7 @@ CREATE TABLE `method_seq` (
 
 LOCK TABLES `method_seq` WRITE;
 /*!40000 ALTER TABLE `method_seq` DISABLE KEYS */;
-INSERT INTO `method_seq` VALUES (57);
+INSERT INTO `method_seq` VALUES (69);
 /*!40000 ALTER TABLE `method_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -792,6 +837,17 @@ CREATE TABLE `modification` (
 LOCK TABLES `modification` WRITE;
 /*!40000 ALTER TABLE `modification` DISABLE KEYS */;
 INSERT INTO `modification` VALUES (1,'PHOSPHO (S)','total-numbers'),(2,'PHOSPHO (T)','total-numbers'),(3,'PHOSPHO (Y)','total-numbers'),(4,'Phenylisocyanate (N-term)','total-numbers'),(5,'Propionyl (K)','total-numbers'),(6,'Propionyl (Protein N-term)','total-numbers'),(7,'Label:13C(6)15N(2) (K)','total-numbers'),(8,'Label:13C(6)15N(4) (R)','total-numbers'),(9,'TMT6plex (K)','total-numbers'),(10,'TMT6plex (N-term)','total-numbers'),(12,'Dimethyl (K)','total-numbers'),(13,'Trimethyl (K)','total-numbers'),(14,'Acetyl (K)','total-numbers'),(16,'Propionyl+Methyl','total-numbers'),(25,'Sum. area Propionyl N-term','histones-biological'),(26,'Sum. area not Propionyl N-term','histones-biological'),(27,'Sum. area PIC precursors N-term','histones-tailored'),(28,'Sum. area not PIC precursors N-term','histones-tailored'),(29,'N-term Propionyl','total-numbers'),(30,'N-term no Propionyl','total-numbers'),(31,'N-term PIC','total-numbers'),(32,'N-term no PIC','total-numbers'),(33,'K(Carbamyl)','sec-react'),(34,'.(Carbamyl)','sec-react'),(35,'R(Carbamyl)','sec-react'),(36,'N(Deamidated)','sec-react'),(37,'K(Formyl)','sec-react'),(38,'.(Formyl)','sec-react'),(39,'S(Formyl)','sec-react'),(40,'T(Formyl)','sec-react'),(41,'pyro-Glu','sec-react'),(42,'PEG+1H','polymer-contaminants'),(43,'PEG+2H','polymer-contaminants'),(44,'PEG+3H','polymer-contaminants'),(45,'PPG','polymer-contaminants'),(46,'Triton X-100','polymer-contaminants'),(47,'Triton X-100 (Reduced)','polymer-contaminants'),(48,'Triton X-100 (Na)','polymer-contaminants'),(49,'Triton X-100 (Reduced, Na)','polymer-contaminants'),(50,'Triton X-101','polymer-contaminants'),(51,'Triton X-101 (Reduced)','polymer-contaminants'),(52,'Polysiloxane','polymer-contaminants'),(53,'Tween-20','polymer-contaminants'),(54,'Tween-40','polymer-contaminants'),(55,'Tween-60','polymer-contaminants'),(56,'Tween-80','polymer-contaminants'),(57,'IGEPAL CA-630 (NP-40)','polymer-contaminants');
+insert into modification (id, name, type) values (58, "Formylation", "sec_react");
+insert into modification (id, name, type) values (59, "Carbamyl", "sec_react");
+insert into modification (id, name, type) values (60, "Oxidation", "sec_react");
+insert into modification (id, name, type) values (61, "Ammonia loss", "sec_react");
+insert into modification (id, name, type) values (62, "Acetyl", "sec_react");
+insert into modification (id, name, type) values (63, "Deamidation", "sec_react");
+insert into modification (id, name, type) values (64, "Amidation", "sec_react");
+insert into modification (id, name, type) values (65, "Isotopic peak error", "sec_react");
+insert into modification (id, name, type) values (66, "Didehydrobutyrine/Water loss", "sec_react");
+insert into modification (id, name, type) values (67, "Methyl", "sec_react");
+insert into modification (id, name, type) values (68, "Carbamidomethyl/Addition of G", "sec_react");
 /*!40000 ALTER TABLE `modification` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -822,6 +878,37 @@ CREATE TABLE `modification_file` (
 LOCK TABLES `modification_file` WRITE;
 /*!40000 ALTER TABLE `modification_file` DISABLE KEYS */;
 INSERT INTO `modification_file` VALUES (8027,0.0605,4836,42),(8028,0.1188,4836,43),(8029,0.0313,4836,44),(8030,0.004,4836,45),(8031,0.022,4836,46),(8032,0.0035,4836,47),(8033,0.0176,4836,48),(8034,0.0094,4836,49),(8035,0.0272,4836,50),(8036,0.0062,4836,51),(8037,12.5793,4836,52),(8038,0.0755,4836,53),(8039,0.0075,4836,54),(8040,0.0029,4836,55),(8041,0.0029,4836,56),(8042,0.0272,4836,57),(8043,0.0635,4837,42),(8044,0.1007,4837,43),(8045,0.0364,4837,44),(8046,0.0027,4837,45),(8047,0.02,4837,46),(8048,0.0027,4837,47),(8049,0.0092,4837,48),(8050,0.0117,4837,49),(8051,0.115,4837,50),(8052,0.0067,4837,51),(8053,10.8906,4837,52),(8054,0.0688,4837,53),(8055,0.0228,4837,54),(8056,0.0028,4837,55),(8057,0.0034,4837,56),(8058,0.115,4837,57),(8059,0.0603,4838,42),(8060,0.0975,4838,43),(8061,0.0491,4838,44),(8062,0.002,4838,45),(8063,0.0118,4838,46),(8064,0.0015,4838,47),(8065,0.0072,4838,48),(8066,0.0064,4838,49),(8067,0.0074,4838,50),(8068,0.0031,4838,51),(8069,3.5491,4838,52),(8070,0.0598,4838,53),(8071,0.01,4838,54),(8072,0.002,4838,55),(8073,0.0026,4838,56),(8074,0.0074,4838,57),(8075,0.0024,4872,42),(8076,0.0148,4872,43),(8077,0.0214,4872,44),(8078,0.002,4872,45),(8079,0.0011,4872,46),(8080,0.0034,4872,47),(8081,0.0018,4872,48),(8082,0.001,4872,49),(8083,0.0013,4872,50),(8084,0.0142,4872,51),(8085,0.1011,4872,52),(8086,0.0203,4872,53),(8087,0.0024,4872,54),(8088,0.0008,4872,55),(8089,0.0034,4872,56),(8090,0.0013,4872,57),(8091,0.0028,4870,42),(8092,0.0143,4870,43),(8093,0.0191,4870,44),(8094,0.0028,4870,45),(8095,0.0013,4870,46),(8096,0.0052,4870,47),(8097,0.0018,4870,48),(8098,0.0023,4870,49),(8099,0.0014,4870,50),(8100,0.0164,4870,51),(8101,0.1125,4870,52),(8102,0.0237,4870,53),(8103,0.0025,4870,54),(8104,0.001,4870,55),(8105,0.0038,4870,56),(8106,0.0014,4870,57),(8107,0.0032,4871,42),(8108,0.015,4871,43),(8109,0.0208,4871,44),(8110,0.0021,4871,45),(8111,0.0015,4871,46),(8112,0.0045,4871,47),(8113,0.0021,4871,48),(8114,0.0014,4871,49),(8115,0.0013,4871,50),(8116,0.0121,4871,51),(8117,0.0751,4871,52),(8118,0.027,4871,53),(8119,0.0032,4871,54),(8120,0.0008,4871,55),(8121,0.004,4871,56),(8122,0.0013,4871,57),(17997,418,4837,38),(17998,418,4836,38),(17999,645,4836,33),(18000,644,4836,35),(18001,845,4836,40),(18002,744,4836,36),(18003,1375,4837,34),(18004,826,4836,37),(18005,657,4837,33),(18006,903,4837,36),(18007,266,4837,41),(18008,702,4837,35),(18009,900,4837,37),(18010,886,4837,40),(18011,1299,4836,34),(18012,505,4838,38),(18013,1386,4836,39),(18014,1345,4837,39),(18015,201,4836,41),(18016,1581,4838,34),(18017,1051,4838,36),(18020,1450,4838,39),(18021,806,4838,33),(18022,290,4838,41),(18027,999,4838,40),(18031,822,4838,35),(18033,1055,4838,37);
+insert into modification_file (id, value, file_id, modification_id) values (8287, 0.167, 4836, 58);
+insert into modification_file (id, value, file_id, modification_id) values (8297, 0.049, 4837, 58);
+insert into modification_file (id, value, file_id, modification_id) values (8307, 0.108, 4838, 58);
+insert into modification_file (id, value, file_id, modification_id) values (8288, 1.133, 4836, 59);
+insert into modification_file (id, value, file_id, modification_id) values (8298, 1.063, 4837, 59);
+insert into modification_file (id, value, file_id, modification_id) values (8308, 1.54, 4838, 59);
+insert into modification_file (id, value, file_id, modification_id) values (8289, 0.04, 4836, 60);
+insert into modification_file (id, value, file_id, modification_id) values (8299, 0.039, 4837, 60);
+insert into modification_file (id, value, file_id, modification_id) values (8309, 0.065, 4838, 60);
+insert into modification_file (id, value, file_id, modification_id) values (8290, 0.18, 4836, 61);
+insert into modification_file (id, value, file_id, modification_id) values (8300, 0.219, 4837, 61);
+insert into modification_file (id, value, file_id, modification_id) values (8310, 0.371, 4838, 61);
+insert into modification_file (id, value, file_id, modification_id) values (8291, 0.047, 4836, 62);
+insert into modification_file (id, value, file_id, modification_id) values (8301, 0.036, 4837, 62);
+insert into modification_file (id, value, file_id, modification_id) values (8311, 0.051, 4838, 62);
+insert into modification_file (id, value, file_id, modification_id) values (8292, 0.167, 4836, 63);
+insert into modification_file (id, value, file_id, modification_id) values (8302, 0.111, 4837, 63);
+insert into modification_file (id, value, file_id, modification_id) values (8312, 0.239, 4838, 63);
+insert into modification_file (id, value, file_id, modification_id) values (8293, 0.593, 4836, 64);
+insert into modification_file (id, value, file_id, modification_id) values (8303, 0.71, 4837, 64);
+insert into modification_file (id, value, file_id, modification_id) values (8313, 0.796, 4838, 64);
+insert into modification_file (id, value, file_id, modification_id) values (8294, 2.422, 4836, 65);
+insert into modification_file (id, value, file_id, modification_id) values (8304, 1.993, 4837, 65);
+insert into modification_file (id, value, file_id, modification_id) values (8314, 2.223, 4838, 65);
+insert into modification_file (id, value, file_id, modification_id) values (8295, 0.043, 4836, 66);
+insert into modification_file (id, value, file_id, modification_id) values (8305, 0.036, 4837, 66);
+insert into modification_file (id, value, file_id, modification_id) values (8315, 0.075, 4838, 66);
+insert into modification_file (id, value, file_id, modification_id) values (8316, 0.032, 4838, 67);
+insert into modification_file (id, value, file_id, modification_id) values (8296, 0.08, 4836, 68);
+insert into modification_file (id, value, file_id, modification_id) values (8306, 0.075, 4837, 68);
+insert into modification_file (id, value, file_id, modification_id) values (8317, 0.137, 4838, 68);
 /*!40000 ALTER TABLE `modification_file` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -866,7 +953,7 @@ CREATE TABLE `modification_seq` (
 
 LOCK TABLES `modification_seq` WRITE;
 /*!40000 ALTER TABLE `modification_seq` DISABLE KEYS */;
-INSERT INTO `modification_seq` VALUES (58);
+INSERT INTO `modification_seq` VALUES (69);
 /*!40000 ALTER TABLE `modification_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
