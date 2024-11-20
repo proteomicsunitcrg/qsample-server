@@ -1,261 +1,309 @@
 package eu.crg.qsample.request;
 
-import java.util.Date;
+import com.google.gson.annotations.SerializedName;
+import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.gson.annotations.SerializedName;
-
 public class AgendoRequest {
-    private long id;
+  private long id;
 
-    private String ref;
-    
-    private String group;
+  private String ref;
 
-    @SerializedName("class")
-    private String classs;
+  private String group;
 
-    private String date_created;
+  @SerializedName("class")
+  private String classs;
 
-    private String status;
+  private String date_created;
 
-    private String account;
+  private String status;
 
-    private String total;
+  private String account;
 
-    private String delivery_date;
+  private String total;
 
-    private String delivery_location;
+  private String delivery_date;
 
-    private String comment;
+  private String delivery_location;
 
-    private AgendoRequestLastAction last_action;
+  private String comment;
 
-    private AgendoRequestUser created_by;
+  private AgendoRequestLastAction last_action;
 
-    private List<AgendoRequestFieldProduct> fields;
+  private AgendoRequestUser created_by;
 
-    private List<AgendoRequestFieldProduct> products;
+  private List<AgendoRequestFieldProduct> fields;
 
-    private String localCode;
+  private List<AgendoRequestFieldProduct> products;
 
-    private String localCreator;
+  private List<AgendoRequestSample> samples;
 
-    private String localCreationDate;
+  private String localCode;
 
-    private String localTaxonomy;
+  private String localCreator;
 
-    public String getLocalTaxonomy() {
-        return localTaxonomy;
+  private String localCreationDate;
+
+  private String localTaxonomy;
+
+  public String getLocalTaxonomy() {
+    return localTaxonomy;
+  }
+
+  public void setLocalTaxonomy(String localTaxonomy) {
+    this.localTaxonomy = localTaxonomy;
+  }
+
+  public List<AgendoRequestSample> getSamples() {
+    return samples;
+  }
+
+  public void setSamples(List<AgendoRequestSample> samples) {
+    this.samples = samples;
+  }
+
+  // This needed to be created for syncing with RequestLocal
+  public void setSamplesViaString(String samplesStr) {
+    // samplesStr = "Sample1---Sample2---Sample3"
+    String[] sampleNames = samplesStr.split("---");
+    List<AgendoRequestSample> samples = new ArrayList<>();
+
+    for (String sampleName : sampleNames) {
+      AgendoRequestSample sample = new AgendoRequestSample();
+      sample.setCode(sampleName);
+      samples.add(sample);
     }
 
-    public void setLocalTaxonomy(String localTaxonomy) {
-        this.localTaxonomy = localTaxonomy;
-    }
+    this.samples = samples;
+  }
 
-    private String samples;
+  public long getId() {
+    return id;
+  }
 
-    public String getSamples() {
-        return samples;
-    }
+  public void setId(long id) {
+    this.id = id;
+  }
 
-    public void setSamples(String samples) {
-        this.samples = samples;
-    }
+  public String getRef() {
+    return ref;
+  }
 
-    public long getId() {
-        return id;
-    }
+  public void setRef(String ref) {
+    this.ref = ref;
+  }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+  public String getGroup() {
+    return group;
+  }
 
-    public String getRef() {
-        return ref;
-    }
+  public void setGroup(String group) {
+    this.group = group;
+  }
 
-    public void setRef(String ref) {
-        this.ref = ref;
-    }
+  public String getClasss() {
+    return classs;
+  }
 
+  public void setClasss(String classs) {
+    this.classs = classs;
+  }
 
-    public String getGroup() {
-        return group;
-    }
+  public String getdate_created() {
+    return date_created.split("\\.")[0];
+  }
 
-    public void setGroup(String group) {
-        this.group = group;
-    }
+  public void setdate_created(String date_created) {
+    this.date_created = date_created;
+  }
 
-    public String getClasss() {
-        return classs;
-    }
+  public String getStatus() {
+    return status;
+  }
 
-    public void setClasss(String classs) {
-        this.classs = classs;
-    }
+  public void setStatus(String status) {
+    this.status = status;
+  }
 
-    public String getdate_created() {
-        return date_created.split("\\.")[0];
-    }
+  public String getAccount() {
+    return account;
+  }
 
-    public void setdate_created(String date_created) {
-        this.date_created = date_created;
-    }
+  public void setAccount(String account) {
+    this.account = account;
+  }
 
-    public String getStatus() {
-        return status;
-    }
+  public String getTotal() {
+    return total;
+  }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+  public void setTotal(String total) {
+    this.total = total;
+  }
 
-    public String getAccount() {
-        return account;
-    }
+  public String getDelivery_date() {
+    return delivery_date;
+  }
 
-    public void setAccount(String account) {
-        this.account = account;
-    }
+  public void setDelivery_date(String delivery_date) {
+    this.delivery_date = delivery_date;
+  }
 
-    public String getTotal() {
-        return total;
-    }
+  public String getDelivery_location() {
+    return delivery_location;
+  }
 
-    public void setTotal(String total) {
-        this.total = total;
-    }
+  public void setDelivery_location(String delivery_location) {
+    this.delivery_location = delivery_location;
+  }
 
-    public String getDelivery_date() {
-        return delivery_date;
-    }
+  public String getComment() {
+    return comment;
+  }
 
-    public void setDelivery_date(String delivery_date) {
-        this.delivery_date = delivery_date;
-    }
+  public void setComment(String comment) {
+    this.comment = comment;
+  }
 
-    public String getDelivery_location() {
-        return delivery_location;
-    }
+  public AgendoRequestLastAction getLast_action() {
+    return last_action;
+  }
 
-    public void setDelivery_location(String delivery_location) {
-        this.delivery_location = delivery_location;
-    }
+  public void setLast_action(AgendoRequestLastAction last_action) {
+    this.last_action = last_action;
+  }
 
-    public String getComment() {
-        return comment;
-    }
+  public AgendoRequestUser getCreated_by() {
+    return created_by;
+  }
 
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
+  public void setCreated_by(AgendoRequestUser created_by) {
+    this.created_by = created_by;
+  }
 
-    public AgendoRequestLastAction getLast_action() {
-        return last_action;
-    }
+  public List<AgendoRequestFieldProduct> getFields() {
+    return fields;
+  }
 
-    public void setLast_action(AgendoRequestLastAction last_action) {
-        this.last_action = last_action;
-    }
+  public void setFields(List<AgendoRequestFieldProduct> fields) {
+    this.fields = fields;
+  }
 
-    public AgendoRequestUser getCreated_by() {
-        return created_by;
-    }
+  public List<AgendoRequestFieldProduct> getProducts() {
+    return products;
+  }
 
-    public void setCreated_by(AgendoRequestUser created_by) {
-        this.created_by = created_by;
-    }
+  public void setProducts(List<AgendoRequestFieldProduct> products) {
+    this.products = products;
+  }
 
-    public List<AgendoRequestFieldProduct> getFields() {
-        return fields;
-    }
+  public AgendoRequest() {}
 
-    public void setFields(List<AgendoRequestFieldProduct> fields) {
-        this.fields = fields;
-    }
+  public AgendoRequest(
+      long id,
+      String ref,
+      String group,
+      String classs,
+      String date_created,
+      String status,
+      String account,
+      String total,
+      String delivery_date,
+      String delivery_location,
+      String comment,
+      AgendoRequestLastAction last_action,
+      AgendoRequestUser created_by,
+      List<AgendoRequestFieldProduct> fields,
+      List<AgendoRequestFieldProduct> products) {
+    this.id = id;
+    this.ref = ref;
+    this.group = group;
+    this.classs = classs;
+    this.date_created = date_created;
+    this.status = status;
+    this.account = account;
+    this.total = total;
+    this.delivery_date = delivery_date;
+    this.delivery_location = delivery_location;
+    this.comment = comment;
+    this.last_action = last_action;
+    this.created_by = created_by;
+    this.fields = fields;
+    this.products = products;
+  }
 
-    public List<AgendoRequestFieldProduct> getProducts() {
-        return products;
-    }
+  public AgendoRequest(
+      long id, String ref, String group, String classs, String date_created, String status) {
+    this.id = id;
+    this.ref = ref;
+    this.group = group;
+    this.classs = classs;
+    this.date_created = date_created;
+    this.status = status;
+  }
 
-    public void setProducts(List<AgendoRequestFieldProduct> products) {
-        this.products = products;
-    }
+  public String getLocalCode() {
+    return localCode;
+  }
 
+  public void setLocalCode(String localCode) {
+    this.localCode = localCode;
+  }
 
+  public String getLocalCreator() {
+    return localCreator;
+  }
 
-    public AgendoRequest() {
-    }
+  public void setLocalCreator(String localCreator) {
+    this.localCreator = localCreator;
+  }
 
-    public AgendoRequest(long id, String ref, String group, String classs, String date_created, String status, String account,
-            String total, String delivery_date, String delivery_location, String comment,
-            AgendoRequestLastAction last_action, AgendoRequestUser created_by, List<AgendoRequestFieldProduct> fields,
-            List<AgendoRequestFieldProduct> products) {
-        this.id = id;
-        this.ref = ref;
-        this.group = group;
-        this.classs = classs;
-        this.date_created = date_created;
-        this.status = status;
-        this.account = account;
-        this.total = total;
-        this.delivery_date = delivery_date;
-        this.delivery_location = delivery_location;
-        this.comment = comment;
-        this.last_action = last_action;
-        this.created_by = created_by;
-        this.fields = fields;
-        this.products = products;
-    }
+  public String getLocalCreationDate() {
+    return localCreationDate;
+  }
 
-    public AgendoRequest(long id, String ref, String group, String classs, String date_created, String status) {
-        this.id = id;
-        this.ref = ref;
-        this.group = group;
-        this.classs = classs;
-        this.date_created = date_created;
-        this.status = status;
-    }
+  public void setLocalCreationDate(String localCreationDate) {
+    this.localCreationDate = localCreationDate;
+  }
 
-    public String getLocalCode() {
-        return localCode;
-    }
-
-    public void setLocalCode(String localCode) {
-        this.localCode = localCode;
-    }
-
-    public String getLocalCreator() {
-        return localCreator;
-    }
-
-    public void setLocalCreator(String localCreator) {
-        this.localCreator = localCreator;
-    }
-
-    public String getLocalCreationDate() {
-        return localCreationDate;
-    }
-
-    public void setLocalCreationDate(String localCreationDate) {
-        this.localCreationDate = localCreationDate;
-    }
-
-    @Override
-    public String toString() {
-        return "AgendoRequest [account=" + account + ", classs=" + classs + ", comment=" + comment + ", created_by="
-                + created_by + ", date_created=" + date_created + ", delivery_date=" + delivery_date
-                + ", delivery_location=" + delivery_location + ", fields=" + fields + ", group=" + group + ", id=" + id
-                + ", last_action=" + last_action + ", localCode=" + localCode + ", localCreationDate="
-                + localCreationDate + ", localCreator=" + localCreator + ", products=" + products + ", ref=" + ref
-                + ", status=" + status + ", total=" + total + "]";
-    }
-
-
-
-
-
+  @Override
+  public String toString() {
+    return "AgendoRequest [account="
+        + account
+        + ", classs="
+        + classs
+        + ", comment="
+        + comment
+        + ", created_by="
+        + created_by
+        + ", date_created="
+        + date_created
+        + ", delivery_date="
+        + delivery_date
+        + ", delivery_location="
+        + delivery_location
+        + ", fields="
+        + fields
+        + ", group="
+        + group
+        + ", id="
+        + id
+        + ", last_action="
+        + last_action
+        + ", localCode="
+        + localCode
+        + ", localCreationDate="
+        + localCreationDate
+        + ", localCreator="
+        + localCreator
+        + ", products="
+        + products
+        + ", ref="
+        + ref
+        + ", status="
+        + status
+        + ", total="
+        + total
+        + "]";
+  }
 }
