@@ -694,28 +694,6 @@ INSERT INTO `injection_conditions_seq` VALUES (127);
 /*!40000 ALTER TABLE `injection_conditions_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
---
--- Table structure for table `injection_conditionsqc`
---
-
-DROP TABLE IF EXISTS `injection_conditionsqc`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `injection_conditionsqc` (
-  `id` bigint(20) NOT NULL,
-  `qctype` varchar(255) DEFAULT NULL,
-  `method` varchar(255) DEFAULT NULL,
-  `volume` float DEFAULT NULL,
-  `instrument_id` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK33yldjedmrun94xrhrb62ldlg` (`instrument_id`),
-  CONSTRAINT `FK33yldjedmrun94xrhrb62ldlg` FOREIGN KEY (`instrument_id`) REFERENCES `instrument` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `injection_conditionsqc`
---
 
 LOCK TABLES `injection_conditionsqc` WRITE;
 /*!40000 ALTER TABLE `injection_conditionsqc` DISABLE KEYS */;
