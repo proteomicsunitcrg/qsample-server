@@ -631,12 +631,13 @@ DROP TABLE IF EXISTS `injection_conditions_qc`;
 CREATE TABLE `injection_conditions_qc` (
   `id` bigint(20) NOT NULL,
   `method` varchar(255) DEFAULT NULL,
-  `qctype` varchar(255) DEFAULT NULL,
+  `qctype_id` varchar(255) DEFAULT NULL,
   `volume` float DEFAULT NULL,
   `instrument_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKnu8rjv35u3r9cbh16vel91tx0` (`instrument_id`),
-  CONSTRAINT `FKnu8rjv35u3r9cbh16vel91tx0` FOREIGN KEY (`instrument_id`) REFERENCES `instrument` (`id`)
+  CONSTRAINT `FKnu8rjv35u3r9cbh16vel91tx0` FOREIGN KEY (`instrument_id`) REFERENCES `instrument` (`id`),
+  CONSTRAINT `FKqctype` FOREIGN KEY (`qctype_id`) REFERENCES `qctype` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1084,6 +1085,30 @@ LOCK TABLES `plot_seq` WRITE;
 /*!40000 ALTER TABLE `plot_seq` DISABLE KEYS */;
 INSERT INTO `plot_seq` VALUES (8);
 /*!40000 ALTER TABLE `plot_seq` ENABLE KEYS */;
+UNLOCK TABLES;
+--
+-- Table structure for table `qctype`
+--
+
+DROP TABLE IF EXISTS `qctype`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `qctype` (
+  `id` bigint(20) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `KEYQCname` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qctype_seq`
+--
+
+LOCK TABLES `qctype_seq` WRITE;
+/*!40000 ALTER TABLE `qctype_seq` DISABLE KEYS */;
+INSERT INTO `qctype_seq` VALUES (6);
+/*!40000 ALTER TABLE `qctype_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
