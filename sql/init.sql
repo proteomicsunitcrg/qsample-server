@@ -631,7 +631,7 @@ DROP TABLE IF EXISTS `injection_conditions_qc`;
 CREATE TABLE `injection_conditions_qc` (
   `id` bigint(20) NOT NULL,
   `method` varchar(255) DEFAULT NULL,
-  `qctype_id` varchar(255) DEFAULT NULL,
+  `qctype_id` bigint(20) DEFAULT NULL,
   `volume` float DEFAULT NULL,
   `instrument_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -647,7 +647,7 @@ CREATE TABLE `injection_conditions_qc` (
 
 LOCK TABLES `injection_conditions_qc` WRITE;
 /*!40000 ALTER TABLE `injection_conditions_qc` DISABLE KEYS */;
-INSERT INTO `injection_conditions_qc` VALUES (1,'STD-E1-BSA-8min-T3-HCD-IT','QBSA',0.5,3),(2,'STD-E1-BSA-8min-T3-HCD-IT','QC01',0.5,3),(3,'STD-VL-BSA-8min-T3-CID-IT','QBSA',0.5,1),(4,'STD-VL-BSA-8min-T3-CID-IT','QC01',0.5,1),(5,'STD-VL-QC02-60min-T20-CID-IT','QC02',1,1),(6,'STD-VL-QC02-60min-T20-CID-IT','QHELA',1,1),(7,'STD-VL-DDA-60min-T4-CID-IT-HCD-FT-QC4L','QC03',1,1),(8,'STD-L1-BSA-8min-T3-HCD-IT','QBSA',0.5,2),(12,'STD-L1-QC02-60min-TSP-HCD-IT_max2ul','QC02',1,2),(13,'STD-L1-QC02-60min-TSP-HCD-IT_max2ul','QHELA',1,2),(14,'QC4L-Fusion-Lumos','QC03',1,2),(15,'STD-L1-BSA-8min-T3-HCD-IT','QC01',0.5,2),(16,'STD-E1-QC02-60min-TSP-HCD-IT_max2ul','QC02',1,3),(17,'STD-E1-QC02-60min-TSP-HCD-IT_max2ul','QHELA',1,3),(18,'QC4L-Eclipse','QC03',1,3),(19,'STD-E2-BSA-8min-T3-HCD-IT','QBSA',0.5,4),(20,'STD-E2-BSA-8min-T3-HCD-IT','QC01',0.5,4),(21,'STD-E2-QC02-60min-TSP-HCD-IT_max2ul','QC02',1,4),(22,'STD-E2-QC02-60min-TSP-HCD-IT_max2ul','QHELA',1,4),(23,'QC4L-Eclipse2','QC03',1,4);
+INSERT INTO `injection_conditions_qc` VALUES (1,'STD-E1-BSA-8min-T3-HCD-IT',5,0.5,3),(2,'STD-E1-BSA-8min-T3-HCD-IT',1,0.5,3),(3,'STD-VL-BSA-8min-T3-CID-IT',5,0.5,1),(4,'STD-VL-BSA-8min-T3-CID-IT',1,0.5,1),(5,'STD-VL-QC02-60min-T20-CID-IT',2,1,1),(6,'STD-VL-QC02-60min-T20-CID-IT',4,1,1),(7,'STD-VL-DDA-60min-T4-CID-IT-HCD-FT-QC4L',3,1,1),(8,'STD-L1-BSA-8min-T3-HCD-IT',5,0.5,2),(12,'STD-L1-QC02-60min-TSP-HCD-IT_max2ul',2,1,2),(13,'STD-L1-QC02-60min-TSP-HCD-IT_max2ul',4,1,2),(14,'QC4L-Fusion-Lumos',3,1,2),(15,'STD-L1-BSA-8min-T3-HCD-IT',1,0.5,2),(16,'STD-E1-QC02-60min-TSP-HCD-IT_max2ul',2,1,3),(17,'STD-E1-QC02-60min-TSP-HCD-IT_max2ul',4,1,3),(18,'QC4L-Eclipse',3,1,3),(19,'STD-E2-BSA-8min-T3-HCD-IT',5,0.5,4),(20,'STD-E2-BSA-8min-T3-HCD-IT',1,0.5,4),(21,'STD-E2-QC02-60min-TSP-HCD-IT_max2ul',2,1,4),(22,'STD-E2-QC02-60min-TSP-HCD-IT_max2ul',4,1,4),(23,'QC4L-Eclipse2',3,1,4);
 /*!40000 ALTER TABLE `injection_conditions_qc` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1100,6 +1100,23 @@ CREATE TABLE `qctype` (
   KEY `KEYQCname` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `qctype` WRITE;
+INSERT INTO `qctype` VALUES (1, "QC01"),(2, "QC02"),(3, "QC03"),(4, "QHELA"),(5, "QBSA");
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qctype_seq`
+--
+
+DROP TABLE IF EXISTS `qctype_seq`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `qctype_seq` (
+  `next_val` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `qctype_seq`
