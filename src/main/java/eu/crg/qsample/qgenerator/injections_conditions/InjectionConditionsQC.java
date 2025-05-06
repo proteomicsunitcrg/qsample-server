@@ -1,6 +1,7 @@
 package eu.crg.qsample.qgenerator.injections_conditions;
 
 import eu.crg.qsample.qgenerator.instrument.Instrument;
+import eu.crg.qsample.qgenerator.method.Method;
 import eu.crg.qsample.qgenerator.qctype.QCtype;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -34,8 +35,9 @@ public class InjectionConditionsQC {
   @JoinColumn(name = "qctype_id", referencedColumnName = "id")
   private QCtype qctype;
 
-  @Column(name = "method")
-  private String method;
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "method_id", referencedColumnName = "id")
+  private Method method;
 
   @Column(name = "volume")
   private Float volume;
@@ -64,11 +66,11 @@ public class InjectionConditionsQC {
     this.qctype = qctype;
   }
 
-  public String getMethod() {
+  public Method getMethod() {
     return method;
   }
 
-  public void setMethod(String method) {
+  public void setMethod(Method method) {
     this.method = method;
   }
 
@@ -81,7 +83,7 @@ public class InjectionConditionsQC {
   }
 
   public InjectionConditionsQC(
-      Long id, Instrument instrument, QCtype qctype, String method, Float volume) {
+      Long id, Instrument instrument, QCtype qctype, Method method, Float volume) {
     this.id = id;
     this.instrument = instrument;
     this.qctype = qctype;

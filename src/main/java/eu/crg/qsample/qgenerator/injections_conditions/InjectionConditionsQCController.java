@@ -1,10 +1,6 @@
 package eu.crg.qsample.qgenerator.injections_conditions;
 
 import java.util.List;
-import java.util.UUID;
-
-import javax.ws.rs.Path;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,29 +15,30 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/injectionConditionsQC")
 public class InjectionConditionsQCController {
 
-    @Autowired InjectionConditionsQCService injCondServ;
+  @Autowired InjectionConditionsQCService injCondServ;
 
-    @GetMapping("/getByInstrumentIdAndQCType/{instrumentId}/{qcType}")
-    @PreAuthorize("hasRole('INTERNAL')")
-    public InjectionConditionsQC getByInstrumentIdAndQCType(@PathVariable Long instrumentId, @PathVariable String qcType) {
-        return injCondServ.getByInstrumentIdAndQCType(instrumentId, qcType);
-    }
+  @GetMapping("/getByInstrumentIdAndQCType/{instrumentId}/{qcType}")
+  @PreAuthorize("hasRole('INTERNAL')")
+  public InjectionConditionsQC getByInstrumentIdAndQCType(
+      @PathVariable Long instrumentId, @PathVariable String qcType) {
+    return injCondServ.getByInstrumentIdAndQCType(instrumentId, qcType);
+  }
 
-    @GetMapping("/findByInstrumentId/{instrumentId}")
-    @PreAuthorize("hasRole('INTERNAL')")
-    public List<InjectionConditionsQC> getByInstrumentId(@PathVariable Long instrumentId) {
-        return injCondServ.getByInstrumentId(instrumentId);
-    }
+  @GetMapping("/findByInstrumentId/{instrumentId}")
+  @PreAuthorize("hasRole('INTERNAL')")
+  public List<InjectionConditionsQC> getByInstrumentId(@PathVariable Long instrumentId) {
+    return injCondServ.getByInstrumentId(instrumentId);
+  }
 
-    @PostMapping("")
-    @PreAuthorize("hasRole('MANAGER')")
-    public InjectionConditionsQC save(@RequestBody InjectionConditionsQC injCondQC) {
-        return injCondServ.save(injCondQC);
-    }
+  @PostMapping("")
+  @PreAuthorize("hasRole('MANAGER')")
+  public InjectionConditionsQC save(@RequestBody InjectionConditionsQC injCondQC) {
+    return injCondServ.save(injCondQC);
+  }
 
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('MANAGER')")
-    public boolean delete(@PathVariable(name = "id") Long injectionConditionId) {
-        return injCondServ.delete(injectionConditionId);
-    }
+  @DeleteMapping("/{id}")
+  @PreAuthorize("hasRole('MANAGER')")
+  public boolean delete(@PathVariable(name = "id") Long injectionConditionId) {
+    return injCondServ.delete(injectionConditionId);
+  }
 }

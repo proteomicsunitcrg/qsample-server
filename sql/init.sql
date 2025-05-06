@@ -630,14 +630,15 @@ DROP TABLE IF EXISTS `injection_conditions_qc`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `injection_conditions_qc` (
   `id` bigint(20) NOT NULL,
-  `method` varchar(255) DEFAULT NULL,
+  `method_id` bigint(20) DEFAULT NULL,
   `qctype_id` bigint(20) DEFAULT NULL,
   `volume` float DEFAULT NULL,
   `instrument_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKnu8rjv35u3r9cbh16vel91tx0` (`instrument_id`),
   CONSTRAINT `FKnu8rjv35u3r9cbh16vel91tx0` FOREIGN KEY (`instrument_id`) REFERENCES `instrument` (`id`),
-  CONSTRAINT `FKqctype` FOREIGN KEY (`qctype_id`) REFERENCES `qctype` (`id`)
+  CONSTRAINT `FKqctype` FOREIGN KEY (`qctype_id`) REFERENCES `qctype` (`id`),
+  CONSTRAINT `FKmethod` FOREIGN KEY (`method_id`) REFERENCES `method` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -647,7 +648,17 @@ CREATE TABLE `injection_conditions_qc` (
 
 LOCK TABLES `injection_conditions_qc` WRITE;
 /*!40000 ALTER TABLE `injection_conditions_qc` DISABLE KEYS */;
-INSERT INTO `injection_conditions_qc` VALUES (1,'STD-E1-BSA-8min-T3-HCD-IT',5,0.5,3),(2,'STD-E1-BSA-8min-T3-HCD-IT',1,0.5,3),(3,'STD-VL-BSA-8min-T3-CID-IT',5,0.5,1),(4,'STD-VL-BSA-8min-T3-CID-IT',1,0.5,1),(5,'STD-VL-QC02-60min-T20-CID-IT',2,1,1),(6,'STD-VL-QC02-60min-T20-CID-IT',4,1,1),(7,'STD-VL-DDA-60min-T4-CID-IT-HCD-FT-QC4L',3,1,1),(8,'STD-L1-BSA-8min-T3-HCD-IT',5,0.5,2),(12,'STD-L1-QC02-60min-TSP-HCD-IT_max2ul',2,1,2),(13,'STD-L1-QC02-60min-TSP-HCD-IT_max2ul',4,1,2),(14,'QC4L-Fusion-Lumos',3,1,2),(15,'STD-L1-BSA-8min-T3-HCD-IT',1,0.5,2),(16,'STD-E1-QC02-60min-TSP-HCD-IT_max2ul',2,1,3),(17,'STD-E1-QC02-60min-TSP-HCD-IT_max2ul',4,1,3),(18,'QC4L-Eclipse',3,1,3),(19,'STD-E2-BSA-8min-T3-HCD-IT',5,0.5,4),(20,'STD-E2-BSA-8min-T3-HCD-IT',1,0.5,4),(21,'STD-E2-QC02-60min-TSP-HCD-IT_max2ul',2,1,4),(22,'STD-E2-QC02-60min-TSP-HCD-IT_max2ul',4,1,4),(23,'QC4L-Eclipse2',3,1,4);
+INSERT INTO `injection_conditions_qc` VALUES (1,82,5,0.5,3),(2,82,1,0.5,3),
+  (3,83,5,0.5,1),(4,83,1,0.5,1),
+  (5,84,2,1,1),(6,84,4,1,1),
+  (7,85,3,1,1),(8,86,5,0.5,2),
+  (12,87,2,1,2),(13,87,4,1,2),
+  (14,88,3,1,2),(15,86,1,0.5,2),
+  (16,89,2,1,3),(17,89,4,1,3),
+  (18,90,3,1,3),
+  (19,91,5,0.5,4),(20,91,1,0.5,4),
+  (21,92,2,1,4),(22,92,4,1,4),
+  (23,93,3,1,4);
 /*!40000 ALTER TABLE `injection_conditions_qc` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -768,6 +779,18 @@ CREATE TABLE `method` (
 LOCK TABLES `method` WRITE;
 /*!40000 ALTER TABLE `method` DISABLE KEYS */;
 INSERT INTO `method` VALUES (2,'STD-L1-DDA-90min-TSP-HCD-IT_H_max2ul'),(3,'STD-E1-DDA-90min-TSP-HCD-IT_H_max2ul'),(5,'STD-L1-DDA-60min-TSP-CID-OT-MS2-MS3-crosslink_max5ul'),(6,'STD-E1-DDA-60min-TSP-CID-OT-MS2-MS3-crosslink_max5ul'),(8,'STD-L1-DDA-60min-TSP-HCD-IT_max2ul'),(9,'STD-L1-DDA-90min-TSP-HCD-IT_H_max5ul'),(10,'STD-E1-DDA-90min-TSP-HCD-IT_H_max5ul'),(13,'STD-E1-DDA-90min-TSP-HCD-IT_L_max2ul'),(14,'STD-E1-DDA-90min-TSP-HCD-IT_L_max5ul'),(15,'STD-L1-DDA-90min-TSP-HCD-IT_L_max2ul'),(16,'STD-L1-DDA-90min-TSP-HCD-IT_L_max5ul'),(18,'STD-E1-DDA-60min-TSP-HCD-IT_L_max5ul'),(19,'STD-L1-DDA-60min-TSP-HCD-IT_L_max5ul'),(20,'STD-E1-DDA-60min-TSP-HCD-ETD-OT_max5ul'),(21,'STD-L1-DDA-60min-TSP-HCD-ETD-OT_max5ul'),(24,'STD-E1-DDA-90min-TMT-RTS-MS3_max2ul_humanDB'),(25,'STD-E1-DDA-90min-TMT-RTS-MS3_max5ul_humanDB'),(26,'STD-E1-DDA-90min-TMT-RTS-MS3_max2ul_mouseDB'),(27,'STD-E1-DDA-90min-TMT-RTS-MS3_max2ul_phrogDB'),(28,'STD-E1-DDA-90min-TMT-RTS-MS3_max5ul_phrogDB'),(29,'STD-E1-DDA-90min-TMT-RTS-MS3_max2ul_capsaspora'),(30,'STD-E1-DDA-60min-TSP-HCD-CID-OT_histones_max5ul'),(31,'STD-E2-DDA-90min-TSP-HCD-IT_H_max2ul'),(32,'STD-E2-DDA-60min-TSP-CID-OT-MS2-MS3-crosslink_max5ul'),(33,'STD-E2-DDA-90min-TSP-HCD-IT_H_max5ul'),(34,'STD-E2-DDA-90min-TSP-HCD-IT_L_max2ul'),(35,'STD-E2-DDA-90min-TSP-HCD-IT_L_max5ul'),(36,'STD-E2-DDA-60min-TSP-HCD-IT_L_max5ul'),(37,'STD-E2-DDA-60min-TSP-HCD-ETD-OT_max5ul'),(40,'STD-E2-DDA-90min-TMT-RTS-MS3_max2ul_humanDB'),(41,'STD-E2-DDA-90min-TMT-RTS-MS3_max5ul_humanDB'),(42,'STD-E2-DDA-90min-TMT-RTS-MS3_max2ul_mouseDB'),(43,'STD-E2-DDA-90min-TMT-RTS-MS3_max2ul_phrogDB'),(44,'STD-E2-DDA-90min-TMT-RTS-MS3_max5ul_phrogDB'),(45,'STD-E2-DDA-90min-TMT-RTS-MS3_max2ul_capsaspora'),(46,'STD-E2-DDA-60min-TSP-HCD-CID-OT_histones_max5ul'),(47,'STD-L1-DDA-60min-TSP-HCD-IT_L_max2ul'),(48,'STD-L1-DDA-60min-TSP-HCD-IT_L_max5ul'),(49,'STD-E1-DDA-60min-TSP-HCD-IT_L_max2ul'),(50,'STD-E2-DDA-60min-TSP-HCD-IT_L_max2ul'),(51,'STD-E2-DDA-60min-TSP-HCD-IT_L_max2ul'),(52,'STD-L1-DDA-60min-TSP-HCD-CID-OT_histones_max5ul'),(53,'STD-E2-DIA-120min-40X10_max2ul'),(55,'STD-E1-DIA-120min-40X10_max2ul'),(56,'STD-L1-DIA-120min-40X10_max2ul');
+INSERT INTO `method` VALUES (82,'STD-E1-BSA-8min-T3-HCD-IT'),
+(83,'STD-VL-BSA-8min-T3-CID-IT'),
+(84,'STD-VL-QC02-60min-T20-CID-IT'),
+(85,'STD-VL-DDA-60min-T4-CID-IT-HCD-FT-QC4L'),
+(86,'STD-L1-BSA-8min-T3-HCD-IT'),
+(87,'STD-L1-QC02-60min-TSP-HCD-IT_max2ul'),
+(88,'QC4L-Fusion-Lumos'),
+(89,'STD-E1-QC02-60min-TSP-HCD-IT_max2ul'),
+(90,'QC4L-Eclipse'),
+(91,'STD-E2-BSA-8min-T3-HCD-IT'),
+(92,'STD-E2-QC02-60min-TSP-HCD-IT_max2ul'),
+(93,'QC4L-Eclipse2');
 /*!40000 ALTER TABLE `method` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -789,7 +812,7 @@ CREATE TABLE `method_seq` (
 
 LOCK TABLES `method_seq` WRITE;
 /*!40000 ALTER TABLE `method_seq` DISABLE KEYS */;
-INSERT INTO `method_seq` VALUES (69);
+INSERT INTO `method_seq` VALUES (94);
 /*!40000 ALTER TABLE `method_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
