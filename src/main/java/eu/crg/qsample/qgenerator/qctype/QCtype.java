@@ -23,6 +23,9 @@ public class QCtype {
   @NotNull
   private String name;
 
+  @Column(name = "position", length = 20)
+  private String position;
+
   public Long getId() {
     return id;
   }
@@ -39,10 +42,19 @@ public class QCtype {
     this.name = name;
   }
 
+  public String getPosition() {
+    return position;
+  }
+
+  public void setPosition(String position) {
+    this.position = position;
+  }
+
   public QCtype() {}
 
-  public QCtype(Long id, @NotNull String name) {
+  public QCtype(Long id, @NotNull String name, String position) {
     this.id = id;
     this.name = name;
+	this.position = position;
   }
 }

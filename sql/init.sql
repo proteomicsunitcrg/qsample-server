@@ -598,28 +598,28 @@ UNLOCK TABLES;
 -- Table structure for table `injection_conditions_methods`
 --
 
-DROP TABLE IF EXISTS `injection_conditions_methods`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `injection_conditions_methods` (
-  `injection_conditions_id` bigint(20) NOT NULL,
-  `methods_id` bigint(20) NOT NULL,
-  KEY `FKa1d5d4l47f56xcv95swwygj2` (`methods_id`),
-  KEY `FKo6oxj02cd0inf575gem10g2vt` (`injection_conditions_id`),
-  CONSTRAINT `FKa1d5d4l47f56xcv95swwygj2` FOREIGN KEY (`methods_id`) REFERENCES `method` (`id`),
-  CONSTRAINT `FKo6oxj02cd0inf575gem10g2vt` FOREIGN KEY (`injection_conditions_id`) REFERENCES `injection_conditions` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+-- DROP TABLE IF EXISTS `injection_conditions_methods`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `injection_conditions_methods` (
+--   `injection_conditions_id` bigint(20) NOT NULL,
+--   `methods_id` bigint(20) NOT NULL,
+--   KEY `FKa1d5d4l47f56xcv95swwygj2` (`methods_id`),
+--   KEY `FKo6oxj02cd0inf575gem10g2vt` (`injection_conditions_id`),
+--   CONSTRAINT `FKa1d5d4l47f56xcv95swwygj2` FOREIGN KEY (`methods_id`) REFERENCES `method` (`id`),
+--   CONSTRAINT `FKo6oxj02cd0inf575gem10g2vt` FOREIGN KEY (`injection_conditions_id`) REFERENCES `injection_conditions` (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 --
--- Dumping data for table `injection_conditions_methods`
+-- --
+-- -- Dumping data for table `injection_conditions_methods`
+-- --
 --
-
-LOCK TABLES `injection_conditions_methods` WRITE;
-/*!40000 ALTER TABLE `injection_conditions_methods` DISABLE KEYS */;
-INSERT INTO `injection_conditions_methods` VALUES (55,2),(68,13),(68,14),(69,3),(59,19),(59,21),(72,18),(72,20),(89,24),(89,25),(89,26),(89,27),(89,28),(89,29),(90,24),(90,25),(90,26),(90,27),(90,28),(90,29),(74,30),(78,6),(65,5),(93,31),(93,33),(97,40),(97,41),(97,42),(97,44),(97,43),(97,45),(98,34),(98,35),(99,31),(105,46),(110,32),(111,40),(111,41),(111,42),(111,44),(111,43),(111,45),(79,47),(79,48),(52,47),(52,48),(53,2),(53,16),(67,13),(67,16),(96,34),(96,35),(81,19),(81,48),(119,47),(54,15),(54,16),(100,34),(70,13),(56,15),(120,15),(122,34),(121,13),(57,15),(71,13),(101,34),(58,19),(58,21),(58,47),(85,18),(85,20),(85,49),(102,36),(102,37),(102,51),(103,37),(103,36),(73,30),(104,46),(61,52),(60,52),(86,56),(87,55),(106,53),(123,2),(124,3),(125,31),(107,35),(75,14),(62,16),(63,2),(76,3),(108,31),(109,31),(64,2),(77,3),(126,49),(126,18);
-/*!40000 ALTER TABLE `injection_conditions_methods` ENABLE KEYS */;
-UNLOCK TABLES;
+-- LOCK TABLES `injection_conditions_methods` WRITE;
+-- /*!40000 ALTER TABLE `injection_conditions_methods` DISABLE KEYS */;
+-- INSERT INTO `injection_conditions_methods` VALUES (55,2),(68,13),(68,14),(69,3),(59,19),(59,21),(72,18),(72,20),(89,24),(89,25),(89,26),(89,27),(89,28),(89,29),(90,24),(90,25),(90,26),(90,27),(90,28),(90,29),(74,30),(78,6),(65,5),(93,31),(93,33),(97,40),(97,41),(97,42),(97,44),(97,43),(97,45),(98,34),(98,35),(99,31),(105,46),(110,32),(111,40),(111,41),(111,42),(111,44),(111,43),(111,45),(79,47),(79,48),(52,47),(52,48),(53,2),(53,16),(67,13),(67,16),(96,34),(96,35),(81,19),(81,48),(119,47),(54,15),(54,16),(100,34),(70,13),(56,15),(120,15),(122,34),(121,13),(57,15),(71,13),(101,34),(58,19),(58,21),(58,47),(85,18),(85,20),(85,49),(102,36),(102,37),(102,51),(103,37),(103,36),(73,30),(104,46),(61,52),(60,52),(86,56),(87,55),(106,53),(123,2),(124,3),(125,31),(107,35),(75,14),(62,16),(63,2),(76,3),(108,31),(109,31),(64,2),(77,3),(126,49),(126,18);
+-- /*!40000 ALTER TABLE `injection_conditions_methods` ENABLE KEYS */;
+-- UNLOCK TABLES;
 
 --
 -- Table structure for table `injection_conditions_qc`
@@ -1119,13 +1119,15 @@ DROP TABLE IF EXISTS `qctype`;
 CREATE TABLE `qctype` (
   `id` bigint(20) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
+  `position` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `KEYQCname` (`name`)
+  KEY `KEYQCname` (`name`),
+  KEY `KEYQCposition` (`position`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 LOCK TABLES `qctype` WRITE;
-INSERT INTO `qctype` VALUES (1, "QC01"),(2, "QC02"),(3, "QC03"),(4, "QHELA"),(5, "QBSA");
+INSERT INTO `qctype` VALUES (1, "QC01", "1-V1"),(2, "QC02", "1-V2"),(3, "QC03", "1-V3"),(4, "QHELA", "1-V4"),(5, "QBSA", "1-V1");
 UNLOCK TABLES;
 
 --
