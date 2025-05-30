@@ -722,6 +722,8 @@ DROP TABLE IF EXISTS `instrument`;
 CREATE TABLE `instrument` (
   `id` bigint(20) NOT NULL,
   `name` varchar(50) NOT NULL,
+  `path` varchar(255) NULL,
+  `method` varchar(255) NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -732,7 +734,7 @@ CREATE TABLE `instrument` (
 
 LOCK TABLES `instrument` WRITE;
 /*!40000 ALTER TABLE `instrument` DISABLE KEYS */;
-INSERT INTO `instrument` VALUES (1,'Velos'),(2,'Lumos1'),(3,'Eclipse1'),(4,'Eclipse2');
+INSERT INTO `instrument` VALUES (1,'Velos',NULL,NULL),(2,'Lumos1',NULL,NULL),(3,'Eclipse1',NULL,NULL),(4,'Eclipse2',NULL,NULL);
 /*!40000 ALTER TABLE `instrument` ENABLE KEYS */;
 UNLOCK TABLES;
 

@@ -13,37 +13,60 @@ import javax.validation.constraints.NotNull;
 @Table(name = "instrument")
 public class Instrument {
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "instrument_seq")
-    @SequenceGenerator(name = "instrument_seq", sequenceName = "instrument_seq", allocationSize = 1)
-    private Long id;
+  @Id
+  @Column(name = "id")
+  @GeneratedValue(strategy = GenerationType.AUTO, generator = "instrument_seq")
+  @SequenceGenerator(name = "instrument_seq", sequenceName = "instrument_seq", allocationSize = 1)
+  private Long id;
 
-    @Column(name = "name", length = 50)
-    @NotNull
-    private String name;
+  @Column(name = "name", length = 50)
+  @NotNull
+  private String name;
 
-    public Long getId() {
-        return id;
-    }
+  @Column(name = "path", length = 255)
+  private String path;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  @Column(name = "method", length = 255)
+  private String method;
 
-    public String getName() {
-        return name;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public Instrument() {
-    }
+  public String getName() {
+    return name;
+  }
 
-    public Instrument(Long id, @NotNull String name) {
-        this.id = id;
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getPath() {
+    return path;
+  }
+
+  public void setPath(String path) {
+    this.path = path;
+  }
+
+  public String getMethod() {
+    return method;
+  }
+
+  public void setMethod(String method) {
+    this.method = method;
+  }
+
+  public Instrument() {}
+
+  public Instrument(Long id, @NotNull String name, String path, String method) {
+    this.id = id;
+    this.name = name;
+    this.path = path;
+    this.method = method;
+  }
 }
