@@ -23,7 +23,7 @@ public class QGeneratorService {
 
   @Autowired MethodRepository methodRepo;
 
-  public List<Instrument> getInstruentsByAppName(String appName) {
+  public List<Instrument> getInstrumentsByAppName(String appName) {
     List<Instrument> instruments = new ArrayList<>();
     Optional<List<InjectionConditions>> injCondOpt =
         injCondRepository.findByApplicationName(appName);

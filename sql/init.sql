@@ -706,12 +706,6 @@ INSERT INTO `injection_conditions_seq` VALUES (127);
 /*!40000 ALTER TABLE `injection_conditions_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
-
-LOCK TABLES `injection_conditionsqc` WRITE;
-/*!40000 ALTER TABLE `injection_conditionsqc` DISABLE KEYS */;
-/*!40000 ALTER TABLE `injection_conditionsqc` ENABLE KEYS */;
-UNLOCK TABLES;
-
 --
 -- Table structure for table `instrument`
 --
