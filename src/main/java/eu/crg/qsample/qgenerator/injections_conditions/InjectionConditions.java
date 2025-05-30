@@ -17,15 +17,15 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "injectionConditions")
+@Table(name = "injection_conditions")
 public class InjectionConditions {
 
   @Id
   @Column(name = "id")
-  @GeneratedValue(strategy = GenerationType.AUTO, generator = "injectionConditions_seq")
+  @GeneratedValue(strategy = GenerationType.AUTO, generator = "injection_conditions_seq")
   @SequenceGenerator(
-      name = "injectionConditions_seq",
-      sequenceName = "injectionConditions_seq",
+      name = "injection_conditions_seq",
+      sequenceName = "injection_conditions_seq",
       allocationSize = 1)
   private Long id;
 

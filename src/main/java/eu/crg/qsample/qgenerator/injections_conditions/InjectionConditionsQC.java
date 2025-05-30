@@ -20,10 +20,10 @@ public class InjectionConditionsQC {
 
   @Id
   @Column(name = "id")
-  @GeneratedValue(strategy = GenerationType.AUTO, generator = "injectionConditions_qc_seq")
+  @GeneratedValue(strategy = GenerationType.AUTO, generator = "injection_conditions_qc_seq")
   @SequenceGenerator(
-      name = "injectionConditions_qc_seq",
-      sequenceName = "injectionConditions_qc_seq",
+      name = "injection_conditions_qc_seq",
+      sequenceName = "injection_conditions_qc_seq",
       allocationSize = 1)
   private Long id;
 
