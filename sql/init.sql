@@ -728,7 +728,7 @@ CREATE TABLE `instrument` (
 
 LOCK TABLES `instrument` WRITE;
 /*!40000 ALTER TABLE `instrument` DISABLE KEYS */;
-INSERT INTO `instrument` VALUES (1,'Velos',NULL,NULL),(2,'Lumos1',NULL,NULL),(3,'Eclipse1',NULL,NULL),(4,'Eclipse2',NULL,NULL);
+INSERT INTO `instrument` VALUES (1,'Velos','C:\\Xcalibur\\Data','C:\\Xcalibur\\methods\\current\\'),(2,'Lumos1','C:\\Xcalibur\\Data','C:\\Xcalibur\\methods\\current\\'),(3,'Eclipse1','C:\\Xcalibur\\Data','C:\\Xcalibur\\methods\\current\\'),(4,'Eclipse2','C:\\Xcalibur\\Data','C:\\Xcalibur\\methods\\current\\');
 /*!40000 ALTER TABLE `instrument` ENABLE KEYS */;
 UNLOCK TABLES;
 
