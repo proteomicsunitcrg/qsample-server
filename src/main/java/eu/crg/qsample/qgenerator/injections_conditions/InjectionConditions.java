@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -22,7 +21,7 @@ public class InjectionConditions {
 
   @Id
   @Column(name = "id")
-  @GeneratedValue(strategy = GenerationType.AUTO, generator = "injection_conditions_seq")
+  @GeneratedValue(strategy = GenerationType.AUTO, generator = "injectionConditions_seq")
   @SequenceGenerator(
       name = "injection_conditions_seq",
       sequenceName = "injection_conditions_seq",
@@ -37,9 +36,9 @@ public class InjectionConditions {
   @JoinColumn(name = "application_id", referencedColumnName = "id")
   private Application application;
 
-  @ManyToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "method", referencedColumnName = "id")
-  List<Method> methods;
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "method_id", referencedColumnName = "id")
+  private Method method;
 
   @Column(name = "volume")
   private Float volume;
