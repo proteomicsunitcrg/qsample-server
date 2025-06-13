@@ -1,5 +1,6 @@
 package eu.crg.qsample.qgenerator;
 
+import eu.crg.qsample.qgenerator.application.Application;
 import eu.crg.qsample.qgenerator.application.ApplicationRepository;
 // import eu.crg.qsample.qgenerator.injections_conditions.InjectionConditions;
 import eu.crg.qsample.qgenerator.instrument.Instrument;
@@ -23,13 +24,18 @@ public class QGeneratorService {
 
   public List<Instrument> getInstrumentsByAppName(String appName) {
     List<Instrument> instruments = new ArrayList<>();
-    // Optional<List<InjectionConditions>> injCondOpt =
-    //     injCondRepository.findByApplicationName(appName);
-    // if (injCondOpt.isPresent()) {
-    //   for (InjectionConditions injCond : injCondOpt.get()) {
-    //     instruments.add(injCond.getInstrument());
-    //   }
-    // }
+
+    Application application = appRepo.findOneByName(appName);
+    Long applicationId = application.getId();
+
+      // Fetch instrument IDs associated with the application ID
+      // List<Long> instrumentIds =
+      //     applicationInstrumentsRepository.findInstrumentIdsByApplicationId(applicationId);
+      //
+      // // Fetch Instrument objects using the instrument IDs
+      // instruments = instrumentRepository.findByIds(instrumentIds);
+    }
+
     return instruments;
   }
 
