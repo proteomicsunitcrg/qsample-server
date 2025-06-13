@@ -613,44 +613,6 @@ CREATE TABLE `injection_conditions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `injection_conditions`
---
-
--- LOCK TABLES `injection_conditions` WRITE;
--- /*!40000 ALTER TABLE `injection_conditions` DISABLE KEYS */;
--- INSERT INTO `injection_conditions` VALUES (52,4.5,4,2),(53,4.5,5,2),(54,4.5,6,2),(55,2,7,2),(56,1,8,2),(57,1,10,2),(58,1,11,2),(59,4.5,12,2),(60,1,13,2),(61,4.5,14,2),(62,4.5,17,2),(63,1,18,2),(64,2,19,2),(65,3,20,2),(67,4.5,5,3),(68,4.5,6,3),(69,2,7,3),(70,1,8,3),(71,1,10,3),(72,4.5,12,3),(73,1,13,3),(74,4.5,14,3),(75,4.5,17,3),(76,1,18,3),(77,2,19,3),(78,3,20,3),(79,1,3,2),(81,4.5,1,2),(85,1,11,3),(86,1,15,2),(87,1,15,3),(89,2,23,3),(90,2,24,3),(93,4.5,1,4),(96,4.5,5,4),(97,2,23,4),(98,4.5,6,4),(99,2,7,4),(100,1,8,4),(101,1,10,4),(102,1,11,4),(103,4.5,12,4),(104,1,13,4),(105,4.5,14,4),(106,1,15,4),(107,4.5,17,4),(108,1,18,4),(109,2,19,4),(110,3,20,4),(111,2,24,4),(114,NULL,3,1),(115,NULL,5,1),(116,NULL,6,1),(117,NULL,24,1),(118,NULL,1,3),(119,1,2,2),(120,1,9,2),(121,1,9,3),(122,1,9,4),(123,1,16,2),(124,1,16,3),(125,1,16,4),(126,1,3,3);
--- /*!40000 ALTER TABLE `injection_conditions` ENABLE KEYS */;
--- UNLOCK TABLES;
-
---
--- Table structure for table `injection_conditions_methods`
---
-
--- DROP TABLE IF EXISTS `injection_conditions_methods`;
--- /*!40101 SET @saved_cs_client     = @@character_set_client */;
--- /*!50503 SET character_set_client = utf8mb4 */;
--- CREATE TABLE `injection_conditions_methods` (
---   `injection_conditions_id` bigint(20) NOT NULL,
---   `methods_id` bigint(20) NOT NULL,
---   KEY `FKa1d5d4l47f56xcv95swwygj2` (`methods_id`),
---   KEY `FKo6oxj02cd0inf575gem10g2vt` (`injection_conditions_id`),
---   CONSTRAINT `FKa1d5d4l47f56xcv95swwygj2` FOREIGN KEY (`methods_id`) REFERENCES `method` (`id`),
---   CONSTRAINT `FKo6oxj02cd0inf575gem10g2vt` FOREIGN KEY (`injection_conditions_id`) REFERENCES `injection_conditions` (`id`)
--- ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
--- /*!40101 SET character_set_client = @saved_cs_client */;
---
--- --
--- -- Dumping data for table `injection_conditions_methods`
--- --
---
--- LOCK TABLES `injection_conditions_methods` WRITE;
--- /*!40000 ALTER TABLE `injection_conditions_methods` DISABLE KEYS */;
--- INSERT INTO `injection_conditions_methods` VALUES (55,2),(68,13),(68,14),(69,3),(59,19),(59,21),(72,18),(72,20),(89,24),(89,25),(89,26),(89,27),(89,28),(89,29),(90,24),(90,25),(90,26),(90,27),(90,28),(90,29),(74,30),(78,6),(65,5),(93,31),(93,33),(97,40),(97,41),(97,42),(97,44),(97,43),(97,45),(98,34),(98,35),(99,31),(105,46),(110,32),(111,40),(111,41),(111,42),(111,44),(111,43),(111,45),(79,47),(79,48),(52,47),(52,48),(53,2),(53,16),(67,13),(67,16),(96,34),(96,35),(81,19),(81,48),(119,47),(54,15),(54,16),(100,34),(70,13),(56,15),(120,15),(122,34),(121,13),(57,15),(71,13),(101,34),(58,19),(58,21),(58,47),(85,18),(85,20),(85,49),(102,36),(102,37),(102,51),(103,37),(103,36),(73,30),(104,46),(61,52),(60,52),(86,56),(87,55),(106,53),(123,2),(124,3),(125,31),(107,35),(75,14),(62,16),(63,2),(76,3),(108,31),(109,31),(64,2),(77,3),(126,49),(126,18);
--- /*!40000 ALTER TABLE `injection_conditions_methods` ENABLE KEYS */;
--- UNLOCK TABLES;
-
---
 -- Table structure for table `injection_conditions_qc`
 --
 
@@ -923,6 +885,11 @@ CREATE TABLE `method` (
 LOCK TABLES `method` WRITE;
 /*!40000 ALTER TABLE `method` DISABLE KEYS */;
 INSERT INTO `method` VALUES (2,'STD-L1-DDA-90min-TSP-HCD-IT_H_max2ul'),(3,'STD-E1-DDA-90min-TSP-HCD-IT_H_max2ul'),(5,'STD-L1-DDA-60min-TSP-CID-OT-MS2-MS3-crosslink_max5ul'),(6,'STD-E1-DDA-60min-TSP-CID-OT-MS2-MS3-crosslink_max5ul'),(8,'STD-L1-DDA-60min-TSP-HCD-IT_max2ul'),(9,'STD-L1-DDA-90min-TSP-HCD-IT_H_max5ul'),(10,'STD-E1-DDA-90min-TSP-HCD-IT_H_max5ul'),(13,'STD-E1-DDA-90min-TSP-HCD-IT_L_max2ul'),(14,'STD-E1-DDA-90min-TSP-HCD-IT_L_max5ul'),(15,'STD-L1-DDA-90min-TSP-HCD-IT_L_max2ul'),(16,'STD-L1-DDA-90min-TSP-HCD-IT_L_max5ul'),(18,'STD-E1-DDA-60min-TSP-HCD-IT_L_max5ul'),(19,'STD-L1-DDA-60min-TSP-HCD-IT_L_max5ul'),(20,'STD-E1-DDA-60min-TSP-HCD-ETD-OT_max5ul'),(21,'STD-L1-DDA-60min-TSP-HCD-ETD-OT_max5ul'),(24,'STD-E1-DDA-90min-TMT-RTS-MS3_max2ul_humanDB'),(25,'STD-E1-DDA-90min-TMT-RTS-MS3_max5ul_humanDB'),(26,'STD-E1-DDA-90min-TMT-RTS-MS3_max2ul_mouseDB'),(27,'STD-E1-DDA-90min-TMT-RTS-MS3_max2ul_phrogDB'),(28,'STD-E1-DDA-90min-TMT-RTS-MS3_max5ul_phrogDB'),(29,'STD-E1-DDA-90min-TMT-RTS-MS3_max2ul_capsaspora'),(30,'STD-E1-DDA-60min-TSP-HCD-CID-OT_histones_max5ul'),(31,'STD-E2-DDA-90min-TSP-HCD-IT_H_max2ul'),(32,'STD-E2-DDA-60min-TSP-CID-OT-MS2-MS3-crosslink_max5ul'),(33,'STD-E2-DDA-90min-TSP-HCD-IT_H_max5ul'),(34,'STD-E2-DDA-90min-TSP-HCD-IT_L_max2ul'),(35,'STD-E2-DDA-90min-TSP-HCD-IT_L_max5ul'),(36,'STD-E2-DDA-60min-TSP-HCD-IT_L_max5ul'),(37,'STD-E2-DDA-60min-TSP-HCD-ETD-OT_max5ul'),(40,'STD-E2-DDA-90min-TMT-RTS-MS3_max2ul_humanDB'),(41,'STD-E2-DDA-90min-TMT-RTS-MS3_max5ul_humanDB'),(42,'STD-E2-DDA-90min-TMT-RTS-MS3_max2ul_mouseDB'),(43,'STD-E2-DDA-90min-TMT-RTS-MS3_max2ul_phrogDB'),(44,'STD-E2-DDA-90min-TMT-RTS-MS3_max5ul_phrogDB'),(45,'STD-E2-DDA-90min-TMT-RTS-MS3_max2ul_capsaspora'),(46,'STD-E2-DDA-60min-TSP-HCD-CID-OT_histones_max5ul'),(47,'STD-L1-DDA-60min-TSP-HCD-IT_L_max2ul'),(48,'STD-L1-DDA-60min-TSP-HCD-IT_L_max5ul'),(49,'STD-E1-DDA-60min-TSP-HCD-IT_L_max2ul'),(50,'STD-E2-DDA-60min-TSP-HCD-IT_L_max2ul'),(51,'STD-E2-DDA-60min-TSP-HCD-IT_L_max2ul'),(52,'STD-L1-DDA-60min-TSP-HCD-CID-OT_histones_max5ul'),(53,'STD-E2-DIA-120min-40X10_max2ul'),(55,'STD-E1-DIA-120min-40X10_max2ul'),(56,'STD-L1-DIA-120min-40X10_max2ul');
+-- Temporary handling of methods
+INSERT INTO `method` VALUES (25, NULL), (26, NULL), (27, NULL), (28, NULL), (29, NULL), (30, NULL);
+INSERT INTO `method` VALUES (41, NULL), (42, NULL), (43, NULL), (44, NULL), (45, NULL), (46, NULL);
+INSERT INTO `method` VALUES (52, NULL), (56, NULL);
+-- Other methods
 INSERT INTO `method` VALUES (82,'STD-E1-BSA-8min-T3-HCD-IT'),
 (83,'STD-VL-BSA-8min-T3-CID-IT'),
 (84,'STD-VL-QC02-60min-T20-CID-IT'),

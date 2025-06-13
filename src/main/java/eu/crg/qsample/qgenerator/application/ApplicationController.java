@@ -1,7 +1,6 @@
 package eu.crg.qsample.qgenerator.application;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,45 +11,41 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import eu.crg.qsample.qgenerator.injections_conditions.InjectionConditions;
-import eu.crg.qsample.qgenerator.instrument.Instrument;
+// import eu.crg.qsample.qgenerator.injections_conditions.InjectionConditions;
 
 @RestController
 @RequestMapping("/api/application")
 public class ApplicationController {
 
+  @Autowired ApplicationService applicationService;
 
-    @Autowired
-    ApplicationService applicationService;
+  @GetMapping
+  @PreAuthorize("hasRole('INTERNAL')")
+  public List<Application> getAll() {
+    return applicationService.getAll();
+  }
 
-    @GetMapping
-    @PreAuthorize("hasRole('INTERNAL')")
-    public List<Application> getAll() {
-        return applicationService.getAll();
-    }
+  @GetMapping("/{id}")
+  @PreAuthorize("hasRole('INTERNAL')")
+  public Application getById(@PathVariable Long id) {
+    return applicationService.getById(id);
+  }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasRole('INTERNAL')")
-    public Application getById(@PathVariable Long id) {
-        return applicationService.getById(id);
-    }
+  @GetMapping("name/{name}")
+  @PreAuthorize("hasRole('USER')")
+  public Application getByName(@PathVariable String name) {
+    return applicationService.getByName(name);
+  }
 
-    @GetMapping("name/{name}")
-    @PreAuthorize("hasRole('USER')")
-    public Application getByName(@PathVariable String name) {
-        return applicationService.getByName(name);
-    }
+  @PostMapping
+  @PreAuthorize("hasRole('MANAGER')")
+  public Application save(@RequestBody Application instrument) {
+    return applicationService.save(instrument);
+  }
 
-    @PostMapping
-    @PreAuthorize("hasRole('MANAGER')")
-    public Application save(@RequestBody Application instrument) {
-        return applicationService.save(instrument);
-    }
-
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('MANAGER')")
-    public boolean delete(@PathVariable Long id) {
-        return applicationService.delete(id);
-    }
-
+  @DeleteMapping("/{id}")
+  @PreAuthorize("hasRole('MANAGER')")
+  public boolean delete(@PathVariable Long id) {
+    return applicationService.delete(id);
+  }
 }
