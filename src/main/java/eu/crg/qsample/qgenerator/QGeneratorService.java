@@ -3,10 +3,9 @@ package eu.crg.qsample.qgenerator;
 import eu.crg.qsample.qgenerator.application.Application;
 import eu.crg.qsample.qgenerator.application.ApplicationRepository;
 // import eu.crg.qsample.qgenerator.injections_conditions.InjectionConditions;
-import eu.crg.qsample.qgenerator.instrument.Instrument;
+import eu.crg.qsample.qgenerator.application.instruments.ApplicationInstrumentsRepository;
 import eu.crg.qsample.qgenerator.instrument.InstrumentRepository;
 import eu.crg.qsample.qgenerator.method.MethodRepository;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,21 +21,23 @@ public class QGeneratorService {
 
   @Autowired MethodRepository methodRepo;
 
-  public List<Instrument> getInstrumentsByAppName(String appName) {
-    List<Instrument> instruments = new ArrayList<>();
+  @Autowired ApplicationInstrumentsRepository appInstrumentsRepo;
+
+  public List<Long> getInstrumentsByAppName(String appName) {
+    // List<Instrument> instruments = new ArrayList<>();
 
     Application application = appRepo.findOneByName(appName);
     Long applicationId = application.getId();
 
-      // Fetch instrument IDs associated with the application ID
-      // List<Long> instrumentIds =
-      //     applicationInstrumentsRepository.findInstrumentIdsByApplicationId(applicationId);
-      //
-      // // Fetch Instrument objects using the instrument IDs
-      // instruments = instrumentRepository.findByIds(instrumentIds);
-    }
+    // Fetch instrument IDs associated with the application ID
+    List<Long> instrumentIds = appInstrumentsRepo.findInstrumentIdsByApplicationId(applicationId);
 
-    return instruments;
+    // Fetch Instrument objects using the instrument IDs
+    // if (!instrumentIds.isEmpty()) {
+    //   instruments = instrumentRepo.findByIds(instrumentIds);
+    // }
+
+    return instrumentIds;
   }
 
   // public InjectionConditions getMethodsByAppIdAndInstrumentId(Long appId, Long instrumentId) {
