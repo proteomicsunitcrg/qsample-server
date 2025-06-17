@@ -106,6 +106,7 @@ DROP TABLE IF EXISTS `application_instruments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `application_instruments` (
+  `id` bigint(20) NOT NULL,
   `application_id` bigint(20) NOT NULL,
   `instrument_id` bigint(20) NOT NULL,
   KEY `K_application` (`application_id`),
@@ -113,6 +114,7 @@ CREATE TABLE `application_instruments` (
   CONSTRAINT `FK_application` FOREIGN KEY (`application_id`) REFERENCES `application` (`id`),
   CONSTRAINT `FK_instrument` FOREIGN KEY (`instrument_id`) REFERENCES `instrument` (`id`),
   CONSTRAINT `U_app_instruments` UNIQUE (`application_id`, `instrument_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -122,10 +124,31 @@ CREATE TABLE `application_instruments` (
 --
 LOCK TABLES `application_instruments` WRITE;
 /*!40000 ALTER TABLE `application_instruments` DISABLE KEYS */;
-INSERT INTO `application_instruments` VALUES (4,2), (5,2), (6,2), (7,2), (8,2), (10,2), (11,2), (12,2), (13,2), (14,2), (17,2), (18,2), (19,2), (20,2), (5,3), (6,3), (7,3), (8,3), (10,3), (12,3), (13,3), (14,3), (17,3), (18,3), (19,3), (20,3), (3,2), (1,2), (11,3), (15,3), (23,3), (24,3), (1,4), (5,4), (23,4), (6,4), (7,4), (8,4), (10,4), (11,4), (12,4), (13,4), (14,4), (15,4), (17,4), (18,4), (19,4), (20,4), (24,4), (3,1), (5,1), (6,1), (24,1), (1,3), (2,2), (9,2), (9,3), (9,4), (16,2), (16,3), (16,4), (3,3), (15,2), (22,3), (22,4), (22,2), (21,3), (21,4), (21,2), (25,3), (25,4), (27,4), (28,3), (28,4), (26,3);
+INSERT INTO `application_instruments` VALUES (1,4,2), (2,5,2), (3,6,2), (4,7,2), (5,8,2), (6,10,2), (7,11,2), (8,12,2), (9,13,2), (10,14,2), (11,17,2), (12,18,2), (13,19,2), (14,20,2), (15,5,3), (16,6,3), (17,7,3), (18,8,3), (19,10,3), (20,12,3), (21,13,3), (22,14,3), (23,17,3), (24,18,3), (25,19,3), (26,20,3), (27,3,2), (28,1,2), (29,11,3), (30,15,3), (31,23,3), (32,24,3), (33,1,4), (34,5,4), (35,23,4), (36,6,4), (37,7,4), (38,8,4), (39,10,4), (40,11,4), (41,12,4), (42,13,4), (43,14,4), (44,15,4), (45,17,4), (46,18,4), (47,19,4), (48,20,4), (49,24,4), (50,3,1), (51,5,1), (52,6,1), (53,24,1), (54,1,3), (55,2,2), (56,9,2), (57,9,3), (58,9,4), (59,16,2), (60,16,3), (61,16,4), (62,3,3), (63,15,2), (64,22,3), (65,22,4), (66,22,2), (67,21,3), (68,21,4), (69,21,2), (70,25,3), (71,25,4), (72,27,4), (73,28,3), (74,28,4), (75,26,3);
 /*!40000 ALTER TABLE `application_instruments` ENABLE KEYS */;
 UNLOCK TABLES;
 
+--
+-- Table structure for table `application_instruments_seq`
+--
+
+DROP TABLE IF EXISTS `application_instruments_seq`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `application_instruments_seq` (
+  `next_val` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `application_instruments_seq`
+--
+
+LOCK TABLES `application_instruments_seq` WRITE;
+/*!40000 ALTER TABLE `application_instruments_seq` DISABLE KEYS */;
+INSERT INTO `application_instruments_seq` VALUES (76);
+/*!40000 ALTER TABLE `application_instruments_seq` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `application_seq`
