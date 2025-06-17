@@ -113,7 +113,7 @@ CREATE TABLE `application_instruments` (
   KEY `K_instrument` (`instrument_id`),
   CONSTRAINT `FK_application` FOREIGN KEY (`application_id`) REFERENCES `application` (`id`),
   CONSTRAINT `FK_instrument` FOREIGN KEY (`instrument_id`) REFERENCES `instrument` (`id`),
-  CONSTRAINT `U_app_instruments` UNIQUE (`application_id`, `instrument_id`)
+  CONSTRAINT `U_app_instruments` UNIQUE (`application_id`, `instrument_id`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;

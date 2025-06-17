@@ -26,7 +26,7 @@ public class QGeneratorController {
 
   @GetMapping("/available/{appName}")
   @PreAuthorize("hasRole('INTERNAL')")
-  public List<Long> getInstrumentsByAppName(@PathVariable String appName) {
+  public List<Instrument> getInstrumentsByAppName(@PathVariable String appName) {
     return qGeneratorService.getInstrumentsByAppName(appName);
   }
 

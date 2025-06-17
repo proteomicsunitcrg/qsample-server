@@ -27,14 +27,17 @@ public class InjectionConditionsQC {
       allocationSize = 1)
   private Long id;
 
+  // TODO:: Need to check these cascades here
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "instrument_id", referencedColumnName = "id")
   private Instrument instrument;
 
+  // TODO:: Need to check these cascades here
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "qctype_id", referencedColumnName = "id")
   private QCtype qctype;
 
+  // TODO:: Need to check these cascades here
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "method_id", referencedColumnName = "id")
   private Method method;
