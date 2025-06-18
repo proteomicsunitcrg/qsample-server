@@ -3,8 +3,9 @@ package eu.crg.qsample.qgenerator;
 import eu.crg.qsample.qgenerator.application.Application;
 import eu.crg.qsample.qgenerator.application.ApplicationRepository;
 import eu.crg.qsample.qgenerator.application.instruments.ApplicationInstrumentsRepository;
+import eu.crg.qsample.qgenerator.injections_conditions.InjectionConditionsQC;
+import eu.crg.qsample.qgenerator.injections_conditions.InjectionConditionsQCRepository;
 import eu.crg.qsample.qgenerator.instrument.Instrument;
-// import eu.crg.qsample.qgenerator.injections_conditions.InjectionConditions;
 import eu.crg.qsample.qgenerator.instrument.InstrumentRepository;
 import eu.crg.qsample.qgenerator.method.MethodRepository;
 import java.util.List;
@@ -24,32 +25,23 @@ public class QGeneratorService {
 
   @Autowired ApplicationInstrumentsRepository appInstrumentsRepo;
 
+  @Autowired InjectionConditionsQCRepository injCondRepository;
+
   public List<Instrument> getInstrumentsByAppName(String appName) {
-    // List<Instrument> instruments = new ArrayList<>();
 
     Application application = appRepo.findOneByName(appName);
-    // Long applicationId = application.getId();
 
-    // Fetch instrument IDs associated with the application ID
+    // Fetch instrument IDs associated with the application
     List<Instrument> instruments = appInstrumentsRepo.findInstrumentsByApplication(application);
-
-    // Fetch Instrument objects using the instrument IDs
-    // if (!instrumentIds.isEmpty()) {
-    //   instruments = instrumentRepo.findByIds(instrumentIds);
-    // }
 
     return instruments;
   }
 
-  // public InjectionConditions getMethodsByAppIdAndInstrumentId(Long appId, Long instrumentId) {
-  // Optional<InjectionConditions> injCondOpt =
-  //     injCondRepository.findByApplicationIdAndInstrumentId(appId, instrumentId);
-  // if (injCondOpt.isPresent()) {
-  //   return injCondOpt.get();
-  // } else {
-  //   return null;
-  // }
-  // }
+  public List<InjectionConditionsQC> getMethodsByInstrumentId(Long instrumentId) {
+    List<InjectionConditionsQC> injCondsQC = injCondRepository.findByInstrumentId(instrumentId);
+
+    return injCondsQC;
+  }
 
   // public InjectionConditions saveInjectionConditions(InjectionConditions condition) {
   //   List<Method> methods = new ArrayList<>();

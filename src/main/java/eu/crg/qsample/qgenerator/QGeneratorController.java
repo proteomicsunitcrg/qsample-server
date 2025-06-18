@@ -2,7 +2,7 @@ package eu.crg.qsample.qgenerator;
 
 import eu.crg.qsample.exceptions.NotFoundException;
 import eu.crg.qsample.qgenerator.application.ApplicationRepository;
-// import eu.crg.qsample.qgenerator.injections_conditions.InjectionConditions;
+import eu.crg.qsample.qgenerator.injections_conditions.InjectionConditionsQC;
 import eu.crg.qsample.qgenerator.instrument.Instrument;
 import java.io.IOException;
 import java.util.List;
@@ -30,16 +30,13 @@ public class QGeneratorController {
     return qGeneratorService.getInstrumentsByAppName(appName);
   }
 
-  // @GetMapping("/getByAppNameAndInstrumentId/{appName}/{instrumentId}")
-  // @PreAuthorize("hasRole('INTERNAL')")
-  // public InjectionConditions getMethodsByAppNameAndInstrumentId(
-  //     @PathVariable String appName, @PathVariable Long instrumentId) {
-  //
-  //   Application app = appRepo.findOneByName(appName);
-  //   long appId = app.getId();
-  //
-  //   return qGeneratorService.getMethodsByAppIdAndInstrumentId(appId, instrumentId);
-  // }
+  @GetMapping("/getInjectionConditionsByInstrumentId/{instrumentId}")
+  @PreAuthorize("hasRole('INTERNAL')")
+  public List<InjectionConditionsQC> getMethodsByInstrumentId(@PathVariable Long instrumentId) {
+
+    return qGeneratorService.getMethodsByInstrumentId(instrumentId);
+  }
+
   //
   // @PostMapping
   // @PreAuthorize("hasRole('MANAGER')")
