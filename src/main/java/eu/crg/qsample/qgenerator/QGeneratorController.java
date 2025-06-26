@@ -1,6 +1,7 @@
 package eu.crg.qsample.qgenerator;
 
 import eu.crg.qsample.exceptions.NotFoundException;
+import eu.crg.qsample.qgenerator.application.Application;
 import eu.crg.qsample.qgenerator.application.ApplicationRepository;
 import eu.crg.qsample.qgenerator.injections_conditions.InjectionConditionsQC;
 import eu.crg.qsample.qgenerator.instrument.Instrument;
@@ -28,6 +29,12 @@ public class QGeneratorController {
   @PreAuthorize("hasRole('INTERNAL')")
   public List<Instrument> getInstrumentsByAppName(@PathVariable String appName) {
     return qGeneratorService.getInstrumentsByAppName(appName);
+  }
+
+  @GetMapping("/applications/{instrumentId}")
+  @PreAuthorize("hasRole('INTERNAL')")
+  public List<Application> getApplicationsByInstrumentId(@PathVariable long instrumentId) {
+    return qGeneratorService.getApplicationByInstrumentId(instrumentId);
   }
 
   @GetMapping("/getInjectionConditionsByInstrumentId/{instrumentId}")

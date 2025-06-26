@@ -9,6 +9,7 @@ import eu.crg.qsample.qgenerator.instrument.Instrument;
 import eu.crg.qsample.qgenerator.instrument.InstrumentRepository;
 import eu.crg.qsample.qgenerator.method.MethodRepository;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,10 +32,20 @@ public class QGeneratorService {
 
     Application application = appRepo.findOneByName(appName);
 
-    // Fetch instrument IDs associated with the application
+    // Fetch instruments associated with the application
     List<Instrument> instruments = appInstrumentsRepo.findInstrumentsByApplication(application);
 
     return instruments;
+  }
+
+  public List<Application> getApplicationByInstrumentId(long InstrumentId) {
+
+    Optional<Instrument> instrument = instrumentRepo.findById(InstrumentId);
+
+    // Fetch applications associated with the instrument id
+    List<Application> applications = appInstrumentsRepo.findApplicationsByInstrument(instrument);
+
+    return applications;
   }
 
   public List<InjectionConditionsQC> getMethodsByInstrumentId(Long instrumentId) {
