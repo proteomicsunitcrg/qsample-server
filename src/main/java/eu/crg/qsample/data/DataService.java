@@ -278,9 +278,13 @@ public class DataService {
                 }
 
                 Data d = new Data(param.get(), cs.get(), file.get());
-                d.setValue(dataValue.getValue());
-                d.setCalculatedValue(dataValue.getValue());
-                dataRepo.save(d);
+                if (dataValue.getValue() == null || !(dataValue.getValue() instanceof Number)) {
+					throw new DataRetrievalFailureException("Data value is not a number");
+				}
+
+				d.setValue(dataValue.getValue());
+				d.setCalculatedValue(dataValue.getValue());
+				dataRepo.save(d);
             }
 
         }
