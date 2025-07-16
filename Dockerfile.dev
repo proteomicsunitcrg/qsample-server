@@ -1,4 +1,4 @@
-FROM biocorecrg/debian-perlbrew-pyenv3-java:buster as jarserver
+FROM biocorecrg/debian-perlbrew-pyenv3-java:bullseye as jarserver
 
 RUN apt update && apt upgrade -y
 RUN mkdir -p /tmp
@@ -10,13 +10,13 @@ RUN mvn package -DskipTests -f pom.xml
 # Result in target/*jar
 RUN apt clean
 
-FROM biocorecrg/debian-perlbrew-pyenv3-java:buster
+FROM biocorecrg/debian-perlbrew-pyenv3-java:bullseye
 VOLUME /tmp
 RUN mkdir -p /config
 RUN mkdir -p /app
 WORKDIR /app
 COPY --from=jarserver /tmp/target/*jar /app
 # We don't keep version number for making things easier
-RUN mv /app/qsample-*.jar /app/qsample.jar 
+RUN mv /app/qsample-*.jar /app/qsample.jar
 ENTRYPOINT java -jar -Dspring.config.location=file:/config/application.yml -Dspring.profiles.active=prod /app/qsample.jar
 
