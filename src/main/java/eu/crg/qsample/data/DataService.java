@@ -96,7 +96,11 @@ public class DataService {
                         plot.get().getParam().getId());
                 List<Float> res = new ArrayList<>();
                 for (Data d : data) {
-                    res.add(d.getCalculatedValue());
+				    Number value = d.getCalculatedValue();
+					// We only add if number and larger than 0
+					if (value != null && value.doubleValue() > 0) {
+						res.add(value.floatValue());
+					}
                 }
                 double average = getAverage(res);
                 double std = calculateSD(res);
