@@ -1,18 +1,13 @@
-name: Publish Docker image (latest)
+name: Build on Pull Request
 on:
-  workflow_dispatch:
-  push:
-     branches:
-     # Default branches below
-     - master
-     tags:
-      - "v*.*.*"
+  pull_request:
+    branches: [ "master", "main" ]
 jobs:
-  push_to_registries:
+  build_image:
     name: Push Docker image to multiple registries
     runs-on: ubuntu-latest
     permissions:
-      packages: write
+      packages: read
       contents: read
     steps:
       -
@@ -56,7 +51,7 @@ jobs:
         with:
           context: .
           platforms: linux/amd64,linux/arm64
-          push: true
+          push: false
           tags: | 
             ${{ steps.meta.outputs.tags }}
           labels: |
