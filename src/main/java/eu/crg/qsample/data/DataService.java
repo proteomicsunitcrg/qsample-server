@@ -84,6 +84,7 @@ public class DataService {
                 wetlab.get().getId());
         for (WetLabFile wlFile : files) { // TODO impriove this
             List<WetLabFile> triplicats = new ArrayList<>();
+			List<WetLabFile> clean_triplicats = new ArrayList<>();
             triplicats.add(wlFile);
             for (WetLabFile wlFile2 : files) {
                 if (wlFile.getWeek() == wlFile2.getWeek() && wlFile.getYear() == wlFile2.getYear()
@@ -96,7 +97,19 @@ public class DataService {
                         plot.get().getParam().getId());
                 List<Float> res = new ArrayList<>();
                 for (Data d : data) {
-                    res.add(d.getCalculatedValue());
+				    Number value = d.getCalculatedValue();
+
+					Optional<WetLabFile> wetLabFileOpt = fileRepo.findOneByChecksum(d.getFile().getChecksum());
+					if (!wetLabFileOpt.isPresent()) {
+						continue; // TODO: handle error
+					}
+					WetLabFile DataFile = wetLabFileOpt.get();
+
+					// We only add if number and larger than 0
+					if (value != null && value.doubleValue() > 0) {
+						res.add(value.floatValue());
+						clean_triplicats.add(DataFile);
+					}
                 }
                 double average = getAverage(res);
                 double std = calculateSD(res);
@@ -104,7 +117,7 @@ public class DataService {
                     traces.put(cs.getAbbreviated(), generatePlotTraceFromContextSourceWetlab(cs));
                 }
                 traces.get(cs.getAbbreviated()).getPlotTracePoints()
-                        .add(generatePlotTracePointFromDataWetlab(wlFile, average, std, triplicats));
+                        .add(generatePlotTracePointFromDataWetlab(wlFile, average, std, clean_triplicats));
                 order = order + 1;
             }
         }
