@@ -37,7 +37,6 @@ services:
         timeout: 40s
         retries: 20
   app:
-    # image: qsample:latest
     build:
       dockerfile: Dockerfile.dev
       context: .

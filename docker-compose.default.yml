@@ -37,7 +37,7 @@ services:
         timeout: 40s
         retries: 20
   app:
-    # image: qsample:latest
+    # image: ghcr.io/proteomicsunitcrg/qsample-server:latest # Pre-built version
     build:
       context: .
     restart: always
