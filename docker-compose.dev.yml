@@ -35,7 +35,8 @@ services:
         test: ["CMD-SHELL", "mysql -h localhost -u root -p$${MYSQL_ROOT_PASSWORD} $${MYSQL_DATABASE} -e 'SELECT COUNT(*) FROM user limit 1;' || exit 1" ]
         interval: 30s
         timeout: 40s
-        retries: 20
+        start_period: 60s
+        retries: 15
   app:
     build:
       dockerfile: Dockerfile.dev
@@ -53,7 +54,6 @@ services:
         target: /config/application.yml
         read_only: true
       - ./tmp:/tmp
-
     environment:
       QSAMPLE_API_PREFIX: http://localhost:8099/ #Adapt for the final URL to be used
       UID: 1000
@@ -71,6 +71,11 @@ services:
       qsample:
         aliases:
           - qsample
-
+    healthcheck:
+        test: ["CMD-SHELL", "curl -f $${QSAMPLE_API_PREFIX}api/config"]
+        interval: 30s
+        timeout: 10s
+        start_period: 30s
+        retries: 3
 networks:
   qsample:
