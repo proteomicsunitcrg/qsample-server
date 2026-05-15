@@ -30,4 +30,15 @@ public class ChartParameter {
     private String description;
 
     // getters and setters
+    public String getParamKey() {
+        return paramKey;
+    }
+
+    public String getParamValue() {
+        return paramValue;
+    }
+
+    public String getParamType() {
+        return paramType;
+    }
 }
