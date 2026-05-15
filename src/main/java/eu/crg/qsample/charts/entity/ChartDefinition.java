@@ -45,5 +45,83 @@ public class ChartDefinition {
     @OneToMany(mappedBy = "chart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChartPageAssignment> pageAssignments;
 
-    // getters and setters
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getChartType() {
+        return chartType;
+    }
+
+    public String getLibrary() {
+        return library;
+    }
+
+    public String getDataSourceKey() {
+        return dataSourceKey;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public List<ChartParameter> getParameters() {
+        return parameters;
+    }
+
+    public List<ChartPageAssignment> getPageAssignments() {
+        return pageAssignments;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setChartType(String chartType) {
+        this.chartType = chartType;
+    }
+
+    public void setLibrary(String library) {
+        this.library = library;
+    }
+
+    public void setDataSourceKey(String dataSourceKey) {
+        this.dataSourceKey = dataSourceKey;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public void setParameters(List<ChartParameter> parameters) {
+        this.parameters = parameters;
+    }
+
+    public void setPageAssignments(List<ChartPageAssignment> pageAssignments) {
+        this.pageAssignments = pageAssignments;
+    }
 }
