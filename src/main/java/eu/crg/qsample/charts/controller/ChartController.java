@@ -1,6 +1,7 @@
 package eu.crg.qsample.charts.controller;
 
 import eu.crg.qsample.charts.dto.ChartConfigDTO;
+import eu.crg.qsample.charts.dto.ChartDataPointDTO;
 import eu.crg.qsample.charts.dto.ChartDefinitionDTO;
 import eu.crg.qsample.charts.entity.ChartDefinition;
 import eu.crg.qsample.charts.entity.ChartParameter;
@@ -8,6 +9,8 @@ import eu.crg.qsample.charts.repository.ChartDefinitionRepository;
 import eu.crg.qsample.charts.repository.ChartPageAssignmentRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -29,17 +32,14 @@ public class ChartController {
 
     @GetMapping
     public List<ChartDefinitionDTO> getCharts() {
-
-        List<ChartDefinition> charts = chartDefinitionRepository.findByActiveTrue();
-
-        return charts.stream()
+        return chartDefinitionRepository.findByActiveTrue()
+                .stream()
                 .map(this::toDefinitionDTO)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/page/{pageName}")
     public List<ChartConfigDTO> getChartsByPage(@PathVariable String pageName) {
-
         return chartPageAssignmentRepository
                 .findByPageNameAndVisibleTrueOrderByDisplayOrderAsc(pageName)
                 .stream()
@@ -47,6 +47,20 @@ public class ChartController {
                 .filter(chart -> Boolean.TRUE.equals(chart.getActive()))
                 .map(this::toConfigDTO)
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/data/{dataSourceKey}")
+    public List<ChartDataPointDTO> getChartData(@PathVariable String dataSourceKey) {
+
+        if ("request_status".equals(dataSourceKey)) {
+            return Arrays.asList(
+                    new ChartDataPointDTO("Open", 10),
+                    new ChartDataPointDTO("Closed", 20),
+                    new ChartDataPointDTO("Pending", 5)
+            );
+        }
+
+        return Collections.emptyList();
     }
 
     private ChartDefinitionDTO toDefinitionDTO(ChartDefinition chart) {
@@ -78,7 +92,7 @@ public class ChartController {
 
     private Map<String, Object> buildParametersMap(ChartDefinition chart) {
         if (chart.getParameters() == null) {
-            return java.util.Collections.emptyMap();
+            return Collections.emptyMap();
         }
 
         return chart.getParameters()

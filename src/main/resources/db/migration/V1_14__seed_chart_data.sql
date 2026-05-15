@@ -5,7 +5,7 @@ VALUES
   'request_status_chart',
   'Request Status',
   'Request status distribution',
-  'pie',
+  'bar',
   'plotly',
   'request_status',
   TRUE
