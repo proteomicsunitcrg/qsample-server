@@ -1,0 +1,42 @@
+# Docker Compose for LOCAL DEVELOPMENT
+# Uses host MySQL (not containerized)
+# Run with: docker-compose -f docker-compose.local.yml up
+
+services:
+  app:
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
+      args:
+        QSAMPLE_API_PREFIX: http://localhost:8099/
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: ./src/main/resources/application-local.yml
+        target: /config/application.yml
+        read_only: true
+      - ./tmp:/tmp
+    environment:
+      QSAMPLE_API_PREFIX: http://localhost:8099/
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/qsample_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: qsample_user
+      SPRING_DATASOURCE_PASSWORD: qsample_pass_local
+      UID: 1000
+      GID: 1000
+    ports:
+      - 8099:8099
+    networks:
+      - qsample
+    healthcheck:
+        test: ["CMD-SHELL", "curl -f $${QSAMPLE_API_PREFIX}api/config || exit 1"]
+        interval: 30s
+        timeout: 10s
+        start_period: 60s
+        retries: 5
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  qsample:
+    driver: bridge

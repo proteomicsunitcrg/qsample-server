@@ -44,3 +44,6 @@ mysql.agendo/
 tmp/
 sql/agendo.sql
 
+src/main/resources/application-local.yml
+src/main/resources/application-local.yml
+.env
