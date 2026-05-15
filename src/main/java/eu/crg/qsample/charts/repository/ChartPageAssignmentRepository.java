@@ -6,5 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ChartPageAssignmentRepository extends JpaRepository<ChartPageAssignment, Long> {
+
     List<ChartPageAssignment> findByPageNameAndVisibleTrueOrderByDisplayOrder(String pageName);
+
+    List<ChartPageAssignment> findByPageNameAndVisibleTrueOrderByDisplayOrderAsc(String pageName);
 }

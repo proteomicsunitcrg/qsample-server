@@ -27,4 +27,20 @@ public class ChartPageAssignment {
     private Boolean visible = true;
 
     // getters and setters
+
+    public ChartDefinition getChart() {
+            return chart;
+    }
+
+    public String getPageName() {
+        return pageName;
+    }
+
+    public Integer getDisplayOrder() {
+        return displayOrder;
+    }
+
+    public Boolean getVisible() {
+        return visible;
+    }
 }
