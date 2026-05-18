@@ -39,6 +39,9 @@ public class ChartDefinition {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "provider_type")
+    private String providerType;
+
     @OneToMany(mappedBy = "chart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChartParameter> parameters;
 
@@ -123,5 +126,13 @@ public class ChartDefinition {
 
     public void setPageAssignments(List<ChartPageAssignment> pageAssignments) {
         this.pageAssignments = pageAssignments;
+    }
+
+    public String getProviderType() {
+    	return providerType;
+    }
+
+    public void setProviderType(String providerType) {
+    	this.providerType = providerType;
     }
 }

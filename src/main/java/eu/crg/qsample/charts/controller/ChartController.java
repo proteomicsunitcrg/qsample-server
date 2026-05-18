@@ -5,11 +5,11 @@ import eu.crg.qsample.charts.dto.ChartDataPointDTO;
 import eu.crg.qsample.charts.dto.ChartDefinitionDTO;
 import eu.crg.qsample.charts.entity.ChartDefinition;
 import eu.crg.qsample.charts.entity.ChartParameter;
+import eu.crg.qsample.charts.repository.ChartDataRepository;
 import eu.crg.qsample.charts.repository.ChartDefinitionRepository;
 import eu.crg.qsample.charts.repository.ChartPageAssignmentRepository;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -21,13 +21,16 @@ public class ChartController {
 
     private final ChartDefinitionRepository chartDefinitionRepository;
     private final ChartPageAssignmentRepository chartPageAssignmentRepository;
+    private final ChartDataRepository chartDataRepository;
 
     public ChartController(
             ChartDefinitionRepository chartDefinitionRepository,
-            ChartPageAssignmentRepository chartPageAssignmentRepository
+            ChartPageAssignmentRepository chartPageAssignmentRepository,
+            ChartDataRepository chartDataRepository
     ) {
         this.chartDefinitionRepository = chartDefinitionRepository;
         this.chartPageAssignmentRepository = chartPageAssignmentRepository;
+        this.chartDataRepository = chartDataRepository;
     }
 
     @GetMapping
@@ -49,20 +52,42 @@ public class ChartController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/data/{dataSourceKey}")
-    public List<ChartDataPointDTO> getChartData(@PathVariable String dataSourceKey) {
+    @GetMapping("/data/{dataSourceKey}/request/{requestCode}")
+public List<ChartDataPointDTO> getChartDataByRequest(
+        @PathVariable String dataSourceKey,
+        @PathVariable String requestCode) {
 
-        if ("request_status".equals(dataSourceKey)) {
-            return Arrays.asList(
-                    new ChartDataPointDTO("Open", 10),
-                    new ChartDataPointDTO("Closed", 20),
-                    new ChartDataPointDTO("Pending", 5)
-            );
-        }
+    ChartDefinition chart = chartDefinitionRepository
+            .findByDataSourceKey(dataSourceKey)
+            .orElseThrow();
 
-        return Collections.emptyList();
+    List<ChartDataRepository.ChartDataPointProjection> points;
+
+    if ("context_source_group".equals(chart.getProviderType())) {
+
+        points = chartDataRepository
+                .findChartDataByContextSourceGroup(
+                        dataSourceKey,
+                        requestCode
+                );
+
+    } else {
+
+        points = chartDataRepository
+                .findChartDataByPlotApiKeyAndRequestCode(
+                        dataSourceKey,
+                        requestCode
+                );
     }
 
+    return points.stream()
+            .map(point -> new ChartDataPointDTO(
+                    point.getLabel(),
+                    point.getValue()
+            ))
+            .collect(Collectors.toList());
+}
+  
     private ChartDefinitionDTO toDefinitionDTO(ChartDefinition chart) {
         return new ChartDefinitionDTO(
                 chart.getId(),
