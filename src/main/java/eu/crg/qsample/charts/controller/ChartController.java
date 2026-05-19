@@ -14,6 +14,7 @@ import eu.crg.qsample.request.local.RequestRepository;
 import eu.crg.qsample.qgenerator.application.ApplicationConstraint;
 import eu.crg.qsample.qgenerator.application.Application;
 import eu.crg.qsample.qgenerator.application.ApplicationRepository;
+import eu.crg.qsample.charts.dto.ChartSeriesDataPointDTO;
 
 import java.util.Collections;
 import java.util.List;
@@ -121,40 +122,72 @@ public class ChartController {
     }
 
     @GetMapping("/data/{dataSourceKey}/request/{requestCode}")
-public List<ChartDataPointDTO> getChartDataByRequest(
-        @PathVariable String dataSourceKey,
-        @PathVariable String requestCode) {
+    public List<ChartDataPointDTO> getChartDataByRequest(
+            @PathVariable String dataSourceKey,
+            @PathVariable String requestCode,
+            @RequestParam(defaultValue = "filename") String order) {
 
-    ChartDefinition chart = chartDefinitionRepository
-            .findByDataSourceKey(dataSourceKey)
-            .orElseThrow();
+        ChartDefinition chart = chartDefinitionRepository
+                .findByDataSourceKey(dataSourceKey)
+                .orElseThrow();
 
-    List<ChartDataRepository.ChartDataPointProjection> points;
+        List<ChartDataRepository.ChartDataPointProjection> points;
 
-    if ("context_source_group".equals(chart.getProviderType())) {
+        if ("context_source_group".equals(chart.getProviderType())) {
 
-        points = chartDataRepository
-                .findChartDataByContextSourceGroup(
-                        dataSourceKey,
-                        requestCode
-                );
+            points = chartDataRepository
+                    .findChartDataByContextSourceGroup(
+                            dataSourceKey,
+                            requestCode
+                    );
 
-    } else {
+        } else if ("context_source_group_by_file".equals(chart.getProviderType())) {
 
-        points = chartDataRepository
-                .findChartDataByPlotApiKeyAndRequestCode(
-                        dataSourceKey,
-                        requestCode
-                );
+            points = chartDataRepository
+                    .findChartDataByContextSourceGroupByFile(
+                            dataSourceKey,
+                            requestCode,
+                            order
+                    );
+
+        } else {
+
+            points = chartDataRepository
+                    .findChartDataByPlotApiKeyAndRequestCode(
+                            dataSourceKey,
+                            requestCode,
+                            order
+                    );
+        }
+
+        return points.stream()
+                .map(point -> new ChartDataPointDTO(
+                        point.getLabel(),
+                        point.getValue()
+                ))
+                .collect(Collectors.toList());
     }
 
-    return points.stream()
-            .map(point -> new ChartDataPointDTO(
-                    point.getLabel(),
-                    point.getValue()
-            ))
-            .collect(Collectors.toList());
-}
+    @GetMapping("/stacked-data/{dataSourceKey}/request/{requestCode}")
+    public List<ChartSeriesDataPointDTO> getStackedChartDataByRequest(
+            @PathVariable String dataSourceKey,
+            @PathVariable String requestCode,
+            @RequestParam(defaultValue = "date") String order) {
+
+        return chartDataRepository
+                .findStackedChartDataByContextSourceGroup(
+                        dataSourceKey,
+                        requestCode,
+                        order
+                )
+                .stream()
+                .map(point -> new ChartSeriesDataPointDTO(
+                        point.getLabel(),
+                        point.getSeries(),
+                        point.getValue()
+                ))
+                .collect(Collectors.toList());
+    }
 
 private boolean isChartEnabled(
         ChartDefinition chart,
