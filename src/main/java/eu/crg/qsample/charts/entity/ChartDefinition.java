@@ -42,6 +42,9 @@ public class ChartDefinition {
     @Column(name = "provider_type")
     private String providerType;
 
+    @Column(name = "constraint_flag")
+    private String constraintFlag;
+
     @OneToMany(mappedBy = "chart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChartParameter> parameters;
 
@@ -134,5 +137,13 @@ public class ChartDefinition {
 
     public void setProviderType(String providerType) {
     	this.providerType = providerType;
+    }
+
+    public String getConstraintFlag() {
+        return constraintFlag;
+    }
+
+    public void setConstraintFlag(String constraintFlag) {
+        this.constraintFlag = constraintFlag;
     }
 }

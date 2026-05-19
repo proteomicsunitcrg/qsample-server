@@ -9,6 +9,11 @@ import eu.crg.qsample.charts.repository.ChartDataRepository;
 import eu.crg.qsample.charts.repository.ChartDefinitionRepository;
 import eu.crg.qsample.charts.repository.ChartPageAssignmentRepository;
 import org.springframework.web.bind.annotation.*;
+import eu.crg.qsample.request.local.RequestLocal;
+import eu.crg.qsample.request.local.RequestRepository;
+import eu.crg.qsample.qgenerator.application.ApplicationConstraint;
+import eu.crg.qsample.qgenerator.application.Application;
+import eu.crg.qsample.qgenerator.application.ApplicationRepository;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,15 +27,21 @@ public class ChartController {
     private final ChartDefinitionRepository chartDefinitionRepository;
     private final ChartPageAssignmentRepository chartPageAssignmentRepository;
     private final ChartDataRepository chartDataRepository;
+    private final RequestRepository requestRepository;
+    private final ApplicationRepository applicationRepository;
 
     public ChartController(
             ChartDefinitionRepository chartDefinitionRepository,
             ChartPageAssignmentRepository chartPageAssignmentRepository,
-            ChartDataRepository chartDataRepository
+            ChartDataRepository chartDataRepository,
+            RequestRepository requestRepository,
+            ApplicationRepository applicationRepository
     ) {
         this.chartDefinitionRepository = chartDefinitionRepository;
         this.chartPageAssignmentRepository = chartPageAssignmentRepository;
         this.chartDataRepository = chartDataRepository;
+        this.requestRepository = requestRepository;
+        this.applicationRepository = applicationRepository;
     }
 
     @GetMapping
@@ -40,7 +51,7 @@ public class ChartController {
                 .map(this::toDefinitionDTO)
                 .collect(Collectors.toList());
     }
-
+    
     @GetMapping("/page/{pageName}")
     public List<ChartConfigDTO> getChartsByPage(@PathVariable String pageName) {
         return chartPageAssignmentRepository
@@ -48,6 +59,63 @@ public class ChartController {
                 .stream()
                 .map(assignment -> assignment.getChart())
                 .filter(chart -> Boolean.TRUE.equals(chart.getActive()))
+                .map(this::toConfigDTO)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/page/{pageName}/request/{requestCode}")
+    public List<ChartConfigDTO> getChartsByPageAndRequest(
+        @PathVariable String pageName,
+        @PathVariable String requestCode) {
+
+        RequestLocal request = requestRepository
+                .findByRequestCode(requestCode)
+                .orElse(null);
+
+        if (request == null ||
+            request.getApplication() == null ||
+            request.getApplication().getApplicationConstraint() == null) {
+
+            return getChartsByPage(pageName);
+        }
+
+        ApplicationConstraint constraint =
+                request.getApplication().getApplicationConstraint();
+
+        return chartPageAssignmentRepository
+                .findByPageNameAndVisibleTrueOrderByDisplayOrderAsc(pageName)
+                .stream()
+                .map(assignment -> assignment.getChart())
+                .filter(chart -> Boolean.TRUE.equals(chart.getActive()))
+                .filter(chart -> isChartEnabled(chart, constraint))
+                .map(this::toConfigDTO)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/page/{pageName}/application/{applicationId}")
+    public List<ChartConfigDTO> getChartsByPageAndApplication(
+            @PathVariable String pageName,
+            @PathVariable Long applicationId) {
+
+        Application application = applicationRepository
+                .findById(applicationId)
+                .orElse(null);
+
+        if (application == null ||
+            application.getApplicationConstraint() == null) {
+
+            return getChartsByPage(pageName);
+        }
+
+        ApplicationConstraint constraint =
+                application.getApplicationConstraint();
+
+        return chartPageAssignmentRepository
+                .findByPageNameAndVisibleTrueOrderByDisplayOrderAsc(pageName)
+                .stream()
+                .map(assignment -> assignment.getChart())
+                .filter(chart -> Boolean.TRUE.equals(chart.getActive()))
+                .filter(chart -> isChartEnabled(chart, constraint))
                 .map(this::toConfigDTO)
                 .collect(Collectors.toList());
     }
@@ -86,6 +154,38 @@ public List<ChartDataPointDTO> getChartDataByRequest(
                     point.getValue()
             ))
             .collect(Collectors.toList());
+}
+
+private boolean isChartEnabled(
+        ChartDefinition chart,
+        ApplicationConstraint constraint) {
+
+    String flag = chart.getConstraintFlag();
+
+    if (flag == null || flag.isEmpty()) {
+        return true;
+    }
+
+    switch (flag) {
+
+        case "show_identified_proteins_plot":
+            return constraint.isShowIdentifiedProteinsPlot();
+
+        case "show_identified_peptides_plot":
+            return constraint.isShowIdentifiedPeptidesPlot();
+
+        case "show_modifications_plot":
+            return constraint.isShowModificationsPlot();
+
+        case "show_file_info_plot":
+            return constraint.isShowFileInfoPlot();
+
+        case "show_charges_plot":
+            return constraint.isShowChargesPlot();
+
+        default:
+            return true;
+    }
 }
   
     private ChartDefinitionDTO toDefinitionDTO(ChartDefinition chart) {
