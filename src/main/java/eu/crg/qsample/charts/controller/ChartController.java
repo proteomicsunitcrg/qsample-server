@@ -164,7 +164,8 @@ public class ChartController {
                 .map(point -> new ChartDataPointDTO(
                         point.getLabel(),
                         point.getValue(),
-                        point.getChecksum()
+                        point.getChecksum(),
+                        point.getCreationDate()
                 ))
                 .collect(Collectors.toList());
     }
@@ -186,7 +187,8 @@ public class ChartController {
                         point.getLabel(),
                         point.getSeries(),
                         point.getValue(),
-                        point.getChecksum()
+                        point.getChecksum(),
+                        point.getCreationDate()
                 ))
                 .collect(Collectors.toList());
     }

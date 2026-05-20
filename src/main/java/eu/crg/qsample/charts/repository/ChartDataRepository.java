@@ -13,12 +13,14 @@ public interface ChartDataRepository extends Repository<ChartDefinition, Long> {
         String getLabel();
         Double getValue();
         String getChecksum();
+        String getCreationDate();
     }
 
     interface ChartSeriesDataPointProjection {
         String getLabel();
         String getSeries();
         String getChecksum();
+        String getCreationDate();
         Double getValue();
     }
 
@@ -26,7 +28,8 @@ public interface ChartDataRepository extends Repository<ChartDefinition, Long> {
         "SELECT " +
         "  f.filename AS label, " +
         "  d.calculated_value AS value, " +
-        "  f.checksum AS checksum " +
+        "  f.checksum AS checksum, " +
+        "  CAST(f.creation_date AS CHAR) AS creationDate " +
         "FROM plot p " +
         "JOIN plot_context_source pcs ON pcs.plot_id = p.id " +
         "JOIN data d " +
@@ -40,11 +43,11 @@ public interface ChartDataRepository extends Repository<ChartDefinition, Long> {
         "  CASE WHEN :order = 'filename' THEN f.filename END ASC, " +
         "  CASE WHEN :order = 'date' THEN f.creation_date END ASC",
         nativeQuery = true)
-        List<ChartDataPointProjection> findChartDataByPlotApiKeyAndRequestCode(
-                @Param("plotApiKey") String plotApiKey,
-                @Param("requestCode") String requestCode,
-                @Param("order") String order
-        );
+    List<ChartDataPointProjection> findChartDataByPlotApiKeyAndRequestCode(
+            @Param("plotApiKey") String plotApiKey,
+            @Param("requestCode") String requestCode,
+            @Param("order") String order
+    );
 
     @Query(value =
             "SELECT " +
@@ -74,7 +77,8 @@ public interface ChartDataRepository extends Repository<ChartDefinition, Long> {
         "SELECT " +
         "  f.filename AS label, " +
         "  SUM(d.calculated_value) AS value, " +
-        "  f.checksum AS checksum " +
+        "  f.checksum AS checksum, " +
+        "  CAST(f.creation_date AS CHAR) AS creationDate " +
         "FROM chart_definitions cd " +
         "JOIN chart_context_sources ccs " +
         "  ON ccs.chart_id = cd.id " +
@@ -86,26 +90,25 @@ public interface ChartDataRepository extends Repository<ChartDefinition, Long> {
         "  ON f.id = d.file_id " +
         "WHERE cd.data_source_key = :dataSourceKey " +
         "  AND f.request_code = :requestCode " +
-        "  AND d.param_id = 1 " +
         "  AND f.dtype = 'RequestFile' " +
         "GROUP BY f.filename, f.creation_date, f.checksum " +
         "ORDER BY " +
         "  CASE WHEN :order = 'filename' THEN f.filename END ASC, " +
         "  CASE WHEN :order = 'date' THEN f.creation_date END ASC",
         nativeQuery = true)
-        List<ChartDataPointProjection> findChartDataByContextSourceGroupByFile(
-                @Param("dataSourceKey") String dataSourceKey,
-                @Param("requestCode") String requestCode,
-                @Param("order") String order
-        );
+    List<ChartDataPointProjection> findChartDataByContextSourceGroupByFile(
+            @Param("dataSourceKey") String dataSourceKey,
+            @Param("requestCode") String requestCode,
+            @Param("order") String order
+    );
 
     @Query(value =
             "SELECT " +
             "  f.filename AS label, " +
             "  cs.abbreviated AS series, " +
+            "  d.calculated_value AS value, " +
             "  f.checksum AS checksum, " +
-            "  d.calculated_value AS value " +
-
+            "  CAST(f.creation_date AS CHAR) AS creationDate " +
             "FROM chart_definitions cd " +
             "JOIN chart_context_sources ccs " +
             "  ON ccs.chart_id = cd.id " +
@@ -117,16 +120,15 @@ public interface ChartDataRepository extends Repository<ChartDefinition, Long> {
             "  ON f.id = d.file_id " +
             "WHERE cd.data_source_key = :dataSourceKey " +
             "  AND f.request_code = :requestCode " +
-            "  AND d.param_id = 1 " +
             "  AND f.dtype = 'RequestFile' " +
             "ORDER BY " +
             "  CASE WHEN :order = 'filename' THEN f.filename END ASC, " +
-            "  CASE WHEN :order = 'date' THEN f.creation_date END ASC, " +
-            "  cs.id ASC",
+            "  CASE WHEN :order = 'date' THEN f.creation_date END ASC",
             nativeQuery = true)
     List<ChartSeriesDataPointProjection> findStackedChartDataByContextSourceGroup(
             @Param("dataSourceKey") String dataSourceKey,
             @Param("requestCode") String requestCode,
             @Param("order") String order
     );
+
 }
