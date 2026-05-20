@@ -163,7 +163,8 @@ public class ChartController {
         return points.stream()
                 .map(point -> new ChartDataPointDTO(
                         point.getLabel(),
-                        point.getValue()
+                        point.getValue(),
+                        point.getChecksum()
                 ))
                 .collect(Collectors.toList());
     }
@@ -184,7 +185,8 @@ public class ChartController {
                 .map(point -> new ChartSeriesDataPointDTO(
                         point.getLabel(),
                         point.getSeries(),
-                        point.getValue()
+                        point.getValue(),
+                        point.getChecksum()
                 ))
                 .collect(Collectors.toList());
     }

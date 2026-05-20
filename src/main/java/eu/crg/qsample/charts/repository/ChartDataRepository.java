@@ -12,18 +12,21 @@ public interface ChartDataRepository extends Repository<ChartDefinition, Long> {
     interface ChartDataPointProjection {
         String getLabel();
         Double getValue();
+        String getChecksum();
     }
 
     interface ChartSeriesDataPointProjection {
         String getLabel();
         String getSeries();
+        String getChecksum();
         Double getValue();
     }
 
     @Query(value =
         "SELECT " +
         "  f.filename AS label, " +
-        "  d.calculated_value AS value " +
+        "  d.calculated_value AS value, " +
+        "  f.checksum AS checksum " +
         "FROM plot p " +
         "JOIN plot_context_source pcs ON pcs.plot_id = p.id " +
         "JOIN data d " +
@@ -70,7 +73,8 @@ public interface ChartDataRepository extends Repository<ChartDefinition, Long> {
     @Query(value =
         "SELECT " +
         "  f.filename AS label, " +
-        "  SUM(d.calculated_value) AS value " +
+        "  SUM(d.calculated_value) AS value, " +
+        "  f.checksum AS checksum " +
         "FROM chart_definitions cd " +
         "JOIN chart_context_sources ccs " +
         "  ON ccs.chart_id = cd.id " +
@@ -84,7 +88,7 @@ public interface ChartDataRepository extends Repository<ChartDefinition, Long> {
         "  AND f.request_code = :requestCode " +
         "  AND d.param_id = 1 " +
         "  AND f.dtype = 'RequestFile' " +
-        "GROUP BY f.filename, f.creation_date " +
+        "GROUP BY f.filename, f.creation_date, f.checksum " +
         "ORDER BY " +
         "  CASE WHEN :order = 'filename' THEN f.filename END ASC, " +
         "  CASE WHEN :order = 'date' THEN f.creation_date END ASC",
@@ -99,7 +103,9 @@ public interface ChartDataRepository extends Repository<ChartDefinition, Long> {
             "SELECT " +
             "  f.filename AS label, " +
             "  cs.abbreviated AS series, " +
+            "  f.checksum AS checksum, " +
             "  d.calculated_value AS value " +
+
             "FROM chart_definitions cd " +
             "JOIN chart_context_sources ccs " +
             "  ON ccs.chart_id = cd.id " +
