@@ -268,17 +268,29 @@ public class ChartController {
     }
 
     @GetMapping("/stacked-data/{dataSourceKey}/request/{requestCode}")
-    public List<ChartSeriesDataPointDTO> getStackedChartDataByRequest(
-            @PathVariable String dataSourceKey,
-            @PathVariable String requestCode,
-            @RequestParam(defaultValue = "date") String order) {
+        public List<ChartSeriesDataPointDTO> getStackedChartDataByRequest(
+                @PathVariable String dataSourceKey,
+                @PathVariable String requestCode,
+                @RequestParam(defaultValue = "date") String order) {
 
-        return chartDataRepository
-                .findStackedChartDataByContextSourceGroup(
-                        dataSourceKey,
-                        requestCode,
-                        order
-                )
+        List<ChartDataRepository.ChartSeriesDataPointProjection> points;
+
+        if ("modification_sites".equals(dataSourceKey)) {
+                points = chartDataRepository
+                        .findModificationSitesByRequestCode(
+                                requestCode,
+                                order
+                        );
+        } else {
+                points = chartDataRepository
+                        .findStackedChartDataByContextSourceGroup(
+                                dataSourceKey,
+                                requestCode,
+                                order
+                        );
+        }
+
+        return points
                 .stream()
                 .map(point -> new ChartSeriesDataPointDTO(
                         point.getLabel(),
@@ -288,7 +300,7 @@ public class ChartController {
                         point.getCreationDate()
                 ))
                 .collect(Collectors.toList());
-    }
+        }
 
     private List<ChartConfigDTO> getConfiguredChartsForApplication(
             String pageName,

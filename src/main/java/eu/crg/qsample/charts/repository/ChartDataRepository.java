@@ -102,6 +102,7 @@ public interface ChartDataRepository extends Repository<ChartDefinition, Long> {
             @Param("order") String order
     );
 
+      
     @Query(value =
             "SELECT " +
             "  f.filename AS label, " +
@@ -127,6 +128,31 @@ public interface ChartDataRepository extends Repository<ChartDefinition, Long> {
             nativeQuery = true)
     List<ChartSeriesDataPointProjection> findStackedChartDataByContextSourceGroup(
             @Param("dataSourceKey") String dataSourceKey,
+            @Param("requestCode") String requestCode,
+            @Param("order") String order
+    );
+
+     @Query(value =
+            "SELECT " +
+            "  f.filename AS label, " +
+            "  m.name AS series, " +
+            "  mf.value AS value, " +
+            "  f.checksum AS checksum, " +
+            "  CAST(f.creation_date AS CHAR) AS creationDate " +
+            "FROM file f " +
+            "JOIN modification_file mf " +
+            "  ON mf.file_id = f.id " +
+            "JOIN modification m " +
+            "  ON m.id = mf.modification_id " +
+            "WHERE f.request_code = :requestCode " +
+            "  AND f.dtype = 'RequestFile' " +
+            "  AND m.type = 'total-numbers' " +
+            "ORDER BY " +
+            "  CASE WHEN :order = 'filename' THEN f.filename END ASC, " +
+            "  CASE WHEN :order = 'date' THEN f.creation_date END ASC, " +
+            "  m.name ASC",
+            nativeQuery = true)
+    List<ChartSeriesDataPointProjection> findModificationSitesByRequestCode(
             @Param("requestCode") String requestCode,
             @Param("order") String order
     );
