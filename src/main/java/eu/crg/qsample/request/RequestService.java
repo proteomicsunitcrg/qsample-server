@@ -90,11 +90,17 @@ public class RequestService {
       boolean hasData = requestHasData(requestCode);
 
       if (!showAll) {
-        if (!agendoRequest.getLast_action().getAction().equals("Rejected")
-            && !agendoRequest.getLast_action().getAction().equals("Completed")
-            && !agendoRequest.getLast_action().getAction().equals("Created")
-            && !agendoRequest.getLast_action().getAction().equals("Cancelled")
-            && !agendoRequest.getLast_action().getAction().equals("Created as draft")) {
+        String action = agendoRequest.getLast_action().getAction();
+
+        boolean shouldShow =
+            hasData
+                || (!action.equals("Rejected")
+                    && !action.equals("Completed")
+                    && !action.equals("Created")
+                    && !action.equals("Cancelled")
+                    && !action.equals("Created as draft"));
+
+        if (shouldShow) {
           miniRequests.add(
               new MiniRequest(
                   agendoRequest.getId(),
