@@ -86,6 +86,30 @@ public class RestService {
         return response.getBody();
     }
 
+    public boolean isAgendoOnline() {
+        try {
+            final HttpHeaders headers = new HttpHeaders();
+            headers.set("From", agendoFrom);
+            headers.set("Authorization", "Basic " + mountBasicAuth(agendoUser, agendoPass));
+
+            final HttpEntity entity = new HttpEntity(headers);
+
+            java.time.LocalDate today = java.time.LocalDate.now();
+            java.time.LocalDate sevenDaysAgo = today.minusDays(7);
+
+            restTemplate.exchange(
+                    url + "/requests/facility/" + facility + "/" + sevenDaysAgo + "/" + today,
+                    HttpMethod.GET,
+                    entity,
+                    String.class
+            );
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public ResponseEntity<AgendoAuthResponse> loginAgendo(String username, String password) {
         // converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
         // messageConverters.add(converter);
