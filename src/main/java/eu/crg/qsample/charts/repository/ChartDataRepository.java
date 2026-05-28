@@ -52,7 +52,9 @@ public interface ChartDataRepository extends Repository<ChartDefinition, Long> {
     @Query(value =
             "SELECT " +
             "  cs.name AS label, " +
-            "  AVG(d.calculated_value) AS value " +
+            "  AVG(d.calculated_value) AS value, " +
+            "  NULL AS checksum, " +
+            "  NULL AS creationDate " +
             "FROM chart_definitions cd " +
             "JOIN chart_context_sources ccs " +
             "  ON ccs.chart_id = cd.id " +
@@ -102,7 +104,186 @@ public interface ChartDataRepository extends Repository<ChartDefinition, Long> {
             @Param("order") String order
     );
 
-      
+    @Query(value =
+        "SELECT " +
+        "  f.filename AS label, " +
+        "  CAST(fi.peptide_modified AS DECIMAL(20,4)) AS value, " +
+        "  f.checksum AS checksum, " +
+        "  CAST(f.creation_date AS CHAR) AS creationDate " +
+        "FROM file f " +
+        "JOIN file_info fi " +
+        "  ON fi.id = f.file_info_id " +
+        "WHERE f.request_code = :requestCode " +
+        "  AND f.dtype = 'RequestFile' " +
+        "  AND fi.peptide_modified IS NOT NULL " +
+        "ORDER BY " +
+        "  CASE WHEN :order = 'filename' THEN f.filename END ASC, " +
+        "  CASE WHEN :order = 'date' THEN f.creation_date END ASC",
+        nativeQuery = true)
+    List<ChartDataPointProjection> findModifiedPeptidesByRequestCode(
+            @Param("requestCode") String requestCode,
+            @Param("order") String order
+    );
+
+    @Query(value =
+        "SELECT " +
+        "  f.filename AS label, " +
+        "  100 * MAX(CASE WHEN m.name = 'Sum. area Propionyl N-term' THEN mf.value END) / " +
+        "  ( " +
+        "    MAX(CASE WHEN m.name = 'Sum. area Propionyl N-term' THEN mf.value END) + " +
+        "    MAX(CASE WHEN m.name = 'Sum. area not Propionyl N-term' THEN mf.value END) " +
+        "  ) AS value, " +
+        "  f.checksum AS checksum, " +
+        "  CAST(f.creation_date AS CHAR) AS creationDate " +
+        "FROM file f " +
+        "JOIN modification_file mf " +
+        "  ON mf.file_id = f.id " +
+        "JOIN modification m " +
+        "  ON m.id = mf.modification_id " +
+        "WHERE f.request_code = :requestCode " +
+        "  AND f.dtype = 'RequestFile' " +
+        "  AND m.name IN ( " +
+        "    'Sum. area Propionyl N-term', " +
+        "    'Sum. area not Propionyl N-term' " +
+        "  ) " +
+        "GROUP BY f.id, f.filename, f.checksum, f.creation_date " +
+        "HAVING value IS NOT NULL " +
+        "ORDER BY " +
+        "  CASE WHEN :order = 'filename' THEN f.filename END ASC, " +
+        "  CASE WHEN :order = 'date' THEN f.creation_date END ASC",
+        nativeQuery = true)
+    List<ChartDataPointProjection> findPercentagePropionylByRequestCode(
+            @Param("requestCode") String requestCode,
+            @Param("order") String order
+    );
+
+    @Query(value =
+        "SELECT " +
+        "  f.filename AS label, " +
+        "  100 * MAX(CASE WHEN m.name = 'Sum. area PIC precursors N-term' THEN mf.value END) / " +
+        "  ( " +
+        "    MAX(CASE WHEN m.name = 'Sum. area PIC precursors N-term' THEN mf.value END) + " +
+        "    MAX(CASE WHEN m.name = 'Sum. area not PIC precursors N-term' THEN mf.value END) " +
+        "  ) AS value, " +
+        "  f.checksum AS checksum, " +
+        "  CAST(f.creation_date AS CHAR) AS creationDate " +
+        "FROM file f " +
+        "JOIN modification_file mf " +
+        "  ON mf.file_id = f.id " +
+        "JOIN modification m " +
+        "  ON m.id = mf.modification_id " +
+        "WHERE f.request_code = :requestCode " +
+        "  AND f.dtype = 'RequestFile' " +
+        "  AND m.name IN ( " +
+        "    'Sum. area PIC precursors N-term', " +
+        "    'Sum. area not PIC precursors N-term' " +
+        "  ) " +
+        "GROUP BY f.id, f.filename, f.checksum, f.creation_date " +
+        "HAVING value IS NOT NULL " +
+        "ORDER BY " +
+        "  CASE WHEN :order = 'filename' THEN f.filename END ASC, " +
+        "  CASE WHEN :order = 'date' THEN f.creation_date END ASC",
+        nativeQuery = true)
+    List<ChartDataPointProjection> findPercentagePicByRequestCode(
+            @Param("requestCode") String requestCode,
+            @Param("order") String order
+    );
+
+        @Query(value =
+                "SELECT " +
+                "  f.filename AS label, " +
+                "  'Modified peptides' AS series, " +
+                "  CAST(fi.peptide_modified AS DECIMAL(20,4)) AS value, " +
+                "  f.checksum AS checksum, " +
+                "  CAST(f.creation_date AS CHAR) AS creationDate " +
+                "FROM file f " +
+                "JOIN file_info fi ON fi.id = f.file_info_id " +
+                "WHERE f.request_code = :requestCode " +
+                "  AND f.dtype = 'RequestFile' " +
+                "  AND fi.peptide_modified IS NOT NULL " +
+                "UNION ALL " +
+                "SELECT " +
+                "  f.filename AS label, " +
+                "  'Unmodified peptides' AS series, " +
+                "  CAST((fi.peptide_hits - fi.peptide_modified) AS DECIMAL(20,4)) AS value, " +
+                "  f.checksum AS checksum, " +
+                "  CAST(f.creation_date AS CHAR) AS creationDate " +
+                "FROM file f " +
+                "JOIN file_info fi ON fi.id = f.file_info_id " +
+                "WHERE f.request_code = :requestCode " +
+                "  AND f.dtype = 'RequestFile' " +
+                "  AND fi.peptide_hits IS NOT NULL " +
+                "  AND fi.peptide_modified IS NOT NULL " +
+                "ORDER BY " +
+                "  CASE WHEN :order = 'filename' THEN label END ASC, " +
+                "  CASE WHEN :order = 'date' THEN creationDate END ASC, " +
+                "  series ASC",
+                nativeQuery = true)
+        List<ChartSeriesDataPointProjection> findModifiedPeptidesStackedByRequestCode(
+                @Param("requestCode") String requestCode,
+                @Param("order") String order
+        );
+
+        @Query(value =
+        "SELECT " +
+        "  f.filename AS label, " +
+        "  m.name AS series, " +
+        "  mf.value AS value, " +
+        "  f.checksum AS checksum, " +
+        "  CAST(f.creation_date AS CHAR) AS creationDate " +
+        "FROM file f " +
+        "JOIN modification_file mf ON mf.file_id = f.id " +
+        "JOIN modification m ON m.id = mf.modification_id " +
+        "WHERE f.request_code = :requestCode " +
+        "  AND f.dtype = 'RequestFile' " +
+        "  AND m.name IN ( " +
+        "    'Sum. area Propionyl N-term', " +
+        "    'Sum. area not Propionyl N-term' " +
+        "  ) " +
+        "ORDER BY " +
+        "  CASE WHEN :order = 'filename' THEN f.filename END ASC, " +
+        "  CASE WHEN :order = 'date' THEN f.creation_date END ASC, " +
+        "  CASE " +
+        "    WHEN m.name = 'Sum. area Propionyl N-term' THEN 1 " +
+        "    WHEN m.name = 'Sum. area not Propionyl N-term' THEN 2 " +
+        "    ELSE 3 " +
+        "  END ASC",
+        nativeQuery = true)
+    List<ChartSeriesDataPointProjection> findPercentagePropionylStackedByRequestCode(
+            @Param("requestCode") String requestCode,
+            @Param("order") String order
+    );
+
+        @Query(value =
+        "SELECT " +
+        "  f.filename AS label, " +
+        "  m.name AS series, " +
+        "  mf.value AS value, " +
+        "  f.checksum AS checksum, " +
+        "  CAST(f.creation_date AS CHAR) AS creationDate " +
+        "FROM file f " +
+        "JOIN modification_file mf ON mf.file_id = f.id " +
+        "JOIN modification m ON m.id = mf.modification_id " +
+        "WHERE f.request_code = :requestCode " +
+        "  AND f.dtype = 'RequestFile' " +
+        "  AND m.name IN ( " +
+        "    'Sum. area PIC precursors N-term', " +
+        "    'Sum. area not PIC precursors N-term' " +
+        "  ) " +
+        "ORDER BY " +
+        "  CASE WHEN :order = 'filename' THEN f.filename END ASC, " +
+        "  CASE WHEN :order = 'date' THEN f.creation_date END ASC, " +
+        "  CASE " +
+        "    WHEN m.name = 'Sum. area PIC precursors N-term' THEN 1 " +
+        "    WHEN m.name = 'Sum. area not PIC precursors N-term' THEN 2 " +
+        "    ELSE 3 " +
+        "  END ASC",
+        nativeQuery = true)
+    List<ChartSeriesDataPointProjection> findPercentagePicStackedByRequestCode(
+            @Param("requestCode") String requestCode,
+            @Param("order") String order
+    );
+
     @Query(value =
             "SELECT " +
             "  f.filename AS label, " +
@@ -132,7 +313,7 @@ public interface ChartDataRepository extends Repository<ChartDefinition, Long> {
             @Param("order") String order
     );
 
-     @Query(value =
+    @Query(value =
             "SELECT " +
             "  f.filename AS label, " +
             "  m.name AS series, " +

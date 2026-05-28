@@ -247,6 +247,33 @@ public class ChartController {
                             order
                     );
 
+                } else if ("file_info_column".equals(chart.getProviderType())
+                && "modified_peptides".equals(dataSourceKey)) {
+
+            points = chartDataRepository
+                    .findModifiedPeptidesByRequestCode(
+                            requestCode,
+                            order
+                    );
+
+        } else if ("modification_ratio_by_file".equals(chart.getProviderType())
+                && "percentage_propionyl".equals(dataSourceKey)) {
+
+            points = chartDataRepository
+                    .findPercentagePropionylByRequestCode(
+                            requestCode,
+                            order
+                    );
+
+        } else if ("modification_ratio_by_file".equals(chart.getProviderType())
+                && "percentage_pic".equals(dataSourceKey)) {
+
+            points = chartDataRepository
+                    .findPercentagePicByRequestCode(
+                            requestCode,
+                            order
+                    );
+
         } else {
 
             points = chartDataRepository
@@ -275,12 +302,34 @@ public class ChartController {
 
         List<ChartDataRepository.ChartSeriesDataPointProjection> points;
 
-        if ("modification_sites".equals(dataSourceKey)) {
+                if ("modification_sites".equals(dataSourceKey)) {
                 points = chartDataRepository
                         .findModificationSitesByRequestCode(
                                 requestCode,
                                 order
                         );
+
+        } else if ("modified_peptides".equals(dataSourceKey)) {
+                points = chartDataRepository
+                        .findModifiedPeptidesStackedByRequestCode(
+                                requestCode,
+                                order
+                        );
+
+        } else if ("percentage_propionyl".equals(dataSourceKey)) {
+                points = chartDataRepository
+                        .findPercentagePropionylStackedByRequestCode(
+                                requestCode,
+                                order
+                        );
+
+        } else if ("percentage_pic".equals(dataSourceKey)) {
+                points = chartDataRepository
+                        .findPercentagePicStackedByRequestCode(
+                                requestCode,
+                                order
+                        );
+
         } else {
                 points = chartDataRepository
                         .findStackedChartDataByContextSourceGroup(
