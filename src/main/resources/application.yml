@@ -53,7 +53,7 @@ spring:
       outOfOrder: false
 jwt:
     header: Authorization
-    secret: L+0P1i+38a26pHiW10iHqPBYAyklvqPdySy98BV9PPCZyDogMggoSZkYxULqCF+WG6Nimlfxd53H6zjdIUJNJA==
+    secret: ${JWT_SECRET}
     expiration: 604800
     route:
     authentication:

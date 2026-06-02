@@ -48,6 +48,8 @@ services:
         target: /config/application.yml
         read_only: true
       - ./tmp:/tmp
+      # Persists the auto-generated JWT secret across container restarts.
+      - qsample-secrets:/secrets
 
     environment:
       QSAMPLE_API_PREFIX: http://localhost:8099/ #Adapt for the final URL to be used
@@ -74,3 +76,5 @@ services:
         retries: 3
 networks:
   qsample:
+volumes:
+  qsample-secrets:
