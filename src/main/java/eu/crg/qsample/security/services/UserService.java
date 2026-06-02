@@ -67,55 +67,6 @@ public class UserService {
         return userRepo.save(newUser);
     }
 
-    public User addUserDummy() {
-        Set<Role> roles = new HashSet<>();
-        Role roleAdmin = roleRepo.findByName(ERole.ROLE_ADMIN).get();
-        Role roleInternal = roleRepo.findByName(ERole.ROLE_INTERNAL).get();
-        Role roleManager = roleRepo.findByName(ERole.ROLE_MANAGER).get();
-        Role roleUser = roleRepo.findByName(ERole.ROLE_USER).get();
-        User newUser =
-                new User(
-                        null,
-                        UUID.randomUUID(),
-                        "ADMINDUMMY",
-                        "UNIT",
-                        "admin@unittest.cat",
-                        encoder.encode("unittest"),
-                        942l,
-                        null);
-        roles.add(roleAdmin);
-        roles.add(roleInternal);
-        roles.add(roleManager);
-        roles.add(roleUser);
-        newUser.setRoles(roles);
-        return userRepo.save(newUser);
-    }
-
-    public User addLocalUser() {
-
-        User newUser =
-                new User(
-                        null,
-                        UUID.randomUUID(),
-                        "admin",
-                        "admin",
-                        "admin@admin.com",
-                        encoder.encode("admin"),
-                        942l,
-                        null);
-        Set<Role> roles = new HashSet<>();
-        Role roleAdmin = roleRepo.findByName(ERole.ROLE_ADMIN).get();
-        Role roleInternal = roleRepo.findByName(ERole.ROLE_INTERNAL).get();
-        Role roleManager = roleRepo.findByName(ERole.ROLE_MANAGER).get();
-        Role roleUser = roleRepo.findByName(ERole.ROLE_USER).get();
-        roles.add(roleAdmin);
-        roles.add(roleInternal);
-        roles.add(roleManager);
-        roles.add(roleUser);
-        newUser.setRoles(roles);
-        return userRepo.save(newUser);
-    }
-
     // Create user from API - default Internal for now
     public User addUser(User newUser) {
 
