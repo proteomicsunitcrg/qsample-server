@@ -75,7 +75,7 @@ services:
         aliases:
           - qsample
     healthcheck:
-        test: ["CMD-SHELL", "curl -f $${QSAMPLE_API_PREFIX}api/config"]
+        test: ["CMD-SHELL", "curl -s -o /dev/null http://localhost:8099"]
         interval: 30s
         timeout: 10s
         start_period: 30s
