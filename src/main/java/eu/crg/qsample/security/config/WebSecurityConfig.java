@@ -67,14 +67,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity security) throws Exception {
-        security.csrf().disable();
-        security.httpBasic().disable();
-        security.formLogin().disable();
-        security.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-                .antMatchers("/request/**").permitAll().antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/**","/").permitAll().anyRequest()
-                .authenticated();
+        // CSRF safe to disable: stateless JWT in Authorization header,
+        // CORS allowCredentials=false, no cookie-based session.
+        security
+                .csrf().disable()
+                .httpBasic().disable()
+                .formLogin().disable()
+                .cors().and()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .antMatchers("/api/auth/**").permitAll()
+                .antMatchers(HttpMethod.GET,
+                        "/",
+                        "/index.html",
+                        "/favicon.ico",
+                        "/env.js",
+                        "/*.js",
+                        "/*.css",
+                        "/*.map",
+                        "/assets/**",
+                        "/static/**"
+                ).permitAll()
+                .anyRequest().authenticated();
 
         security.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
