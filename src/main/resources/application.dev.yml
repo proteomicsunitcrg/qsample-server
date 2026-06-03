@@ -74,6 +74,12 @@ agendo:
 
 local-requests: true # true to use local database, false to use agendo. If true unlocks the request creation, delete and update form TODO
 
+cors:
+    # Comma-separated origins allowed for cross-origin requests (no trailing slash).
+    # Override via the QSAMPLE_CORS_ORIGINS env var, like QSAMPLE_API_PREFIX.
+    # Dev default also admits the standalone client dev server (see email-conf.app-url).
+    allowed-origins: ${QSAMPLE_CORS_ORIGINS:http://localhost:8099,http://localhost:4200}
+
 ---
 
 spring:
