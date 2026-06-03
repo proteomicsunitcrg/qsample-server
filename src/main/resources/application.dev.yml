@@ -51,28 +51,28 @@ jwt:
         refresh: refresh
 
 qcloud2:
-    disable: true
+    disable: false
     url: https://api.qcloud2.crg.eu/qsample
     username: qsample
     password: qsample
 
 neon-stats:
-    disable: true
+    disable: false
     url: http://neon.crg.eu/
 
 nextflow-tower:
-    disable: true
+    disable: false
     token: xxx
     url: https://api.tower.nf/
 
 agendo:
-    username: qsample
-    password: xxx
-    from: Y3Jn
-    url: https://api.qcloud2.crg.eu/mirror?url=https://api.agendoscience.com
-    facility: 10
+    username: ${AGENDO_USERNAME:qsample}
+    password: ${AGENDO_PASSWORD}
+    from: ${AGENDO_FROM:Y3Jn}
+    url: ${AGENDO_URL:https://api.qcloud2.crg.eu/mirror?url=https://apieurope.agendoscience.com}
+    facility: ${AGENDO_FACILITY:10}
 
-local-requests: true # true to use local database, false to use agendo. If true unlocks the request creation, delete and update form TODO
+local-requests: false # true to use local database, false to use agendo. If true unlocks the request creation, delete and update form TODO
 
 cors:
     # Comma-separated origins allowed for cross-origin requests (no trailing slash).
