@@ -44,3 +44,8 @@ mysql.agendo/
 tmp/
 sql/agendo.sql
 
+## AI support
+CLAUDE.md
+
+# Local secrets
+src/main/resources/application-local.yml
