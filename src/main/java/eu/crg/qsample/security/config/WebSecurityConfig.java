@@ -1,8 +1,10 @@
 package eu.crg.qsample.security.config;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,6 +40,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtAuthenticationEntryPoint unauthorizedHandler;
 
+    // Comma-separated allowlist, fed from the QSAMPLE_CORS_ORIGINS env var (see application.yml)
+    @Value("${cors.allowed-origins}")
+    private List<String> allowedOrigins;
+
     @Bean
     public JwtAuthenticationTokenFilter authenticationJwtTokenFilter() {
         return new JwtAuthenticationTokenFilter();
@@ -61,14 +67,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity security) throws Exception {
-        security.csrf().disable();
-        security.httpBasic().disable();
-        security.formLogin().disable();
-        security.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-                .antMatchers("/request/**").permitAll().antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/**","/").permitAll().anyRequest()
-                .authenticated();
+        // CSRF safe to disable: stateless JWT in Authorization header,
+        // CORS allowCredentials=false, no cookie-based session.
+        security
+                .csrf().disable()
+                .httpBasic().disable()
+                .formLogin().disable()
+                .cors().and()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .antMatchers("/api/auth/**").permitAll()
+                .antMatchers(HttpMethod.GET,
+                        "/",
+                        "/index.html",
+                        "/favicon.ico",
+                        "/env.js",
+                        "/*.js",
+                        "/*.css",
+                        "/*.map",
+                        "/assets/**",
+                        "/static/**"
+                ).permitAll()
+                .anyRequest().authenticated();
 
         security.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
@@ -76,12 +98,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         final CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);
+        configuration.setAllowedOrigins(allowedOrigins);
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        // JWT travels in the Authorization header, no cookies involved
+        configuration.setAllowCredentials(false);
         configuration.addExposedHeader("total");
         configuration.addExposedHeader("tokenexpiration");
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

@@ -53,7 +53,7 @@ spring:
       outOfOrder: false
 jwt:
     header: Authorization
-    secret: L+0P1i+38a26pHiW10iHqPBYAyklvqPdySy98BV9PPCZyDogMggoSZkYxULqCF+WG6Nimlfxd53H6zjdIUJNJA==
+    secret: ${JWT_SECRET}
     expiration: 604800
     route:
     authentication:
@@ -83,6 +83,11 @@ agendo:
     facility: 10
 
 local-requests: true # true to use local database, false to use agendo. If true unlocks the request creation, delete and update form TODO
+
+cors:
+    # Comma-separated origins allowed for cross-origin requests (no trailing slash).
+    # Override via the QSAMPLE_CORS_ORIGINS env var, like QSAMPLE_API_PREFIX.
+    allowed-origins: ${QSAMPLE_CORS_ORIGINS:http://localhost:8099}
 
 ---
 

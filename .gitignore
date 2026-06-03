@@ -12,13 +12,11 @@ target/
 .settings
 .springBeans
 .sts4-cache
-
 ### IntelliJ IDEA ###
 .idea
 *.iws
 *.iml
 *.ipr
-
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
@@ -26,14 +24,11 @@ target/
 /nbdist/
 /.nb-gradle/
 build/
-
 ### VS Code ###
 .vscode/
-
 src/main/resources/static
 *.log
 *.gz
-
 docker-compose.agendo.yml
 docker-compose.crg.yml
 docker-compose.flyway.agendo.yml
@@ -43,7 +38,8 @@ mysql/
 mysql.agendo/
 tmp/
 sql/agendo.sql
-
-src/main/resources/application-local.yml
+## AI support
+CLAUDE.md
+# Local secrets
 src/main/resources/application-local.yml
 .env
