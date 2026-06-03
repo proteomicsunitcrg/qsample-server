@@ -28,14 +28,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -94,39 +92,6 @@ public class AuthController {
     }
 
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-  }
-
-  /**
-   * Secret endpoint just to setup users for testing withouth asking agendo
-   *
-   * @param signUpRequest
-   * @return
-   */
-  @PostMapping("/signupDummyLMAO")
-  public ResponseEntity<?> registerUserDummy(@Valid @RequestBody LoginRequest signUpRequest) {
-    // System.out.println("signup try");
-    if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-      return ResponseEntity.badRequest()
-          .body(new MessageResponse("Error: Username is already taken!"));
-    }
-
-    userService.addUserDummy();
-
-    return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-  }
-
-  /**
-   * Secret endpoint just to setup users for testing withouth asking agendo
-   *
-   * @param signUpRequest
-   * @return
-   */
-  @PostMapping("/firstsignup")
-  public ResponseEntity<?> setFirstUserToDB() {
-    // System.out.println("Start /firstsignup entry point...");
-    userService.addLocalUser();
-    // System.out.println("End /firstsignup entry point.");
-    return ResponseEntity.ok(new MessageResponse("First signup successfull!"));
   }
 
   @PostMapping("/recovery")

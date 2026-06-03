@@ -28,6 +28,7 @@ ENV QSAMPLE_API_PREFIX=http://localhost:8099/
 VOLUME /tmp
 RUN mkdir -p /config
 RUN mkdir -p /app
+RUN mkdir -p /secrets
 WORKDIR /app
 RUN apt clean
 COPY --from=jarserver /tmp/target/*jar /app
