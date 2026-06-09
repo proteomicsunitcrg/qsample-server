@@ -56,9 +56,10 @@ public class RequestService {
     List<RequestLocal> requestList =
         requestRepository.findAllByCreationDateBetween(startDate, endDate);
     List<MiniRequest> miniRequestList = new ArrayList<>();
+
     for (RequestLocal req : requestList) {
-      // System.out.println(req.getRequestCode());
-      // Format string and remove dots of create_date
+      boolean hasData = requestHasData(req.getRequestCode());
+
       miniRequestList.add(
           new MiniRequest(
               req.getId(),
@@ -68,9 +69,10 @@ public class RequestService {
               req.getCreationDate().toString().split("\\.")[0],
               req.getStatus(),
               req.getRequestCode(),
-              false,
+              hasData,
               true));
     }
+
     return miniRequestList;
   }
 
@@ -79,23 +81,26 @@ public class RequestService {
     String ccc =
         restService.getAllRequests(
             convertDateToAgendoFormat(startDate), convertDateToAgendoFormat(endDate));
-    System.out.println(ccc);
+
     Gson gson = new Gson();
     AgendoRequestWrapper response = gson.fromJson(ccc, AgendoRequestWrapper.class);
-    for (AgendoRequest agendoRequest : response.getRequest()) {
 
-      // String requestCode = getRequestCode(
-      //         agendoRequest.getFields().get(agendoRequest.getFields().size() - 1).getValue());
-      String requestCode = agendoRequest.getRef(); // Get requestCode from ref field
-      System.out.println("REQUEST CODE:");
-      System.out.println(requestCode);
-      boolean hasData = false;
+    for (AgendoRequest agendoRequest : response.getRequest()) {
+      String requestCode = agendoRequest.getRef();
+      boolean hasData = requestHasData(requestCode);
+
       if (!showAll) {
-        if (!agendoRequest.getLast_action().getAction().equals("Rejected")
-            && !agendoRequest.getLast_action().getAction().equals("Completed")
-            && !agendoRequest.getLast_action().getAction().equals("Created")
-            && !agendoRequest.getLast_action().getAction().equals("Cancelled")
-            && !agendoRequest.getLast_action().getAction().equals("Created as draft")) {
+        String action = agendoRequest.getLast_action().getAction();
+
+        boolean shouldShow =
+            hasData
+                || (!action.equals("Rejected")
+                    && !action.equals("Completed")
+                    && !action.equals("Created")
+                    && !action.equals("Cancelled")
+                    && !action.equals("Created as draft"));
+
+        if (shouldShow) {
           miniRequests.add(
               new MiniRequest(
                   agendoRequest.getId(),
@@ -122,25 +127,25 @@ public class RequestService {
                 false));
       }
     }
+
     return miniRequests;
+  }
+
+  private boolean requestHasData(String requestCode) {
+    if (requestCode == null || requestCode.trim().isEmpty()) {
+      return false;
+    }
+
+    return fileRepository
+        .findAllByRequestCodeContains(requestCode)
+        .map(files -> !files.isEmpty())
+        .orElse(false);
   }
 
   private String convertDateToAgendoFormat(Date date) {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     return sdf.format(date);
   }
-
-  // TODO THIS
-  // private String getRequestCode(String mierda) {
-  //     try {
-  //         Gson gson = new Gson();
-  //         AgendoFieldWrapper[] fielderinos = gson.fromJson(mierda, AgendoFieldWrapper[].class);
-  //         List<AgendoFieldWrapper> wrapper = Arrays.asList(fielderinos);
-  //         return wrapper.get(0).getFields().get(0).getValue();
-  //     } catch (Exception e) {
-  //         return mierda;
-  //     }
-  // }
 
   public AgendoRequest getRequestById(Long id) {
     if (localRequests) {
@@ -154,14 +159,13 @@ public class RequestService {
     if (localRequests) {
       return getLocalRequestByRequestCode(requestCode);
     } else {
-      // TODO: We should preload all agendo Requests and then retrieve the one we want
-      // If client already detected one in cache, we would not need it anymore
       return null;
     }
   }
 
   private AgendoRequest getRequestByIdLocal(Long id) {
     Optional<RequestLocal> requestOpt = requestRepository.findById(id);
+
     if (requestOpt.isPresent()) {
       String emptyRef = "";
       AgendoRequest agendoRequest =
@@ -172,12 +176,13 @@ public class RequestService {
               requestOpt.get().getApplication().getName(),
               requestOpt.get().getCreationDate().toString(),
               requestOpt.get().getStatus());
+
       agendoRequest.setLocalCode(requestOpt.get().getRequestCode());
       agendoRequest.setLocalCreationDate(requestOpt.get().getCreationDate().toString());
       agendoRequest.setLocalCreator(requestOpt.get().getCreator());
-      agendoRequest.setSamplesViaString(
-          requestOpt.get().getSamples()); // TODO: Here we have confronting types
+      agendoRequest.setSamplesViaString(requestOpt.get().getSamples());
       agendoRequest.setLocalTaxonomy(requestOpt.get().getTaxonomy());
+
       return agendoRequest;
     } else {
       throw new NotFoundException("Request not found by id");
@@ -194,6 +199,7 @@ public class RequestService {
   public String getPlotName(Long csId, Long paramId) {
     Optional<Param> param = paramRepo.findById(paramId);
     Optional<ContextSource> cs = csRepo.findById(csId);
+
     if (cs.isPresent() && param.isPresent()) {
       return cs.get().getName();
     } else {
@@ -207,7 +213,11 @@ public class RequestService {
     String ccc = restService.getAllRequestsExternal(userId);
     Gson gson = new Gson();
     AgendoRequestWrapper response = gson.fromJson(ccc, AgendoRequestWrapper.class);
+
     for (AgendoRequest agendoRequest : response.getRequest()) {
+      String requestCode = agendoRequest.getRef();
+      boolean hasData = requestHasData(requestCode);
+
       miniRequests.add(
           new MiniRequest(
               agendoRequest.getId(),
@@ -215,8 +225,12 @@ public class RequestService {
               agendoRequest.getCreated_by().getEmail(),
               agendoRequest.getCreated_by().getName(),
               agendoRequest.getdate_created(),
-              agendoRequest.getLast_action().getAction()));
+              agendoRequest.getLast_action().getAction(),
+              requestCode,
+              hasData,
+              false));
     }
+
     return miniRequests;
   }
 
@@ -232,6 +246,7 @@ public class RequestService {
 
   public RequestLocal getLocalRequestById(Long id) {
     Optional<RequestLocal> localOpt = requestRepository.findById(id);
+
     if (localOpt.isPresent()) {
       return localOpt.get();
     } else {
@@ -241,6 +256,7 @@ public class RequestService {
 
   public RequestLocal getLocalRequestByRequestCode(String requestCode) {
     Optional<RequestLocal> localOpt = requestRepository.findByRequestCode(requestCode);
+
     if (localOpt.isPresent()) {
       return localOpt.get();
     } else {
