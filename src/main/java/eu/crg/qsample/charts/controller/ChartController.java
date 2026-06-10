@@ -330,6 +330,14 @@ public class ChartController {
                                 order
                         );
 
+        } else if ("polymer_contaminants".equals(dataSourceKey)) {
+                points = chartDataRepository
+                        .findModificationStackedByTypeAndRequestCode(
+                                requestCode,
+                                "polymer-contaminants",
+                                order
+                        );
+
         } else {
                 points = chartDataRepository
                         .findStackedChartDataByContextSourceGroup(

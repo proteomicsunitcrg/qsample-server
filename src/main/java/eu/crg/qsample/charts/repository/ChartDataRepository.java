@@ -305,11 +305,47 @@ public interface ChartDataRepository extends Repository<ChartDefinition, Long> {
             "  AND f.dtype = 'RequestFile' " +
             "ORDER BY " +
             "  CASE WHEN :order = 'filename' THEN f.filename END ASC, " +
-            "  CASE WHEN :order = 'date' THEN f.creation_date END ASC",
+            "  CASE WHEN :order = 'date' THEN f.creation_date END ASC, " +
+            "  CASE " +
+            "    WHEN :dataSourceKey = 'missed_cleavages' AND cs.abbreviated = '2' THEN 1 " +
+            "    WHEN :dataSourceKey = 'missed_cleavages' AND cs.abbreviated = '1' THEN 2 " +
+            "    WHEN :dataSourceKey = 'missed_cleavages' AND cs.abbreviated = '0' THEN 3 " +
+            "    WHEN :dataSourceKey = 'precursors_by_charge' AND cs.abbreviated = '+4' THEN 1 " +
+            "    WHEN :dataSourceKey = 'precursors_by_charge' AND cs.abbreviated = '+3' THEN 2 " +
+            "    WHEN :dataSourceKey = 'precursors_by_charge' AND cs.abbreviated = '+2' THEN 3 " +
+            "    ELSE 99 " +
+            "  END ASC, " +
+            "  cs.abbreviated ASC",
             nativeQuery = true)
     List<ChartSeriesDataPointProjection> findStackedChartDataByContextSourceGroup(
             @Param("dataSourceKey") String dataSourceKey,
             @Param("requestCode") String requestCode,
+            @Param("order") String order
+    );
+
+    @Query(value =
+            "SELECT " +
+            "  f.filename AS label, " +
+            "  m.name AS series, " +
+            "  mf.value AS value, " +
+            "  f.checksum AS checksum, " +
+            "  CAST(f.creation_date AS CHAR) AS creationDate " +
+            "FROM file f " +
+            "JOIN modification_file mf " +
+            "  ON mf.file_id = f.id " +
+            "JOIN modification m " +
+            "  ON m.id = mf.modification_id " +
+            "WHERE f.request_code = :requestCode " +
+            "  AND f.dtype = 'RequestFile' " +
+            "  AND m.type = :modificationType " +
+            "ORDER BY " +
+            "  CASE WHEN :order = 'filename' THEN f.filename END ASC, " +
+            "  CASE WHEN :order = 'date' THEN f.creation_date END ASC, " +
+            "  m.id DESC",
+            nativeQuery = true)
+    List<ChartSeriesDataPointProjection> findModificationStackedByTypeAndRequestCode(
+            @Param("requestCode") String requestCode,
+            @Param("modificationType") String modificationType,
             @Param("order") String order
     );
 

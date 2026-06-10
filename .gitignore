@@ -43,3 +43,4 @@ CLAUDE.md
 # Local secrets
 src/main/resources/application-local.yml
 .env
+docker-compose.dev.override.yml
