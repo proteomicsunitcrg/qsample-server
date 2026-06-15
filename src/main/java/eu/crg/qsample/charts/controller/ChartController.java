@@ -6,18 +6,26 @@ import eu.crg.qsample.charts.dto.ChartConfigDTO;
 import eu.crg.qsample.charts.dto.ChartDataPointDTO;
 import eu.crg.qsample.charts.dto.ChartDefinitionDTO;
 import eu.crg.qsample.charts.dto.ChartSeriesDataPointDTO;
+import eu.crg.qsample.charts.dto.WetlabPlotConfigDTO;
+import eu.crg.qsample.charts.dto.WetlabPlotConfigSaveDTO;
 import eu.crg.qsample.charts.entity.ApplicationChartConfig;
 import eu.crg.qsample.charts.entity.ChartDefinition;
 import eu.crg.qsample.charts.entity.ChartParameter;
+import eu.crg.qsample.charts.entity.WetlabPlotConfig;
 import eu.crg.qsample.charts.repository.ApplicationChartConfigRepository;
 import eu.crg.qsample.charts.repository.ChartDataRepository;
 import eu.crg.qsample.charts.repository.ChartDefinitionRepository;
 import eu.crg.qsample.charts.repository.ChartPageAssignmentRepository;
+import eu.crg.qsample.charts.repository.WetlabPlotConfigRepository;
+import eu.crg.qsample.plot.Plot;
+import eu.crg.qsample.plot.PlotRepository;
 import eu.crg.qsample.qgenerator.application.Application;
 import eu.crg.qsample.qgenerator.application.ApplicationConstraint;
 import eu.crg.qsample.qgenerator.application.ApplicationRepository;
 import eu.crg.qsample.request.local.RequestLocal;
 import eu.crg.qsample.request.local.RequestRepository;
+import eu.crg.qsample.wetlab.WetLab;
+import eu.crg.qsample.wetlab.WetLabRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -35,6 +43,9 @@ public class ChartController {
     private final RequestRepository requestRepository;
     private final ApplicationRepository applicationRepository;
     private final ApplicationChartConfigRepository applicationChartConfigRepository;
+    private final WetLabRepository wetLabRepository;
+    private final PlotRepository plotRepository;
+    private final WetlabPlotConfigRepository wetlabPlotConfigRepository;
 
     public ChartController(
             ChartDefinitionRepository chartDefinitionRepository,
@@ -42,7 +53,10 @@ public class ChartController {
             ChartDataRepository chartDataRepository,
             RequestRepository requestRepository,
             ApplicationRepository applicationRepository,
-            ApplicationChartConfigRepository applicationChartConfigRepository
+            ApplicationChartConfigRepository applicationChartConfigRepository,
+            WetLabRepository wetLabRepository,
+            PlotRepository plotRepository,
+            WetlabPlotConfigRepository wetlabPlotConfigRepository
     ) {
         this.chartDefinitionRepository = chartDefinitionRepository;
         this.chartPageAssignmentRepository = chartPageAssignmentRepository;
@@ -50,6 +64,9 @@ public class ChartController {
         this.requestRepository = requestRepository;
         this.applicationRepository = applicationRepository;
         this.applicationChartConfigRepository = applicationChartConfigRepository;
+        this.wetLabRepository = wetLabRepository;
+        this.plotRepository = plotRepository;
+        this.wetlabPlotConfigRepository = wetlabPlotConfigRepository;
     }
 
     @GetMapping
@@ -215,6 +232,112 @@ public class ChartController {
                 .stream()
                 .sorted(java.util.Comparator.comparing(ApplicationChartConfig::getOrderIndex))
                 .map(this::toApplicationChartConfigDTO)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/wetlab-config/{wetlabId}")
+    public List<WetlabPlotConfigDTO> getWetlabPlotConfig(
+            @PathVariable Long wetlabId) {
+
+        return wetlabPlotConfigRepository
+                .findByWetlabIdOrderByOrderIndexAsc(wetlabId)
+                .stream()
+                .map(this::toWetlabPlotConfigDTO)
+                .collect(Collectors.toList());
+    }
+
+    @PostMapping("/wetlab-config/{wetlabId}/initialize")
+    public List<WetlabPlotConfigDTO> initializeWetlabPlotConfig(
+            @PathVariable Long wetlabId) {
+
+        WetLab wetlab = wetLabRepository
+                .findById(wetlabId)
+                .orElseThrow();
+
+        List<WetlabPlotConfig> existingConfigs =
+                wetlabPlotConfigRepository
+                        .findByWetlabIdOrderByOrderIndexAsc(wetlabId);
+
+        if (!existingConfigs.isEmpty()) {
+            return existingConfigs
+                    .stream()
+                    .map(this::toWetlabPlotConfigDTO)
+                    .collect(Collectors.toList());
+        }
+
+        List<WetlabPlotConfig> newConfigs =
+                new java.util.ArrayList<>();
+
+        List<Plot> plots = wetlab.getPlot();
+
+        if (plots != null) {
+            for (int i = 0; i < plots.size(); i++) {
+                WetlabPlotConfig config = new WetlabPlotConfig();
+                config.setWetlab(wetlab);
+                config.setPlot(plots.get(i));
+                config.setEnabled(true);
+                config.setOrderIndex(i + 1);
+
+                newConfigs.add(config);
+            }
+        }
+
+        return wetlabPlotConfigRepository
+                .saveAll(newConfigs)
+                .stream()
+                .map(this::toWetlabPlotConfigDTO)
+                .collect(Collectors.toList());
+    }
+
+    @PostMapping("/wetlab-config/{wetlabId}")
+    public List<WetlabPlotConfigDTO> saveWetlabPlotConfig(
+            @PathVariable Long wetlabId,
+            @RequestBody List<WetlabPlotConfigSaveDTO> configDTOs) {
+
+        WetLab wetlab = wetLabRepository
+                .findById(wetlabId)
+                .orElseThrow();
+
+        List<WetlabPlotConfig> existingConfigs =
+                wetlabPlotConfigRepository
+                        .findByWetlabIdOrderByOrderIndexAsc(wetlabId);
+
+        Map<Long, WetlabPlotConfig> existingByPlotId =
+                existingConfigs
+                        .stream()
+                        .collect(Collectors.toMap(
+                                config -> config.getPlot().getId(),
+                                config -> config
+                        ));
+
+        List<WetlabPlotConfig> configsToSave =
+                new java.util.ArrayList<>();
+
+        for (WetlabPlotConfigSaveDTO dto : configDTOs) {
+            Plot plot = plotRepository
+                    .findById(dto.getPlotId())
+                    .orElseThrow();
+
+            WetlabPlotConfig config =
+                    existingByPlotId.get(dto.getPlotId());
+
+            if (config == null) {
+                config = new WetlabPlotConfig();
+                config.setWetlab(wetlab);
+                config.setPlot(plot);
+            }
+
+            config.setEnabled(Boolean.TRUE.equals(dto.getEnabled()));
+            config.setOrderIndex(dto.getOrderIndex());
+
+            configsToSave.add(config);
+        }
+
+        return wetlabPlotConfigRepository
+                .saveAll(configsToSave)
+                .stream()
+                .sorted(java.util.Comparator.comparing(WetlabPlotConfig::getOrderIndex))
+                .map(this::toWetlabPlotConfigDTO)
                 .collect(Collectors.toList());
     }
 
@@ -451,6 +574,21 @@ public class ChartController {
                 chart.getTitle(),
                 chart.getChartType(),
                 chart.getDataSourceKey(),
+                config.getEnabled(),
+                config.getOrderIndex()
+        );
+    }
+
+    private WetlabPlotConfigDTO toWetlabPlotConfigDTO(
+            WetlabPlotConfig config) {
+
+        Plot plot = config.getPlot();
+
+        return new WetlabPlotConfigDTO(
+                config.getId(),
+                config.getWetlab().getId(),
+                plot.getId(),
+                plot.getName(),
                 config.getEnabled(),
                 config.getOrderIndex()
         );
