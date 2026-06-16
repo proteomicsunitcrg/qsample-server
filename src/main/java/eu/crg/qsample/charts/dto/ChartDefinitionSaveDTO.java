@@ -8,6 +8,7 @@ public class ChartDefinitionSaveDTO {
     private String title;
     private String description;
     private String chartType;
+    private String chartMode;
     private String library;
     private String dataSourceKey;
     private Boolean active;
@@ -45,6 +46,14 @@ public class ChartDefinitionSaveDTO {
 
     public void setChartType(String chartType) {
         this.chartType = chartType;
+    }
+
+    public String getChartMode() {
+        return chartMode;
+    }
+
+    public void setChartMode(String chartMode) {
+        this.chartMode = chartMode;
     }
 
     public String getLibrary() {

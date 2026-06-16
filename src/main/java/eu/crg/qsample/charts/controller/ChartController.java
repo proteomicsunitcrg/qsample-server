@@ -141,8 +141,8 @@ public class ChartController {
         chart.setLibrary(defaultIfBlank(chartDTO.getLibrary(), "plotly"));
         chart.setDataSourceKey(chartDTO.getDataSourceKey().trim());
         chart.setActive(chartDTO.getActive() == null || chartDTO.getActive());
-        chart.setProviderType(defaultIfBlank(chartDTO.getProviderType(), "plot_api_key"));
-        chart.setChartMode(resolveChartMode(chart));
+        chart.setChartMode(resolveChartMode(chartDTO.getChartMode(), chart));
+        chart.setProviderType(resolveProviderType(chartDTO.getProviderType(), chart.getChartMode(), chart));
         chart.setConstraintFlag(trimToNull(chartDTO.getConstraintFlag()));
         chart.setParameters(buildParameters(chartDTO.getParameters(), chart));
 
@@ -181,7 +181,9 @@ public class ChartController {
         chart.setLibrary(defaultIfBlank(chartDTO.getLibrary(), "plotly"));
         chart.setDataSourceKey(chartDTO.getDataSourceKey().trim());
         chart.setActive(chartDTO.getActive() == null || chartDTO.getActive());
-        chart.setChartMode(resolveChartMode(chart));
+        chart.setConstraintFlag(trimToNull(chartDTO.getConstraintFlag()));
+        chart.setChartMode(resolveChartMode(chartDTO.getChartMode(), chart));
+        chart.setProviderType(resolveProviderType(chartDTO.getProviderType(), chart.getChartMode(), chart));
         replaceParameters(chart, chartDTO.getParameters());
 
         ChartDefinition savedChart = chartDefinitionRepository.save(chart);
@@ -604,6 +606,28 @@ public class ChartController {
                 .findByDataSourceKey(dataSourceKey)
                 .orElseThrow();
 
+        return getChartDataByRequest(chart, requestCode, order);
+    }
+
+    @GetMapping("/data/chart/{chartId}/request/{requestCode}")
+    public List<ChartDataPointDTO> getChartDataByChartAndRequest(
+            @PathVariable Long chartId,
+            @PathVariable String requestCode,
+            @RequestParam(defaultValue = "filename") String order) {
+
+        ChartDefinition chart = chartDefinitionRepository
+                .findById(chartId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Chart not found"));
+
+        return getChartDataByRequest(chart, requestCode, order);
+    }
+
+    private List<ChartDataPointDTO> getChartDataByRequest(
+            ChartDefinition chart,
+            String requestCode,
+            String order) {
+
+        String dataSourceKey = chart.getDataSourceKey();
         String providerType = normalizeProviderType(chart.getProviderType());
 
         List<ChartDataRepository.ChartDataPointProjection> points;
@@ -685,6 +709,28 @@ public class ChartController {
                 .findByDataSourceKey(dataSourceKey)
                 .orElseThrow();
 
+        return getStackedChartDataByRequest(chart, requestCode, order);
+    }
+
+    @GetMapping("/stacked-data/chart/{chartId}/request/{requestCode}")
+    public List<ChartSeriesDataPointDTO> getStackedChartDataByChartAndRequest(
+            @PathVariable Long chartId,
+            @PathVariable String requestCode,
+            @RequestParam(defaultValue = "date") String order) {
+
+        ChartDefinition chart = chartDefinitionRepository
+                .findById(chartId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Chart not found"));
+
+        return getStackedChartDataByRequest(chart, requestCode, order);
+    }
+
+    private List<ChartSeriesDataPointDTO> getStackedChartDataByRequest(
+            ChartDefinition chart,
+            String requestCode,
+            String order) {
+
+        String dataSourceKey = chart.getDataSourceKey();
         String providerType = normalizeProviderType(chart.getProviderType());
 
         List<ChartDataRepository.ChartSeriesDataPointProjection> points;
@@ -731,11 +777,20 @@ public class ChartController {
 
         } else {
                 points = chartDataRepository
-                        .findStackedChartDataByContextSourceGroup(
+                        .findStackedChartDataByPlotApiKeyAndRequestCode(
                                 dataSourceKey,
                                 requestCode,
                                 order
                         );
+
+                if (points.isEmpty()) {
+                        points = chartDataRepository
+                                .findStackedChartDataByContextSourceGroup(
+                                        dataSourceKey,
+                                        requestCode,
+                                        order
+                                );
+                }
         }
 
         return points
@@ -943,6 +998,7 @@ public class ChartController {
                                 chart.getTitle(),
                                 chart.getDescription(),
                                 chart.getChartType(),
+                                resolveChartMode(null, chart),
                                 chart.getLibrary(),
                                 chart.getDataSourceKey(),
                                 chart.getActive(),
@@ -959,7 +1015,7 @@ public class ChartController {
                 chart.getChartType(),
                 chart.getLibrary(),
                 chart.getDataSourceKey(),
-                resolveChartMode(chart),
+                resolveChartMode(null, chart),
                 chart.getActive(),
                 buildParametersMap(chart)
         );
@@ -1223,8 +1279,31 @@ public class ChartController {
                 }
         }
 
-        private String resolveChartMode(ChartDefinition chart) {
-                String existingChartMode = trimToNull(chart.getChartMode());
+        private String resolveProviderType(String requestedProviderType, String chartMode, ChartDefinition chart) {
+                String normalizedProviderType = normalizeProviderType(requestedProviderType);
+                if (normalizedProviderType != null) {
+                        return normalizedProviderType;
+                }
+
+                String existingProviderType = normalizeProviderType(chart.getProviderType());
+                if (existingProviderType != null) {
+                        return existingProviderType;
+                }
+
+                if ("STACKED_BAR".equals(normalizeChartMode(chartMode))) {
+                        return "stacked_context_source";
+                }
+
+                return "plot_api_key";
+        }
+
+        private String resolveChartMode(String requestedChartMode, ChartDefinition chart) {
+                String normalizedChartMode = normalizeChartMode(requestedChartMode);
+                if (normalizedChartMode != null) {
+                        return normalizedChartMode;
+                }
+
+                String existingChartMode = normalizeChartMode(chart.getChartMode());
                 if (existingChartMode != null) {
                         return existingChartMode;
                 }
@@ -1239,5 +1318,27 @@ public class ChartController {
                 }
 
                 return "SIMPLE_BAR";
+        }
+
+        private String normalizeChartMode(String chartMode) {
+                String normalized = trimToNull(chartMode);
+                if (normalized == null) {
+                        return null;
+                }
+
+                switch (normalized.trim().toUpperCase()) {
+                        case "SIMPLE_BAR":
+                        case "BAR":
+                        case "SIMPLE":
+                                return "SIMPLE_BAR";
+                        case "STACKED_BAR":
+                        case "STACKED":
+                                return "STACKED_BAR";
+                        default:
+                                throw new ResponseStatusException(
+                                                HttpStatus.BAD_REQUEST,
+                                                "Unsupported chart mode: " + chartMode
+                                );
+                }
         }
 }

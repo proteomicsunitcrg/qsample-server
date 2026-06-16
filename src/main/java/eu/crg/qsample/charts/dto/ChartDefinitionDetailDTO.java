@@ -9,6 +9,7 @@ public class ChartDefinitionDetailDTO {
     private String title;
     private String description;
     private String chartType;
+    private String chartMode;
     private String library;
     private String dataSourceKey;
     private Boolean active;
@@ -20,6 +21,7 @@ public class ChartDefinitionDetailDTO {
             String title,
             String description,
             String chartType,
+            String chartMode,
             String library,
             String dataSourceKey,
             Boolean active,
@@ -29,6 +31,7 @@ public class ChartDefinitionDetailDTO {
         this.title = title;
         this.description = description;
         this.chartType = chartType;
+        this.chartMode = chartMode;
         this.library = library;
         this.dataSourceKey = dataSourceKey;
         this.active = active;
@@ -53,6 +56,10 @@ public class ChartDefinitionDetailDTO {
 
     public String getChartType() {
         return chartType;
+    }
+
+    public String getChartMode() {
+        return chartMode;
     }
 
     public String getLibrary() {
