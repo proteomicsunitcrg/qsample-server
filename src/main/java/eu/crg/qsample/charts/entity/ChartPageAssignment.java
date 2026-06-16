@@ -32,15 +32,31 @@ public class ChartPageAssignment {
             return chart;
     }
 
+    public void setChart(ChartDefinition chart) {
+        this.chart = chart;
+    }
+
     public String getPageName() {
         return pageName;
+    }
+
+    public void setPageName(String pageName) {
+        this.pageName = pageName;
     }
 
     public Integer getDisplayOrder() {
         return displayOrder;
     }
 
+    public void setDisplayOrder(Integer displayOrder) {
+        this.displayOrder = displayOrder;
+    }
+
     public Boolean getVisible() {
         return visible;
+    }
+
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
     }
 }

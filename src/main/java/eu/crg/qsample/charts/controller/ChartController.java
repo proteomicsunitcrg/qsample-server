@@ -4,11 +4,19 @@ import eu.crg.qsample.charts.dto.ApplicationChartConfigDTO;
 import eu.crg.qsample.charts.dto.ApplicationChartConfigSaveDTO;
 import eu.crg.qsample.charts.dto.ChartConfigDTO;
 import eu.crg.qsample.charts.dto.ChartDataPointDTO;
+import eu.crg.qsample.charts.dto.ChartDataSourceDTO;
+import eu.crg.qsample.charts.dto.ChartDataSourceOptionsDTO;
+import eu.crg.qsample.charts.dto.ChartDataSourceSaveDTO;
+import eu.crg.qsample.charts.dto.ChartDefinitionDetailDTO;
 import eu.crg.qsample.charts.dto.ChartDefinitionDTO;
+import eu.crg.qsample.charts.dto.ChartDefinitionSaveDTO;
+import eu.crg.qsample.charts.dto.ChartParameterDTO;
+import eu.crg.qsample.charts.dto.ChartParameterSaveDTO;
 import eu.crg.qsample.charts.dto.ChartSeriesDataPointDTO;
 import eu.crg.qsample.charts.dto.WetlabPlotConfigDTO;
 import eu.crg.qsample.charts.dto.WetlabPlotConfigSaveDTO;
 import eu.crg.qsample.charts.entity.ApplicationChartConfig;
+import eu.crg.qsample.charts.entity.ChartPageAssignment;
 import eu.crg.qsample.charts.entity.ChartDefinition;
 import eu.crg.qsample.charts.entity.ChartParameter;
 import eu.crg.qsample.charts.entity.WetlabPlotConfig;
@@ -17,6 +25,10 @@ import eu.crg.qsample.charts.repository.ChartDataRepository;
 import eu.crg.qsample.charts.repository.ChartDefinitionRepository;
 import eu.crg.qsample.charts.repository.ChartPageAssignmentRepository;
 import eu.crg.qsample.charts.repository.WetlabPlotConfigRepository;
+import eu.crg.qsample.context_source.ContextSource;
+import eu.crg.qsample.context_source.ContextSourceRepository;
+import eu.crg.qsample.param.Param;
+import eu.crg.qsample.param.ParamRepository;
 import eu.crg.qsample.plot.Plot;
 import eu.crg.qsample.plot.PlotRepository;
 import eu.crg.qsample.qgenerator.application.Application;
@@ -26,11 +38,22 @@ import eu.crg.qsample.request.local.RequestLocal;
 import eu.crg.qsample.request.local.RequestRepository;
 import eu.crg.qsample.wetlab.WetLab;
 import eu.crg.qsample.wetlab.WetLabRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
+
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -45,7 +68,10 @@ public class ChartController {
     private final ApplicationChartConfigRepository applicationChartConfigRepository;
     private final WetLabRepository wetLabRepository;
     private final PlotRepository plotRepository;
+    private final ParamRepository paramRepository;
+    private final ContextSourceRepository contextSourceRepository;
     private final WetlabPlotConfigRepository wetlabPlotConfigRepository;
+        private final EntityManager entityManager;
 
     public ChartController(
             ChartDefinitionRepository chartDefinitionRepository,
@@ -56,7 +82,10 @@ public class ChartController {
             ApplicationChartConfigRepository applicationChartConfigRepository,
             WetLabRepository wetLabRepository,
             PlotRepository plotRepository,
-            WetlabPlotConfigRepository wetlabPlotConfigRepository
+            ParamRepository paramRepository,
+            ContextSourceRepository contextSourceRepository,
+            WetlabPlotConfigRepository wetlabPlotConfigRepository,
+            EntityManager entityManager
     ) {
         this.chartDefinitionRepository = chartDefinitionRepository;
         this.chartPageAssignmentRepository = chartPageAssignmentRepository;
@@ -66,7 +95,10 @@ public class ChartController {
         this.applicationChartConfigRepository = applicationChartConfigRepository;
         this.wetLabRepository = wetLabRepository;
         this.plotRepository = plotRepository;
+        this.paramRepository = paramRepository;
+        this.contextSourceRepository = contextSourceRepository;
         this.wetlabPlotConfigRepository = wetlabPlotConfigRepository;
+                this.entityManager = entityManager;
     }
 
     @GetMapping
@@ -75,6 +107,102 @@ public class ChartController {
                 .stream()
                 .map(this::toDefinitionDTO)
                 .collect(Collectors.toList());
+    }
+
+        @GetMapping("/{chartId}")
+        public ChartDefinitionDetailDTO getChart(@PathVariable Long chartId) {
+                ChartDefinition chart = chartDefinitionRepository
+                                .findById(chartId)
+                                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Chart not found"));
+
+                return toDefinitionDetailDTO(chart);
+        }
+
+    @PostMapping
+    @Transactional
+    public ResponseEntity<ChartDefinitionDTO> createChart(
+            @RequestBody ChartDefinitionSaveDTO chartDTO) {
+
+        validateChartDefinition(chartDTO);
+
+        chartDefinitionRepository.findByName(chartDTO.getName())
+                .ifPresent(chart -> {
+                    throw new ResponseStatusException(
+                            HttpStatus.CONFLICT,
+                            "Chart name already exists"
+                    );
+                });
+
+        ChartDefinition chart = new ChartDefinition();
+        chart.setName(chartDTO.getName().trim());
+        chart.setTitle(chartDTO.getTitle().trim());
+        chart.setDescription(trimToNull(chartDTO.getDescription()));
+        chart.setChartType(chartDTO.getChartType().trim());
+        chart.setLibrary(defaultIfBlank(chartDTO.getLibrary(), "plotly"));
+        chart.setDataSourceKey(chartDTO.getDataSourceKey().trim());
+        chart.setActive(chartDTO.getActive() == null || chartDTO.getActive());
+        chart.setProviderType(defaultIfBlank(chartDTO.getProviderType(), "plot_api_key"));
+        chart.setChartMode(resolveChartMode(chart));
+        chart.setConstraintFlag(trimToNull(chartDTO.getConstraintFlag()));
+        chart.setParameters(buildParameters(chartDTO.getParameters(), chart));
+
+        ChartDefinition savedChart = chartDefinitionRepository.save(chart);
+        createDefaultPageAssignment(savedChart, "request_details");
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(toDefinitionDTO(savedChart));
+    }
+
+    @PutMapping("/{chartId}")
+    public ChartDefinitionDetailDTO updateChart(
+            @PathVariable Long chartId,
+            @RequestBody ChartDefinitionSaveDTO chartDTO) {
+
+        validateChartDefinition(chartDTO);
+
+        ChartDefinition chart = chartDefinitionRepository
+                .findById(chartId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Chart not found"));
+
+        chartDefinitionRepository.findByName(chartDTO.getName().trim())
+                .filter(existingChart -> !existingChart.getId().equals(chartId))
+                .ifPresent(existingChart -> {
+                    throw new ResponseStatusException(
+                            HttpStatus.CONFLICT,
+                            "Chart name already exists"
+                    );
+                });
+
+        chart.setName(chartDTO.getName().trim());
+        chart.setTitle(chartDTO.getTitle().trim());
+        chart.setDescription(trimToNull(chartDTO.getDescription()));
+        chart.setChartType(chartDTO.getChartType().trim());
+        chart.setLibrary(defaultIfBlank(chartDTO.getLibrary(), "plotly"));
+        chart.setDataSourceKey(chartDTO.getDataSourceKey().trim());
+        chart.setActive(chartDTO.getActive() == null || chartDTO.getActive());
+        chart.setChartMode(resolveChartMode(chart));
+        replaceParameters(chart, chartDTO.getParameters());
+
+        ChartDefinition savedChart = chartDefinitionRepository.save(chart);
+
+        return toDefinitionDetailDTO(savedChart);
+    }
+
+    @DeleteMapping("/{chartId}")
+    @Transactional
+    public ResponseEntity<Void> deleteChart(@PathVariable Long chartId) {
+        ChartDefinition chart = chartDefinitionRepository
+                .findById(chartId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Chart not found"));
+
+        applicationChartConfigRepository.deleteByChartId(chartId);
+        entityManager.createNativeQuery("DELETE FROM chart_context_sources WHERE chart_id = :chartId")
+                .setParameter("chartId", chartId)
+                .executeUpdate();
+        chartDefinitionRepository.delete(chart);
+
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/page/{pageName}")
@@ -137,6 +265,81 @@ public class ChartController {
                 .stream()
                 .map(this::toApplicationChartConfigDTO)
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/data-sources")
+    @Transactional
+    public List<ChartDataSourceDTO> getDataSources() {
+        List<Plot> plots = new ArrayList<>();
+        plotRepository.findAll().forEach(plots::add);
+
+        return plots
+                .stream()
+                .sorted(Comparator.comparing(plot -> defaultIfBlank(plot.getName(), "")))
+                .map(this::toDataSourceDTO)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/data-source-options")
+    public ChartDataSourceOptionsDTO getDataSourceOptions() {
+        List<Param> params = paramRepository.findAll()
+                .stream()
+                .sorted(Comparator.comparing(Param::getName))
+                .collect(Collectors.toList());
+
+        List<ContextSource> contextSources = new ArrayList<>();
+        contextSourceRepository.findAll().forEach(contextSources::add);
+
+        return new ChartDataSourceOptionsDTO(
+                params
+                        .stream()
+                        .map(param -> new ChartDataSourceOptionsDTO.OptionDTO(
+                                param.getId(),
+                                param.getName()
+                        ))
+                        .collect(Collectors.toList()),
+                contextSources
+                        .stream()
+                        .sorted(Comparator.comparing(ContextSource::getName))
+                        .map(this::toContextSourceDTO)
+                        .collect(Collectors.toList())
+        );
+    }
+
+    @PostMapping("/data-sources")
+    @Transactional
+    public ResponseEntity<ChartDataSourceDTO> createDataSource(
+            @RequestBody ChartDataSourceSaveDTO dataSourceDTO) {
+
+        validateDataSource(dataSourceDTO);
+
+        Param param = paramRepository
+                .findById(dataSourceDTO.getParamId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Param not found"));
+
+        List<ContextSource> contextSources = findContextSources(dataSourceDTO.getContextSourceIds());
+
+        Plot existingPlot = findExistingPlot(
+                dataSourceDTO.getName().trim(),
+                param.getId(),
+                contextSources
+        );
+
+        if (existingPlot != null) {
+            return ResponseEntity.ok(toDataSourceDTO(existingPlot));
+        }
+
+        Plot plot = new Plot();
+        plot.setName(dataSourceDTO.getName().trim());
+        plot.setApiKey(UUID.randomUUID());
+        plot.setParam(param);
+        plot.setContextSource(contextSources);
+
+        Plot savedPlot = plotRepository.save(plot);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(toDataSourceDTO(savedPlot));
     }
 
     @PostMapping("/application-config/{applicationId}/initialize")
@@ -211,6 +414,8 @@ public class ChartController {
             ChartDefinition chart = chartDefinitionRepository
                     .findById(dto.getChartId())
                     .orElseThrow();
+
+            ensurePageAssignment(chart, "request_details");
 
             ApplicationChartConfig config =
                     existingByChartId.get(dto.getChartId());
@@ -351,9 +556,11 @@ public class ChartController {
                 .findByDataSourceKey(dataSourceKey)
                 .orElseThrow();
 
+        String providerType = normalizeProviderType(chart.getProviderType());
+
         List<ChartDataRepository.ChartDataPointProjection> points;
 
-        if ("context_source_group".equals(chart.getProviderType())) {
+        if ("context_source_group".equals(providerType)) {
 
             points = chartDataRepository
                     .findChartDataByContextSourceGroup(
@@ -361,7 +568,7 @@ public class ChartController {
                             requestCode
                     );
 
-        } else if ("context_source_group_by_file".equals(chart.getProviderType())) {
+        } else if ("context_source_group_by_file".equals(providerType)) {
 
             points = chartDataRepository
                     .findChartDataByContextSourceGroupByFile(
@@ -370,7 +577,8 @@ public class ChartController {
                             order
                     );
 
-                } else if ("file_info_column".equals(chart.getProviderType())
+                } else if (("file_info_column".equals(providerType)
+                || "file_info_stacked_by_file".equals(providerType))
                 && "modified_peptides".equals(dataSourceKey)) {
 
             points = chartDataRepository
@@ -379,7 +587,8 @@ public class ChartController {
                             order
                     );
 
-        } else if ("modification_ratio_by_file".equals(chart.getProviderType())
+        } else if (("modification_ratio_by_file".equals(providerType)
+                || "modification_stacked_by_file".equals(providerType))
                 && "percentage_propionyl".equals(dataSourceKey)) {
 
             points = chartDataRepository
@@ -388,7 +597,8 @@ public class ChartController {
                             order
                     );
 
-        } else if ("modification_ratio_by_file".equals(chart.getProviderType())
+        } else if (("modification_ratio_by_file".equals(providerType)
+                || "modification_stacked_by_file".equals(providerType))
                 && "percentage_pic".equals(dataSourceKey)) {
 
             points = chartDataRepository
@@ -423,6 +633,12 @@ public class ChartController {
                 @PathVariable String requestCode,
                 @RequestParam(defaultValue = "date") String order) {
 
+        ChartDefinition chart = chartDefinitionRepository
+                .findByDataSourceKey(dataSourceKey)
+                .orElseThrow();
+
+        String providerType = normalizeProviderType(chart.getProviderType());
+
         List<ChartDataRepository.ChartSeriesDataPointProjection> points;
 
                 if ("modification_sites".equals(dataSourceKey)) {
@@ -432,28 +648,32 @@ public class ChartController {
                                 order
                         );
 
-        } else if ("modified_peptides".equals(dataSourceKey)) {
+        } else if ("modified_peptides".equals(dataSourceKey)
+                && "file_info_stacked_by_file".equals(providerType)) {
                 points = chartDataRepository
                         .findModifiedPeptidesStackedByRequestCode(
                                 requestCode,
                                 order
                         );
 
-        } else if ("percentage_propionyl".equals(dataSourceKey)) {
+        } else if ("percentage_propionyl".equals(dataSourceKey)
+                && "modification_stacked_by_file".equals(providerType)) {
                 points = chartDataRepository
                         .findPercentagePropionylStackedByRequestCode(
                                 requestCode,
                                 order
                         );
 
-        } else if ("percentage_pic".equals(dataSourceKey)) {
+        } else if ("percentage_pic".equals(dataSourceKey)
+                && "modification_stacked_by_file".equals(providerType)) {
                 points = chartDataRepository
                         .findPercentagePicStackedByRequestCode(
                                 requestCode,
                                 order
                         );
 
-        } else if ("polymer_contaminants".equals(dataSourceKey)) {
+        } else if ("polymer_contaminants".equals(dataSourceKey)
+                && "modification_stacked_by_type".equals(providerType)) {
                 points = chartDataRepository
                         .findModificationStackedByTypeAndRequestCode(
                                 requestCode,
@@ -509,6 +729,37 @@ public class ChartController {
                 .filter(chart -> pageChartIds.contains(chart.getId()))
                 .map(this::toConfigDTO)
                 .collect(Collectors.toList());
+    }
+
+    private void createDefaultPageAssignment(ChartDefinition chart, String pageName) {
+                ensurePageAssignment(chart, pageName);
+        }
+
+        private void ensurePageAssignment(ChartDefinition chart, String pageName) {
+                boolean alreadyAssigned = chartPageAssignmentRepository
+                                .findByPageNameAndVisibleTrueOrderByDisplayOrderAsc(pageName)
+                                .stream()
+                                .anyMatch(assignment -> assignment.getChart().getId().equals(chart.getId()));
+
+                if (alreadyAssigned) {
+                        return;
+                }
+
+        int nextDisplayOrder = chartPageAssignmentRepository
+                .findByPageNameAndVisibleTrueOrderByDisplayOrderAsc(pageName)
+                .stream()
+                .map(ChartPageAssignment::getDisplayOrder)
+                .filter(order -> order != null)
+                .max(Integer::compareTo)
+                .orElse(0) + 1;
+
+        ChartPageAssignment assignment = new ChartPageAssignment();
+        assignment.setChart(chart);
+        assignment.setPageName(pageName);
+        assignment.setDisplayOrder(nextDisplayOrder);
+        assignment.setVisible(true);
+
+        chartPageAssignmentRepository.save(assignment);
     }
 
     private List<ChartConfigDTO> getLegacyChartsByPageAndConstraint(
@@ -594,6 +845,36 @@ public class ChartController {
         );
     }
 
+    private ChartDataSourceDTO toDataSourceDTO(Plot plot) {
+        Param param = plot.getParam();
+
+        List<ChartDataSourceDTO.ContextSourceDTO> contextSources =
+                plot.getContextSource() == null
+                        ? Collections.emptyList()
+                        : plot.getContextSource()
+                                .stream()
+                                .sorted(Comparator.comparing(ContextSource::getName))
+                                .map(this::toContextSourceDTO)
+                                .collect(Collectors.toList());
+
+        return new ChartDataSourceDTO(
+                plot.getId(),
+                plot.getName(),
+                plot.getApiKey() == null ? null : plot.getApiKey().toString(),
+                param == null ? null : param.getId(),
+                param == null ? null : param.getName(),
+                contextSources
+        );
+    }
+
+    private ChartDataSourceDTO.ContextSourceDTO toContextSourceDTO(ContextSource contextSource) {
+        return new ChartDataSourceDTO.ContextSourceDTO(
+                contextSource.getId(),
+                contextSource.getName(),
+                contextSource.getAbbreviated()
+        );
+    }
+
     private ChartDefinitionDTO toDefinitionDTO(ChartDefinition chart) {
         return new ChartDefinitionDTO(
                 chart.getId(),
@@ -607,6 +888,20 @@ public class ChartController {
         );
     }
 
+        private ChartDefinitionDetailDTO toDefinitionDetailDTO(ChartDefinition chart) {
+                return new ChartDefinitionDetailDTO(
+                                chart.getId(),
+                                chart.getName(),
+                                chart.getTitle(),
+                                chart.getDescription(),
+                                chart.getChartType(),
+                                chart.getLibrary(),
+                                chart.getDataSourceKey(),
+                                chart.getActive(),
+                                toParameterDTOs(chart.getParameters())
+                );
+        }
+
     private ChartConfigDTO toConfigDTO(ChartDefinition chart) {
         return new ChartConfigDTO(
                 chart.getId(),
@@ -616,6 +911,7 @@ public class ChartController {
                 chart.getChartType(),
                 chart.getLibrary(),
                 chart.getDataSourceKey(),
+                resolveChartMode(chart),
                 chart.getActive(),
                 buildParametersMap(chart)
         );
@@ -656,4 +952,244 @@ public class ChartController {
 
         return value;
     }
+
+        private List<ChartParameterDTO> toParameterDTOs(List<ChartParameter> parameters) {
+                if (parameters == null || parameters.isEmpty()) {
+                        return Collections.emptyList();
+                }
+
+                return parameters.stream()
+                                .map(parameter -> new ChartParameterDTO(
+                                                parameter.getParamKey(),
+                                                parameter.getParamValue(),
+                                                parameter.getParamType(),
+                                                parameter.getDescription()
+                                ))
+                                .collect(Collectors.toList());
+        }
+
+        private List<ChartParameter> buildParameters(
+                        List<ChartParameterSaveDTO> parameterDTOs,
+                        ChartDefinition chart) {
+
+                if (parameterDTOs == null || parameterDTOs.isEmpty()) {
+                        return Collections.emptyList();
+                }
+
+                Set<String> keys = new HashSet<>();
+
+                return parameterDTOs.stream()
+                                .map(parameterDTO -> toChartParameter(parameterDTO, chart, keys))
+                                .collect(Collectors.toList());
+        }
+
+        private void replaceParameters(
+                        ChartDefinition chart,
+                        List<ChartParameterSaveDTO> parameterDTOs) {
+
+                List<ChartParameter> updatedParameters = buildParameters(parameterDTOs, chart);
+
+                if (chart.getParameters() == null) {
+                        chart.setParameters(updatedParameters);
+                        return;
+                }
+
+                chart.getParameters().clear();
+                chart.getParameters().addAll(updatedParameters);
+        }
+
+        private ChartParameter toChartParameter(
+                        ChartParameterSaveDTO parameterDTO,
+                        ChartDefinition chart,
+                        Set<String> keys) {
+
+                String key = requireValue(parameterDTO.getKey(), "Parameter key is required");
+                String normalizedKey = key.trim();
+
+                if (!keys.add(normalizedKey)) {
+                        throw new ResponseStatusException(
+                                        HttpStatus.BAD_REQUEST,
+                                        "Duplicate chart parameter key: " + normalizedKey
+                        );
+                }
+
+                ChartParameter parameter = new ChartParameter();
+                parameter.setChart(chart);
+                parameter.setParamKey(normalizedKey);
+                parameter.setParamValue(trimToNull(parameterDTO.getValue()));
+                parameter.setParamType(defaultIfBlank(parameterDTO.getType(), "string"));
+                parameter.setDescription(trimToNull(parameterDTO.getDescription()));
+
+                return parameter;
+        }
+
+        private void validateDataSource(ChartDataSourceSaveDTO dataSourceDTO) {
+                if (dataSourceDTO == null) {
+                        throw new ResponseStatusException(
+                                        HttpStatus.BAD_REQUEST,
+                                        "Data source payload is required"
+                        );
+                }
+
+                requireValue(dataSourceDTO.getName(), "Data source name is required");
+
+                if (dataSourceDTO.getParamId() == null) {
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Param is required");
+                }
+
+                if (dataSourceDTO.getContextSourceIds() == null
+                                || dataSourceDTO.getContextSourceIds().isEmpty()) {
+                        throw new ResponseStatusException(
+                                        HttpStatus.BAD_REQUEST,
+                                        "At least one context source is required"
+                        );
+                }
+        }
+
+        private List<ContextSource> findContextSources(List<Long> contextSourceIds) {
+                Set<Long> requestedIds = new HashSet<>(contextSourceIds);
+                List<ContextSource> contextSources = new ArrayList<>();
+
+                contextSourceRepository
+                                .findAllById(requestedIds)
+                                .forEach(contextSources::add);
+
+                if (contextSources.size() != requestedIds.size()) {
+                        throw new ResponseStatusException(
+                                        HttpStatus.BAD_REQUEST,
+                                        "One or more context sources were not found"
+                        );
+                }
+
+                return contextSources
+                                .stream()
+                                .sorted(Comparator.comparing(ContextSource::getName))
+                                .collect(Collectors.toList());
+        }
+
+        private Plot findExistingPlot(
+                        String name,
+                        Long paramId,
+                        List<ContextSource> contextSources) {
+
+                for (Plot plot : plotRepository.findAll()) {
+                        Param plotParam = plot.getParam();
+
+                        if (plotParam == null || !paramId.equals(plotParam.getId())) {
+                                continue;
+                        }
+
+                        if (!name.equalsIgnoreCase(defaultIfBlank(plot.getName(), ""))) {
+                                continue;
+                        }
+
+                        if (hasSameContextSources(plot.getContextSource(), contextSources)) {
+                                return plot;
+                        }
+                }
+
+                return null;
+        }
+
+        private boolean hasSameContextSources(
+                        List<ContextSource> existingContextSources,
+                        List<ContextSource> requestedContextSources) {
+
+                if (existingContextSources == null) {
+                        return requestedContextSources == null || requestedContextSources.isEmpty();
+                }
+
+                List<Long> existingIds = existingContextSources
+                                .stream()
+                                .map(ContextSource::getId)
+                                .sorted()
+                                .collect(Collectors.toList());
+
+                List<Long> requestedIds = requestedContextSources
+                                .stream()
+                                .map(ContextSource::getId)
+                                .sorted()
+                                .collect(Collectors.toList());
+
+                return existingIds.equals(requestedIds);
+        }
+
+        private void validateChartDefinition(ChartDefinitionSaveDTO chartDTO) {
+                if (chartDTO == null) {
+                        throw new ResponseStatusException(
+                                        HttpStatus.BAD_REQUEST,
+                                        "Chart payload is required"
+                        );
+                }
+
+                requireValue(chartDTO.getName(), "Chart name is required");
+                requireValue(chartDTO.getTitle(), "Chart title is required");
+                requireValue(chartDTO.getChartType(), "Chart type is required");
+                requireValue(chartDTO.getDataSourceKey(), "Chart data source key is required");
+        }
+
+        private String requireValue(String value, String message) {
+                if (value == null || value.trim().isEmpty()) {
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
+                }
+
+                return value;
+        }
+
+        private String defaultIfBlank(String value, String fallback) {
+                String trimmed = trimToNull(value);
+                return trimmed == null ? fallback : trimmed;
+        }
+
+        private String trimToNull(String value) {
+                if (value == null) {
+                        return null;
+                }
+
+                String trimmed = value.trim();
+                return trimmed.isEmpty() ? null : trimmed;
+        }
+
+        private String normalizeProviderType(String providerType) {
+                String normalized = defaultIfBlank(providerType, "plot_api_key");
+
+                switch (normalized) {
+                        case "file_info_stacked_by_file":
+                                return "file_info_stacked_by_file";
+                        case "file_info_column":
+                                return "file_info_column";
+                        case "modification_stacked_by_file":
+                                return "modification_stacked_by_file";
+                        case "modification_ratio_by_file":
+                                return "modification_ratio_by_file";
+                        case "modification_stacked_by_type":
+                                return "modification_stacked_by_type";
+                        case "stacked_context_source":
+                                return "stacked_context_source";
+                        case "context_source_group":
+                                return "context_source_group";
+                        case "context_source_group_by_file":
+                                return "context_source_group_by_file";
+                        default:
+                                return normalized;
+                }
+        }
+
+        private String resolveChartMode(ChartDefinition chart) {
+                String existingChartMode = trimToNull(chart.getChartMode());
+                if (existingChartMode != null) {
+                        return existingChartMode;
+                }
+
+                String providerType = normalizeProviderType(chart.getProviderType());
+
+                if ("file_info_stacked_by_file".equals(providerType)
+                                || "modification_stacked_by_file".equals(providerType)
+                                || "modification_stacked_by_type".equals(providerType)
+                                || "stacked_context_source".equals(providerType)) {
+                        return "STACKED_BAR";
+                }
+
+                return "SIMPLE_BAR";
+        }
 }
