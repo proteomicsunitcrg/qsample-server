@@ -342,6 +342,54 @@ public class ChartController {
                 .body(toDataSourceDTO(savedPlot));
     }
 
+
+    @GetMapping("/data-sources/{dataSourceId}")
+    @Transactional
+    public ChartDataSourceDTO getDataSource(
+            @PathVariable Long dataSourceId) {
+
+        Plot plot = plotRepository
+                .findById(dataSourceId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data source not found"));
+
+        return toDataSourceDTO(plot);
+    }
+
+    @PutMapping("/data-sources/{dataSourceId}")
+    @Transactional
+    public ChartDataSourceDTO updateDataSource(
+            @PathVariable Long dataSourceId,
+            @RequestBody ChartDataSourceSaveDTO dataSourceDTO) {
+
+        validateDataSource(dataSourceDTO);
+
+        Plot plot = plotRepository
+                .findById(dataSourceId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data source not found"));
+
+        Param param = paramRepository
+                .findById(dataSourceDTO.getParamId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Param not found"));
+
+        List<ContextSource> contextSources = findContextSources(dataSourceDTO.getContextSourceIds());
+
+        Plot existingPlot = findExistingPlot(
+                dataSourceDTO.getName().trim(),
+                param.getId(),
+                contextSources
+        );
+
+        if (existingPlot != null && !existingPlot.getId().equals(plot.getId())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Data source already exists");
+        }
+
+        plot.setName(dataSourceDTO.getName().trim());
+        plot.setParam(param);
+        plot.setContextSource(contextSources);
+
+        return toDataSourceDTO(plotRepository.save(plot));
+    }
+
     @PostMapping("/application-config/{applicationId}/initialize")
     public List<ApplicationChartConfigDTO> initializeApplicationChartConfig(
             @PathVariable Long applicationId) {
