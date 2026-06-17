@@ -813,6 +813,101 @@ public class ChartController {
         return toWetlabPlotConfigDTO(wetlabPlotConfigRepository.save(config));
     }
 
+    @PutMapping("/wetlabs/{wetlabId}/data-sources/{plotId}")
+    @Transactional
+    public ResponseEntity<WetlabPlotConfigDTO> updateWetlabDataSource(
+            @PathVariable Long wetlabId,
+            @PathVariable Long plotId,
+            @RequestBody ChartDataSourceSaveDTO dataSourceDTO) {
+
+        validateDataSource(dataSourceDTO);
+
+        WetLab wetlab = wetLabRepository
+                .findById(wetlabId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wetlab not found"));
+
+        plotRepository
+                .findById(plotId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data source not found"));
+
+        WetlabPlotConfig previousConfig = wetlabPlotConfigRepository
+                .findByWetlabIdAndPlotId(wetlabId, plotId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Data source is not linked to this wetlab"
+                ));
+
+        Param param = paramRepository
+                .findById(dataSourceDTO.getParamId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Param not found"));
+
+        List<ContextSource> contextSources = findContextSources(dataSourceDTO.getContextSourceIds());
+
+        Plot targetPlot = findExistingPlot(
+                dataSourceDTO.getName().trim(),
+                param.getId(),
+                contextSources
+        );
+
+        boolean created = false;
+
+        if (targetPlot == null) {
+            targetPlot = new Plot();
+            targetPlot.setName(dataSourceDTO.getName().trim());
+            targetPlot.setApiKey(UUID.randomUUID());
+            targetPlot.setParam(param);
+            targetPlot.setContextSource(contextSources);
+            targetPlot = plotRepository.save(targetPlot);
+            created = true;
+        }
+
+        Integer previousOrderIndex = previousConfig.getOrderIndex();
+        Boolean previousEnabled = previousConfig.getEnabled();
+
+        if (!targetPlot.getId().equals(plotId)) {
+            wetlabPlotConfigRepository.deleteByWetlabIdAndPlotId(wetlabId, plotId);
+
+            entityManager
+                    .createNativeQuery(
+                            "DELETE FROM wetlab_plot " +
+                                    "WHERE wet_lab_id = :wetlabId " +
+                                    "AND plot_id = :plotId"
+                    )
+                    .setParameter("wetlabId", wetlabId)
+                    .setParameter("plotId", plotId)
+                    .executeUpdate();
+
+            entityManager
+                    .createNativeQuery(
+                            "INSERT IGNORE INTO wetlab_plot (wet_lab_id, plot_id) " +
+                                    "VALUES (:wetlabId, :plotId)"
+                    )
+                    .setParameter("wetlabId", wetlabId)
+                    .setParameter("plotId", targetPlot.getId())
+                    .executeUpdate();
+        }
+
+        final Plot finalTargetPlot = targetPlot;
+
+        WetlabPlotConfig targetConfig = wetlabPlotConfigRepository
+                .findByWetlabIdAndPlotId(wetlabId, finalTargetPlot.getId())
+                .orElseGet(() -> {
+                    WetlabPlotConfig newConfig = new WetlabPlotConfig();
+                    newConfig.setWetlab(wetlab);
+                    newConfig.setPlot(finalTargetPlot);
+                    return newConfig;
+                });
+
+        targetConfig.setEnabled(previousEnabled == null || previousEnabled);
+        targetConfig.setOrderIndex(previousOrderIndex == null ? 0 : previousOrderIndex);
+
+        WetlabPlotConfig savedConfig = wetlabPlotConfigRepository.save(targetConfig);
+
+        return ResponseEntity
+                .status(created ? HttpStatus.CREATED : HttpStatus.OK)
+                .body(toWetlabPlotConfigDTO(savedConfig));
+    }
+
     @DeleteMapping("/wetlabs/{wetlabId}/data-sources/{plotId}")
     @Transactional
     public ResponseEntity<Void> unlinkWetlabDataSource(
