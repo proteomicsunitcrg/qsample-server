@@ -690,6 +690,53 @@ public class ChartController {
                 .collect(Collectors.toList());
     }
 
+    @PostMapping("/wetlabs/{wetlabId}/data-sources/{plotId}")
+    @Transactional
+    public WetlabPlotConfigDTO linkWetlabDataSource(
+            @PathVariable Long wetlabId,
+            @PathVariable Long plotId) {
+
+        WetLab wetlab = wetLabRepository
+                .findById(wetlabId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wetlab not found"));
+
+        Plot plot = plotRepository
+                .findById(plotId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data source not found"));
+
+        entityManager
+                .createNativeQuery(
+                        "INSERT IGNORE INTO wetlab_plot (wet_lab_id, plot_id) " +
+                                "VALUES (:wetlabId, :plotId)"
+                )
+                .setParameter("wetlabId", wetlabId)
+                .setParameter("plotId", plotId)
+                .executeUpdate();
+
+        WetlabPlotConfig config = wetlabPlotConfigRepository
+                .findByWetlabIdAndPlotId(wetlabId, plotId)
+                .orElseGet(() -> {
+                    WetlabPlotConfig newConfig = new WetlabPlotConfig();
+                    newConfig.setWetlab(wetlab);
+                    newConfig.setPlot(plot);
+
+                    Integer nextOrderIndex = wetlabPlotConfigRepository
+                            .findByWetlabIdOrderByOrderIndexAsc(wetlabId)
+                            .stream()
+                            .map(WetlabPlotConfig::getOrderIndex)
+                            .filter(orderIndex -> orderIndex != null)
+                            .max(Integer::compareTo)
+                            .orElse(0) + 1;
+
+                    newConfig.setOrderIndex(nextOrderIndex);
+                    return newConfig;
+                });
+
+        config.setEnabled(true);
+
+        return toWetlabPlotConfigDTO(wetlabPlotConfigRepository.save(config));
+    }
+
     @DeleteMapping("/wetlabs/{wetlabId}/data-sources/{plotId}")
     @Transactional
     public ResponseEntity<Void> unlinkWetlabDataSource(
