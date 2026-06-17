@@ -1098,8 +1098,31 @@ public class ChartController {
                         return;
                 }
 
-                chart.getParameters().clear();
-                chart.getParameters().addAll(updatedParameters);
+                Map<String, ChartParameter> existingParameters = chart.getParameters()
+                                .stream()
+                                .collect(Collectors.toMap(
+                                                ChartParameter::getParamKey,
+                                                parameter -> parameter
+                                ));
+
+                Set<String> updatedKeys = updatedParameters.stream()
+                                .map(ChartParameter::getParamKey)
+                                .collect(Collectors.toSet());
+
+                chart.getParameters().removeIf(parameter -> !updatedKeys.contains(parameter.getParamKey()));
+
+                for (ChartParameter updatedParameter : updatedParameters) {
+                        ChartParameter existingParameter = existingParameters.get(updatedParameter.getParamKey());
+
+                        if (existingParameter == null) {
+                                chart.getParameters().add(updatedParameter);
+                                continue;
+                        }
+
+                        existingParameter.setParamValue(updatedParameter.getParamValue());
+                        existingParameter.setParamType(updatedParameter.getParamType());
+                        existingParameter.setDescription(updatedParameter.getDescription());
+                }
         }
 
         private ChartParameter toChartParameter(
@@ -1280,12 +1303,12 @@ public class ChartController {
         }
 
         private String resolveProviderType(String requestedProviderType, String chartMode, ChartDefinition chart) {
-                String normalizedProviderType = normalizeProviderType(requestedProviderType);
+                String normalizedProviderType = normalizeRequestedProviderType(requestedProviderType);
                 if (normalizedProviderType != null) {
                         return normalizedProviderType;
                 }
 
-                String existingProviderType = normalizeProviderType(chart.getProviderType());
+                String existingProviderType = normalizeRequestedProviderType(chart.getProviderType());
                 if (existingProviderType != null) {
                         return existingProviderType;
                 }
@@ -1295,6 +1318,15 @@ public class ChartController {
                 }
 
                 return "plot_api_key";
+        }
+
+        private String normalizeRequestedProviderType(String providerType) {
+                String trimmedProviderType = trimToNull(providerType);
+                if (trimmedProviderType == null) {
+                        return null;
+                }
+
+                return normalizeProviderType(trimmedProviderType);
         }
 
         private String resolveChartMode(String requestedChartMode, ChartDefinition chart) {
