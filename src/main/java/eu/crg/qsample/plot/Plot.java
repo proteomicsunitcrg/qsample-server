@@ -3,7 +3,6 @@ package eu.crg.qsample.plot;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -45,7 +43,7 @@ public class Plot {
     private List <ContextSource> contextSource;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "param_id", referencedColumnName = "id")
     private Param param;
 

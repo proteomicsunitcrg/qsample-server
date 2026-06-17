@@ -392,6 +392,100 @@ public class ChartController {
         return toDataSourceDTO(plotRepository.save(plot));
     }
 
+    @DeleteMapping("/data-sources/{dataSourceId}")
+    @Transactional
+    public ResponseEntity<Void> deleteDataSource(
+            @PathVariable Long dataSourceId) {
+
+        Plot plot = plotRepository
+                .findById(dataSourceId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data source not found"));
+
+        String dataSourceKey = plot.getApiKey().toString();
+
+        List<ChartDefinition> chartsUsingDataSource =
+                chartDefinitionRepository.findAllByDataSourceKey(dataSourceKey);
+
+        if (!chartsUsingDataSource.isEmpty()) {
+            String chartTitles = chartsUsingDataSource
+                    .stream()
+                    .map(chart -> {
+                        List<ApplicationChartConfig> applicationConfigs =
+                                applicationChartConfigRepository.findByChartId(chart.getId());
+
+                        String applicationNames = applicationConfigs
+                                .stream()
+                                .map(config -> config.getApplication().getName())
+                                .distinct()
+                                .collect(Collectors.joining(", "));
+
+                        long applicationCount = applicationConfigs
+                                .stream()
+                                .map(config -> config.getApplication().getName())
+                                .distinct()
+                                .count();
+
+                        String applicationPreview = applicationConfigs
+                                .stream()
+                                .map(config -> config.getApplication().getName())
+                                .distinct()
+                                .limit(3)
+                                .collect(Collectors.joining(", "));
+
+                        String applicationInfo = applicationCount == 0
+                                ? "not assigned to any application"
+                                : "used in " + applicationCount + " application(s), including: "
+                                        + applicationPreview
+                                        + (applicationCount > 3 ? ", ..." : "");
+
+                        return chart.getTitle() + " [" + chart.getName() + ", " + applicationInfo + "]";
+                    })
+                    .distinct()
+                    .collect(Collectors.joining(", "));
+
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Cannot delete data source. It is used by " + chartsUsingDataSource.size()
+                            + " dynamic chart(s): " + chartTitles
+            );
+        }
+
+        List<String> wetlabNames = entityManager
+                .createNativeQuery(
+                        "SELECT w.name " +
+                                "FROM wetlab_plot wp " +
+                                "JOIN wetlab w ON w.id = wp.wet_lab_id " +
+                                "WHERE wp.plot_id = :plotId " +
+                                "ORDER BY w.name"
+                )
+                .setParameter("plotId", plot.getId())
+                .getResultList();
+
+        long wetlabCount = wetlabNames
+                .stream()
+                .distinct()
+                .count();
+
+        if (wetlabCount > 0) {
+            String wetlabPreview = wetlabNames
+                    .stream()
+                    .distinct()
+                    .limit(5)
+                    .collect(Collectors.joining(", "));
+
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Cannot delete data source. It is used by " + wetlabCount
+                            + " wetlab(s), including: " + wetlabPreview
+                            + (wetlabCount > 5 ? ", ..." : "")
+            );
+        }
+
+        plotRepository.delete(plot);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/application-config/{applicationId}/initialize")
     public List<ApplicationChartConfigDTO> initializeApplicationChartConfig(
             @PathVariable Long applicationId) {
