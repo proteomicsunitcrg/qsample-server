@@ -690,6 +690,35 @@ public class ChartController {
                 .collect(Collectors.toList());
     }
 
+    @DeleteMapping("/wetlabs/{wetlabId}/data-sources/{plotId}")
+    @Transactional
+    public ResponseEntity<Void> unlinkWetlabDataSource(
+            @PathVariable Long wetlabId,
+            @PathVariable Long plotId) {
+
+        wetLabRepository
+                .findById(wetlabId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wetlab not found"));
+
+        plotRepository
+                .findById(plotId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data source not found"));
+
+        wetlabPlotConfigRepository.deleteByWetlabIdAndPlotId(wetlabId, plotId);
+
+        entityManager
+                .createNativeQuery(
+                        "DELETE FROM wetlab_plot " +
+                                "WHERE wet_lab_id = :wetlabId " +
+                                "AND plot_id = :plotId"
+                )
+                .setParameter("wetlabId", wetlabId)
+                .setParameter("plotId", plotId)
+                .executeUpdate();
+
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/data/{dataSourceKey}/request/{requestCode}")
     public List<ChartDataPointDTO> getChartDataByRequest(
             @PathVariable String dataSourceKey,

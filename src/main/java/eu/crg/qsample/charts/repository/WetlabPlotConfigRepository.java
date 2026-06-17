@@ -8,4 +8,6 @@ import java.util.List;
 public interface WetlabPlotConfigRepository extends JpaRepository<WetlabPlotConfig, Long> {
 
     List<WetlabPlotConfig> findByWetlabIdOrderByOrderIndexAsc(Long wetlabId);
+
+    void deleteByWetlabIdAndPlotId(Long wetlabId, Long plotId);
 }
