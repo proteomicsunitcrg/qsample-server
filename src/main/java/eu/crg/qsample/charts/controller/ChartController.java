@@ -13,17 +13,21 @@ import eu.crg.qsample.charts.dto.ChartDefinitionSaveDTO;
 import eu.crg.qsample.charts.dto.ChartParameterDTO;
 import eu.crg.qsample.charts.dto.ChartParameterSaveDTO;
 import eu.crg.qsample.charts.dto.ChartSeriesDataPointDTO;
+import eu.crg.qsample.charts.dto.WetlabChartConfigDTO;
+import eu.crg.qsample.charts.dto.WetlabChartConfigSaveDTO;
 import eu.crg.qsample.charts.dto.WetlabPlotConfigDTO;
 import eu.crg.qsample.charts.dto.WetlabPlotConfigSaveDTO;
 import eu.crg.qsample.charts.entity.ApplicationChartConfig;
 import eu.crg.qsample.charts.entity.ChartPageAssignment;
 import eu.crg.qsample.charts.entity.ChartDefinition;
 import eu.crg.qsample.charts.entity.ChartParameter;
+import eu.crg.qsample.charts.entity.WetlabChartConfig;
 import eu.crg.qsample.charts.entity.WetlabPlotConfig;
 import eu.crg.qsample.charts.repository.ApplicationChartConfigRepository;
 import eu.crg.qsample.charts.repository.ChartDataRepository;
 import eu.crg.qsample.charts.repository.ChartDefinitionRepository;
 import eu.crg.qsample.charts.repository.ChartPageAssignmentRepository;
+import eu.crg.qsample.charts.repository.WetlabChartConfigRepository;
 import eu.crg.qsample.charts.repository.WetlabPlotConfigRepository;
 import eu.crg.qsample.context_source.ContextSource;
 import eu.crg.qsample.context_source.ContextSourceRepository;
@@ -71,6 +75,7 @@ public class ChartController {
     private final ParamRepository paramRepository;
     private final ContextSourceRepository contextSourceRepository;
     private final WetlabPlotConfigRepository wetlabPlotConfigRepository;
+    private final WetlabChartConfigRepository wetlabChartConfigRepository;
         private final EntityManager entityManager;
 
     public ChartController(
@@ -85,6 +90,7 @@ public class ChartController {
             ParamRepository paramRepository,
             ContextSourceRepository contextSourceRepository,
             WetlabPlotConfigRepository wetlabPlotConfigRepository,
+            WetlabChartConfigRepository wetlabChartConfigRepository,
             EntityManager entityManager
     ) {
         this.chartDefinitionRepository = chartDefinitionRepository;
@@ -98,6 +104,7 @@ public class ChartController {
         this.paramRepository = paramRepository;
         this.contextSourceRepository = contextSourceRepository;
         this.wetlabPlotConfigRepository = wetlabPlotConfigRepository;
+        this.wetlabChartConfigRepository = wetlabChartConfigRepository;
                 this.entityManager = entityManager;
     }
 
@@ -199,6 +206,7 @@ public class ChartController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Chart not found"));
 
         applicationChartConfigRepository.deleteByChartId(chartId);
+        wetlabChartConfigRepository.deleteByChartId(chartId);
         entityManager.createNativeQuery("DELETE FROM chart_context_sources WHERE chart_id = :chartId")
                 .setParameter("chartId", chartId)
                 .executeUpdate();
@@ -581,6 +589,69 @@ public class ChartController {
                 .stream()
                 .sorted(java.util.Comparator.comparing(ApplicationChartConfig::getOrderIndex))
                 .map(this::toApplicationChartConfigDTO)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/wetlab-chart-config/{wetlabId}")
+    public List<WetlabChartConfigDTO> getWetlabChartConfig(
+            @PathVariable Long wetlabId) {
+
+        return wetlabChartConfigRepository
+                .findByWetlabIdOrderByOrderIndexAsc(wetlabId)
+                .stream()
+                .map(this::toWetlabChartConfigDTO)
+                .collect(Collectors.toList());
+    }
+
+    @PostMapping("/wetlab-chart-config/{wetlabId}")
+    public List<WetlabChartConfigDTO> saveWetlabChartConfig(
+            @PathVariable Long wetlabId,
+            @RequestBody List<WetlabChartConfigSaveDTO> configDTOs) {
+
+        WetLab wetlab = wetLabRepository
+                .findById(wetlabId)
+                .orElseThrow();
+
+        List<WetlabChartConfig> existingConfigs =
+                wetlabChartConfigRepository
+                        .findByWetlabIdOrderByOrderIndexAsc(wetlabId);
+
+        Map<Long, WetlabChartConfig> existingByChartId =
+                existingConfigs
+                        .stream()
+                        .collect(Collectors.toMap(
+                                config -> config.getChart().getId(),
+                                config -> config
+                        ));
+
+        List<WetlabChartConfig> configsToSave =
+                new java.util.ArrayList<>();
+
+        for (WetlabChartConfigSaveDTO dto : configDTOs) {
+            ChartDefinition chart = chartDefinitionRepository
+                    .findById(dto.getChartId())
+                    .orElseThrow();
+
+            WetlabChartConfig config =
+                    existingByChartId.get(dto.getChartId());
+
+            if (config == null) {
+                config = new WetlabChartConfig();
+                config.setWetlab(wetlab);
+                config.setChart(chart);
+            }
+
+            config.setEnabled(Boolean.TRUE.equals(dto.getEnabled()));
+            config.setOrderIndex(dto.getOrderIndex());
+
+            configsToSave.add(config);
+        }
+
+        return wetlabChartConfigRepository
+                .saveAll(configsToSave)
+                .stream()
+                .sorted(java.util.Comparator.comparing(WetlabChartConfig::getOrderIndex))
+                .map(this::toWetlabChartConfigDTO)
                 .collect(Collectors.toList());
     }
 
@@ -1254,6 +1325,24 @@ public class ChartController {
             default:
                 return true;
         }
+    }
+
+    private WetlabChartConfigDTO toWetlabChartConfigDTO(
+            WetlabChartConfig config) {
+
+        ChartDefinition chart = config.getChart();
+
+        return new WetlabChartConfigDTO(
+                config.getId(),
+                config.getWetlab().getId(),
+                chart.getId(),
+                chart.getName(),
+                chart.getTitle(),
+                chart.getChartType(),
+                chart.getDataSourceKey(),
+                config.getEnabled(),
+                config.getOrderIndex()
+        );
     }
 
     private ApplicationChartConfigDTO toApplicationChartConfigDTO(
