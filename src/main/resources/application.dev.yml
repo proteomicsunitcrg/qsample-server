@@ -72,7 +72,7 @@ agendo:
     url: ${AGENDO_URL:https://api.qcloud2.crg.eu/mirror?url=https://apieurope.agendoscience.com}
     facility: ${AGENDO_FACILITY:10}
 
-local-requests: false # true to use local database, false to use agendo. If true unlocks the request creation, delete and update form TODO
+local-requests: false # This environment must always use Agendo; local requests are only for external/lab-specific local setups.
 
 cors:
     # Comma-separated origins allowed for cross-origin requests (no trailing slash).

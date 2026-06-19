@@ -9,5 +9,6 @@ import java.util.Optional;
 public interface ChartDefinitionRepository extends JpaRepository<ChartDefinition, Long> {
     Optional<ChartDefinition> findByName(String name);
     Optional<ChartDefinition> findByDataSourceKey(String dataSourceKey);
+    List<ChartDefinition> findAllByDataSourceKey(String dataSourceKey);
     List<ChartDefinition> findByActiveTrue();
 }

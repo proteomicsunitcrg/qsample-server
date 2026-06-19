@@ -10,4 +10,8 @@ public interface ApplicationChartConfigRepository extends JpaRepository<Applicat
     List<ApplicationChartConfig> findByApplicationIdOrderByOrderIndexAsc(Long applicationId);
 
     List<ApplicationChartConfig> findByApplicationIdAndEnabledTrueOrderByOrderIndexAsc(Long applicationId);
+
+    List<ApplicationChartConfig> findByChartId(Long chartId);
+
+    void deleteByChartId(Long chartId);
 }

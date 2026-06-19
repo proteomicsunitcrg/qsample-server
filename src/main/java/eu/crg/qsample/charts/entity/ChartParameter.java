@@ -41,4 +41,40 @@ public class ChartParameter {
     public String getParamType() {
         return paramType;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public ChartDefinition getChart() {
+        return chart;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setChart(ChartDefinition chart) {
+        this.chart = chart;
+    }
+
+    public void setParamKey(String paramKey) {
+        this.paramKey = paramKey;
+    }
+
+    public void setParamValue(String paramValue) {
+        this.paramValue = paramValue;
+    }
+
+    public void setParamType(String paramType) {
+        this.paramType = paramType;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

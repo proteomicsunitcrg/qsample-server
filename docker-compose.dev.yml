@@ -58,7 +58,7 @@ services:
       - qsample-secrets:/secrets
     environment:
       QSAMPLE_API_PREFIX: http://localhost:8099/ #Adapt for the final URL to be used
-      QSAMPLE_CORS_ORIGINS: http://localhost:8099,http://localhost:4200 #Comma-separated allowed origins, no trailing slash
+      QSAMPLE_CORS_ORIGINS: "http://localhost:8099,http://localhost:4200,http://10.44.129.61:4200"
       AGENDO_USERNAME: qsample
       AGENDO_PASSWORD: ${AGENDO_PASSWORD}
       AGENDO_FROM: Y3Jn

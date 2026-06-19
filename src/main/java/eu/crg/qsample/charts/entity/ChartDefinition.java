@@ -42,6 +42,9 @@ public class ChartDefinition {
     @Column(name = "provider_type")
     private String providerType;
 
+    @Column(name = "chart_mode")
+    private String chartMode;
+
     @Column(name = "constraint_flag")
     private String constraintFlag;
 
@@ -143,7 +146,15 @@ public class ChartDefinition {
         return constraintFlag;
     }
 
+    public String getChartMode() {
+        return chartMode;
+    }
+
     public void setConstraintFlag(String constraintFlag) {
         this.constraintFlag = constraintFlag;
+    }
+
+    public void setChartMode(String chartMode) {
+        this.chartMode = chartMode;
     }
 }

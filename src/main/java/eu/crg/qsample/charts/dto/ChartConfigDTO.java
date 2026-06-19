@@ -11,6 +11,7 @@ public class ChartConfigDTO {
     private String chartType;
     private String library;
     private String dataSourceKey;
+    private String chartMode;
     private Boolean active;
     private Map<String, Object> parameters;
 
@@ -22,6 +23,7 @@ public class ChartConfigDTO {
             String chartType,
             String library,
             String dataSourceKey,
+                String chartMode,
             Boolean active,
             Map<String, Object> parameters
     ) {
@@ -32,6 +34,7 @@ public class ChartConfigDTO {
         this.chartType = chartType;
         this.library = library;
         this.dataSourceKey = dataSourceKey;
+        this.chartMode = chartMode;
         this.active = active;
         this.parameters = parameters;
     }
@@ -43,6 +46,7 @@ public class ChartConfigDTO {
     public String getChartType() { return chartType; }
     public String getLibrary() { return library; }
     public String getDataSourceKey() { return dataSourceKey; }
+    public String getChartMode() { return chartMode; }
     public Boolean getActive() { return active; }
     public Map<String, Object> getParameters() { return parameters; }
 }

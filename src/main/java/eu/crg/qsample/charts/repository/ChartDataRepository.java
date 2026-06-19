@@ -324,6 +324,37 @@ public interface ChartDataRepository extends Repository<ChartDefinition, Long> {
     );
 
     @Query(value =
+        "SELECT " +
+        "  f.filename AS label, " +
+        "  COALESCE(cs.abbreviated, cs.name) AS series, " +
+        "  d.calculated_value AS value, " +
+        "  f.checksum AS checksum, " +
+        "  CAST(f.creation_date AS CHAR) AS creationDate " +
+        "FROM plot p " +
+        "JOIN plot_context_source pcs " +
+        "  ON pcs.plot_id = p.id " +
+        "JOIN context_source cs " +
+        "  ON cs.id = pcs.context_source_id " +
+        "JOIN data d " +
+        "  ON d.param_id = p.param_id " +
+        " AND d.context_source_id = pcs.context_source_id " +
+        "JOIN file f " +
+        "  ON f.id = d.file_id " +
+        "WHERE p.api_key = :plotApiKey " +
+        "  AND f.request_code = :requestCode " +
+        "  AND f.dtype = 'RequestFile' " +
+        "ORDER BY " +
+        "  CASE WHEN :order = 'filename' THEN f.filename END ASC, " +
+        "  CASE WHEN :order = 'date' THEN f.creation_date END ASC, " +
+        "  series ASC",
+        nativeQuery = true)
+    List<ChartSeriesDataPointProjection> findStackedChartDataByPlotApiKeyAndRequestCode(
+            @Param("plotApiKey") String plotApiKey,
+            @Param("requestCode") String requestCode,
+            @Param("order") String order
+    );
+
+    @Query(value =
             "SELECT " +
             "  f.filename AS label, " +
             "  m.name AS series, " +
