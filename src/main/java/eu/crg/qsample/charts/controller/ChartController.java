@@ -31,6 +31,7 @@ import eu.crg.qsample.charts.repository.WetlabChartConfigRepository;
 import eu.crg.qsample.charts.repository.WetlabPlotConfigRepository;
 import eu.crg.qsample.context_source.ContextSource;
 import eu.crg.qsample.context_source.ContextSourceRepository;
+import eu.crg.qsample.data.DataService;
 import eu.crg.qsample.param.Param;
 import eu.crg.qsample.param.ParamRepository;
 import eu.crg.qsample.plot.Plot;
@@ -76,6 +77,7 @@ public class ChartController {
     private final ContextSourceRepository contextSourceRepository;
     private final WetlabPlotConfigRepository wetlabPlotConfigRepository;
     private final WetlabChartConfigRepository wetlabChartConfigRepository;
+    private final DataService dataService;
         private final EntityManager entityManager;
 
     public ChartController(
@@ -91,6 +93,7 @@ public class ChartController {
             ContextSourceRepository contextSourceRepository,
             WetlabPlotConfigRepository wetlabPlotConfigRepository,
             WetlabChartConfigRepository wetlabChartConfigRepository,
+            DataService dataService,
             EntityManager entityManager
     ) {
         this.chartDefinitionRepository = chartDefinitionRepository;
@@ -105,6 +108,7 @@ public class ChartController {
         this.contextSourceRepository = contextSourceRepository;
         this.wetlabPlotConfigRepository = wetlabPlotConfigRepository;
         this.wetlabChartConfigRepository = wetlabChartConfigRepository;
+        this.dataService = dataService;
                 this.entityManager = entityManager;
     }
 
@@ -264,6 +268,14 @@ public class ChartController {
                 applicationId,
                 application.getApplicationConstraint()
         );
+    }
+
+    @GetMapping("/page/{pageName}/wetlab/{wetlabId}")
+    public List<ChartConfigDTO> getChartsByPageAndWetlab(
+            @PathVariable String pageName,
+            @PathVariable Long wetlabId) {
+
+        return getConfiguredChartsForWetlab(pageName, wetlabId);
     }
 
     @GetMapping("/application-config/{applicationId}")
@@ -1111,6 +1123,47 @@ public class ChartController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/data/chart/{chartId}/wetlab/{wetlabId}")
+    public List<ChartDataPointDTO> getChartDataByChartAndWetlab(
+            @PathVariable Long chartId,
+            @PathVariable Long wetlabId) {
+
+        ChartDefinition chart = chartDefinitionRepository
+                .findById(chartId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Chart not found"));
+
+        WetLab wetlab = wetLabRepository
+                .findById(wetlabId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "WetLab not found"));
+
+        UUID plotApiKey;
+        try {
+            plotApiKey = UUID.fromString(chart.getDataSourceKey());
+        } catch (IllegalArgumentException exception) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Chart data source is not a WetLab plot");
+        }
+
+        Plot plot = plotRepository
+                .findOneByApiKey(plotApiKey)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Plot not found"));
+
+        java.util.Date startDate = java.sql.Timestamp.valueOf("2018-06-07 10:54:50");
+        java.util.Date endDate = java.sql.Timestamp.valueOf("2022-06-07 10:54:50");
+
+        return dataService
+                .getTraceData(startDate, endDate, plot.getId(), wetlab.getApiKey())
+                .stream()
+                .flatMap(trace -> trace.getPlotTracePoints()
+                        .stream()
+                        .map(point -> new ChartDataPointDTO(
+                                point.getName(),
+                                point.getValue(),
+                                null,
+                                null
+                        )))
+                .collect(Collectors.toList());
+    }
+
     @GetMapping("/stacked-data/{dataSourceKey}/request/{requestCode}")
         public List<ChartSeriesDataPointDTO> getStackedChartDataByRequest(
                 @PathVariable String dataSourceKey,
@@ -1240,6 +1293,34 @@ public class ChartController {
         return configs
                 .stream()
                 .map(ApplicationChartConfig::getChart)
+                .filter(chart -> Boolean.TRUE.equals(chart.getActive()))
+                .filter(chart -> pageChartIds.contains(chart.getId()))
+                .map(this::toConfigDTO)
+                .collect(Collectors.toList());
+    }
+
+    private List<ChartConfigDTO> getConfiguredChartsForWetlab(
+            String pageName,
+            Long wetlabId) {
+
+        List<WetlabChartConfig> configs =
+                wetlabChartConfigRepository
+                        .findByWetlabIdAndEnabledTrueOrderByOrderIndexAsc(wetlabId);
+
+        if (configs == null || configs.isEmpty()) {
+            return getChartsByPage(pageName);
+        }
+
+        List<Long> pageChartIds =
+                chartPageAssignmentRepository
+                        .findByPageNameAndVisibleTrueOrderByDisplayOrderAsc(pageName)
+                        .stream()
+                        .map(assignment -> assignment.getChart().getId())
+                        .collect(Collectors.toList());
+
+        return configs
+                .stream()
+                .map(WetlabChartConfig::getChart)
                 .filter(chart -> Boolean.TRUE.equals(chart.getActive()))
                 .filter(chart -> pageChartIds.contains(chart.getId()))
                 .map(this::toConfigDTO)
