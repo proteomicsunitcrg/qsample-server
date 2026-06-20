@@ -32,6 +32,7 @@ import eu.crg.qsample.charts.repository.WetlabPlotConfigRepository;
 import eu.crg.qsample.context_source.ContextSource;
 import eu.crg.qsample.context_source.ContextSourceRepository;
 import eu.crg.qsample.data.DataService;
+import eu.crg.qsample.data.PlotTracePointWetlab;
 import eu.crg.qsample.param.Param;
 import eu.crg.qsample.param.ParamRepository;
 import eu.crg.qsample.plot.Plot;
@@ -44,6 +45,7 @@ import eu.crg.qsample.request.local.RequestRepository;
 import eu.crg.qsample.wetlab.WetLab;
 import eu.crg.qsample.wetlab.WetLabRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -1126,7 +1128,9 @@ public class ChartController {
     @GetMapping("/data/chart/{chartId}/wetlab/{wetlabId}")
     public List<ChartDataPointDTO> getChartDataByChartAndWetlab(
             @PathVariable Long chartId,
-            @PathVariable Long wetlabId) {
+            @PathVariable Long wetlabId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) java.util.Date startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) java.util.Date endDate) {
 
         ChartDefinition chart = chartDefinitionRepository
                 .findById(chartId)
@@ -1136,32 +1140,58 @@ public class ChartController {
                 .findById(wetlabId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "WetLab not found"));
 
+        Plot plot = resolveWetlabPlot(chart.getDataSourceKey());
+
+        java.util.Date effectiveStartDate = startDate == null ? new java.util.Date(0) : startDate;
+        java.util.Date effectiveEndDate = endDate == null ? new java.util.Date() : endDate;
+
+        return dataService
+                .getTraceData(effectiveStartDate, effectiveEndDate, plot.getId(), wetlab.getApiKey())
+                .stream()
+                .flatMap(trace -> trace.getPlotTracePoints().stream())
+                .map(point -> (PlotTracePointWetlab) point)
+                .sorted(Comparator
+                        .comparingInt(PlotTracePointWetlab::getYear)
+                        .thenComparingInt(PlotTracePointWetlab::getWeek))
+                .map(point -> new ChartDataPointDTO(
+                        point.getName(),
+                        point.getValue(),
+                        null,
+                        null,
+                        point.getStd(),
+                        point.getTriplicats() == null
+                                ? Collections.emptyList()
+                                : point.getTriplicats()
+                                        .stream()
+                                        .map(file -> file.getFilename())
+                                        .collect(Collectors.toList())
+                ))
+                .collect(Collectors.toList());
+    }
+
+    private Plot resolveWetlabPlot(String dataSourceKey) {
+        if ("percentage_propionyl".equals(dataSourceKey)) {
+            return plotRepository
+                    .findOneByName("Percentage Propionyl")
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Plot not found"));
+        }
+
+        if ("percentage_pic".equals(dataSourceKey)) {
+            return plotRepository
+                    .findOneByName("Percentage PIC")
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Plot not found"));
+        }
+
         UUID plotApiKey;
         try {
-            plotApiKey = UUID.fromString(chart.getDataSourceKey());
+            plotApiKey = UUID.fromString(dataSourceKey);
         } catch (IllegalArgumentException exception) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Chart data source is not a WetLab plot");
         }
 
-        Plot plot = plotRepository
+        return plotRepository
                 .findOneByApiKey(plotApiKey)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Plot not found"));
-
-        java.util.Date startDate = java.sql.Timestamp.valueOf("2018-06-07 10:54:50");
-        java.util.Date endDate = java.sql.Timestamp.valueOf("2022-06-07 10:54:50");
-
-        return dataService
-                .getTraceData(startDate, endDate, plot.getId(), wetlab.getApiKey())
-                .stream()
-                .flatMap(trace -> trace.getPlotTracePoints()
-                        .stream()
-                        .map(point -> new ChartDataPointDTO(
-                                point.getName(),
-                                point.getValue(),
-                                null,
-                                null
-                        )))
-                .collect(Collectors.toList());
     }
 
     @GetMapping("/stacked-data/{dataSourceKey}/request/{requestCode}")
