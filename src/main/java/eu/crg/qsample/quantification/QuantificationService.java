@@ -8,7 +8,9 @@ import eu.crg.qsample.quantification.model.QuantificationFromPipeline;
 import eu.crg.qsample.restservice_neon.DendogramBody;
 import eu.crg.qsample.restservice_neon.RestServiceNeon;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -82,86 +84,142 @@ public class QuantificationService {
     HeatmapData heatmapData = new HeatmapData();
     List<String> filenames = new ArrayList<>();
     Optional<List<RequestFile>> files = Optional.of(new ArrayList<RequestFile>());
+
     switch (order) {
       case "filename":
-        files =
-            fileRepository.findAllByRequestCodeAndChecksumInOrderByFilename(requestCode, checksums);
+        files = fileRepository.findAllByRequestCodeAndChecksumInOrderByFilename(requestCode, checksums);
         break;
       case "date":
-        files =
-            fileRepository.findAllByRequestCodeAndChecksumInOrderByCreationDate(
-                requestCode, checksums);
+        files = fileRepository.findAllByRequestCodeAndChecksumInOrderByCreationDate(requestCode, checksums);
         break;
       default:
-        files =
-            fileRepository.findAllByRequestCodeAndChecksumInOrderByFilename(requestCode, checksums);
+        files = fileRepository.findAllByRequestCodeAndChecksumInOrderByFilename(requestCode, checksums);
         break;
     }
+
+    if (!files.isPresent()) {
+      return null;
+    }
+
+    Map<String, Map<String, Double>> quantificationsByChecksum = new HashMap<>();
+
+    for (RequestFile file : files.get()) {
+      Optional<List<Quantification>> quantificationListOpt =
+          quantificationRepository.findByFileChecksumOrderByIdDesc(file.getChecksum());
+
+      if (!quantificationListOpt.isPresent()) {
+        continue;
+      }
+
+      Map<String, Double> abundanceByAccession = new HashMap<>();
+      for (Quantification quantification : quantificationListOpt.get()) {
+        abundanceByAccession.putIfAbsent(
+            quantification.getAccession(),
+            quantification.getAbundance());
+      }
+
+      quantificationsByChecksum.put(file.getChecksum(), abundanceByAccession);
+    }
+
     List<List<Double>> finalCorrelationList = new ArrayList<>();
-    if (files.isPresent()) {
-      for (RequestFile file : files.get()) {
-        List<Double> correlationsList = new ArrayList<>();
-        Optional<List<Quantification>> quantificationListOpt =
-            quantificationRepository.findByFileChecksumOrderByIdDesc(file.getChecksum());
-        if (quantificationListOpt.isPresent()) {
-          for (RequestFile fileMini : files.get()) {
-            Double calRes = calc(file, fileMini, consensus);
-            if (calRes != null) {
-              correlationsList.add(calc(file, fileMini, consensus));
-            }
-          }
-          filenames.add(file.getFilename());
-          finalCorrelationList.add(correlationsList);
+
+    for (RequestFile file : files.get()) {
+      if (!quantificationsByChecksum.containsKey(file.getChecksum())) {
+        continue;
+      }
+
+      List<Double> correlationsList = new ArrayList<>();
+
+      for (RequestFile fileMini : files.get()) {
+        Double calRes = calc(file, fileMini, consensus, quantificationsByChecksum);
+        if (calRes != null) {
+          correlationsList.add(calRes);
         }
       }
-      heatmapData.setData(finalCorrelationList);
-      heatmapData.setNames(filenames);
-      return heatmapData;
+
+      filenames.add(file.getFilename());
+      finalCorrelationList.add(correlationsList);
     }
-    return null;
+
+    heatmapData.setData(finalCorrelationList);
+    heatmapData.setNames(filenames);
+    return heatmapData;
   }
 
   public Double calc(RequestFile file1, RequestFile file2, int consensus) {
+    Map<String, Map<String, Double>> quantificationsByChecksum = new HashMap<>();
+
     Optional<List<Quantification>> quantificationListOpt =
-        quantificationRepository // Obtain the current file loop
-            // quantification
-            .findByFileChecksumOrderByIdDesc(file1.getChecksum());
+        quantificationRepository.findByFileChecksumOrderByIdDesc(file1.getChecksum());
     Optional<List<Quantification>> quantificationListOpt2 =
-        quantificationRepository // Obtain the current file loop
-            // quantification
-            .findByFileChecksumOrderByIdDesc(file2.getChecksum());
-    List<Double> consensued = new ArrayList<>();
-    List<Double> consensued2 = new ArrayList<>();
-    if (quantificationListOpt.isPresent() && quantificationListOpt2.isPresent()) {
-      if (file1.getId().equals(file2.getId())) { // Both are the same file, the consensus is total
-        return 1d;
-      } else {
-        for (Quantification quant1 : quantificationListOpt.get()) {
-          for (Quantification quant2 : quantificationListOpt2.get()) {
-            if (quant1.getAccession().equals(quant2.getAccession())) {
-              consensued.add(Math.log(quant1.getAbundance()));
-              consensued2.add(Math.log(quant2.getAbundance()));
-              continue;
-            }
-          }
-        }
-      }
-      if (consensued.size() < consensus) {
-        return 0d;
-      }
-      double correlation =
-          new PearsonsCorrelation()
-              .correlation(
-                  convertListOfDoublesToPrimitiveArray(consensued),
-                  convertListOfDoublesToPrimitiveArray(consensued2)); // Do de math
-      if (Double.isNaN(correlation)) {
-        return null;
-      } else {
-        return Math.pow(correlation, 2);
-      }
-    } else {
+        quantificationRepository.findByFileChecksumOrderByIdDesc(file2.getChecksum());
+
+    if (quantificationListOpt.isPresent()) {
+      quantificationsByChecksum.put(file1.getChecksum(), toAbundanceByAccession(quantificationListOpt.get()));
+    }
+
+    if (quantificationListOpt2.isPresent()) {
+      quantificationsByChecksum.put(file2.getChecksum(), toAbundanceByAccession(quantificationListOpt2.get()));
+    }
+
+    return calc(file1, file2, consensus, quantificationsByChecksum);
+  }
+
+  private Double calc(
+      RequestFile file1,
+      RequestFile file2,
+      int consensus,
+      Map<String, Map<String, Double>> quantificationsByChecksum) {
+    if (file1.getId().equals(file2.getId())) {
+      return 1d;
+    }
+
+    Map<String, Double> quantifications1 = quantificationsByChecksum.get(file1.getChecksum());
+    Map<String, Double> quantifications2 = quantificationsByChecksum.get(file2.getChecksum());
+
+    if (quantifications1 == null || quantifications2 == null) {
       return null;
     }
+
+    List<Double> consensued = new ArrayList<>();
+    List<Double> consensued2 = new ArrayList<>();
+
+    for (Map.Entry<String, Double> entry : quantifications1.entrySet()) {
+      Double abundance2 = quantifications2.get(entry.getKey());
+
+      if (abundance2 != null) {
+        consensued.add(Math.log(entry.getValue()));
+        consensued2.add(Math.log(abundance2));
+      }
+    }
+
+    if (consensued.size() < consensus) {
+      return 0d;
+    }
+
+    double correlation =
+        new PearsonsCorrelation()
+            .correlation(
+                convertListOfDoublesToPrimitiveArray(consensued),
+                convertListOfDoublesToPrimitiveArray(consensued2));
+
+    if (Double.isNaN(correlation)) {
+      return null;
+    }
+
+    return Math.pow(correlation, 2);
+  }
+
+  private Map<String, Double> toAbundanceByAccession(List<Quantification> quantifications) {
+    Map<String, Double> abundanceByAccession = new HashMap<>();
+
+    for (Quantification quantification : quantifications) {
+      abundanceByAccession.putIfAbsent(
+          quantification.getAccession(),
+          quantification.getAbundance());
+    }
+
+    return abundanceByAccession;
   }
 
   public List<List<Double>> pca(String requestCode, List<String> checksums) {
