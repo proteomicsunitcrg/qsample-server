@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -42,7 +44,11 @@ public class RestService {
     @Value("${agendo.facility}")
     private String facility;
 
+    private static final long CACHE_TTL_MILLIS = 60000;
+
     private final RestTemplate restTemplate;
+
+    private final Map<String, CachedResponse> requestCache = new HashMap<>();
 
     List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
     // Add the Jackson Message converter
@@ -55,6 +61,13 @@ public class RestService {
     }
 
     public String getAllRequests(String dateFrom, String dateTo) {
+        final String cacheKey = "facility:" + facility + ":" + dateFrom + ":" + dateTo;
+        final CachedResponse cachedResponse = requestCache.get(cacheKey);
+
+        if (cachedResponse != null && !cachedResponse.isExpired()) {
+            return cachedResponse.getBody();
+        }
+
         // converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
         // messageConverters.add(converter);
         // restTemplate.setMessageConverters(messageConverters);
@@ -67,6 +80,7 @@ public class RestService {
                 .exchange(url + "/requests/facility/"+facility+"/"+dateFrom+"/"+dateTo, HttpMethod.GET, entity, String.class);
         // System.out.println(response.getBody());
         // System.out.println(url + "/requests/facility/"+facility+"/"+dateFrom+"/"+dateTo);
+        requestCache.put(cacheKey, new CachedResponse(response.getBody()));
         return response.getBody();
     }
 
@@ -123,6 +137,24 @@ public class RestService {
                 AgendoAuthResponse.class, username, password);
         // System.out.println(response.getBody().getUser().getEmail());
         return response;
+    }
+
+    private static class CachedResponse {
+        private final String body;
+        private final long createdAt;
+
+        CachedResponse(String body) {
+            this.body = body;
+            this.createdAt = System.currentTimeMillis();
+        }
+
+        String getBody() {
+            return body;
+        }
+
+        boolean isExpired() {
+            return System.currentTimeMillis() - createdAt > CACHE_TTL_MILLIS;
+        }
     }
 
     public String mountBasicAuth(String user, String password) {

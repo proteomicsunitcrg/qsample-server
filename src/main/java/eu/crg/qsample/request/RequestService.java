@@ -16,7 +16,9 @@ import eu.crg.qsample.security.repository.UserRepository;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import javax.ws.rs.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,9 +93,16 @@ public class RequestService {
     Gson gson = new Gson();
     AgendoRequestWrapper response = gson.fromJson(ccc, AgendoRequestWrapper.class);
 
+    List<String> requestCodes = new ArrayList<>();
+    for (AgendoRequest agendoRequest : response.getRequest()) {
+      requestCodes.add(agendoRequest.getRef());
+    }
+
+    Map<String, String> lastProcessedFileDates = getLastProcessedFileDates(requestCodes);
+
     for (AgendoRequest agendoRequest : response.getRequest()) {
       String requestCode = agendoRequest.getRef();
-      String lastProcessedFileDate = getLastProcessedFileDate(requestCode);
+      String lastProcessedFileDate = lastProcessedFileDates.get(requestCode);
       boolean hasData = lastProcessedFileDate != null;
 
       if (!showAll) {
@@ -142,6 +151,22 @@ public class RequestService {
     return miniRequests;
   }
 
+  private Map<String, String> getLastProcessedFileDates(List<String> requestCodes) {
+    Map<String, String> lastProcessedFileDates = new HashMap<>();
+
+    if (requestCodes == null || requestCodes.isEmpty()) {
+      return lastProcessedFileDates;
+    }
+
+    for (Object[] row : requestFileRepository.findLastProcessedFileDatesByRequestCodeIn(requestCodes)) {
+      if (row[0] != null && row[1] != null) {
+        lastProcessedFileDates.put(String.valueOf(row[0]), formatDate(row[1]));
+      }
+    }
+
+    return lastProcessedFileDates;
+  }
+
   private String getLastProcessedFileDate(String requestCode) {
     if (requestCode == null || requestCode.trim().isEmpty()) {
       return null;
@@ -150,8 +175,12 @@ public class RequestService {
     return requestFileRepository
         .findFirstByRequestCodeContainsOrderByCreationDateDesc(requestCode)
         .map(RequestFile::getCreationDate)
-        .map(date -> date.toString().split("\\.", 2)[0])
+        .map(this::formatDate)
         .orElse(null);
+  }
+
+  private String formatDate(Object date) {
+    return date.toString().split("\\.", 2)[0];
   }
 
   private MiniRequest newMiniRequestWithLastProcessedFileDate(
@@ -232,9 +261,16 @@ public class RequestService {
     Gson gson = new Gson();
     AgendoRequestWrapper response = gson.fromJson(ccc, AgendoRequestWrapper.class);
 
+    List<String> requestCodes = new ArrayList<>();
+    for (AgendoRequest agendoRequest : response.getRequest()) {
+      requestCodes.add(agendoRequest.getRef());
+    }
+
+    Map<String, String> lastProcessedFileDates = getLastProcessedFileDates(requestCodes);
+
     for (AgendoRequest agendoRequest : response.getRequest()) {
       String requestCode = agendoRequest.getRef();
-      String lastProcessedFileDate = getLastProcessedFileDate(requestCode);
+      String lastProcessedFileDate = lastProcessedFileDates.get(requestCode);
       boolean hasData = lastProcessedFileDate != null;
 
       miniRequests.add(
