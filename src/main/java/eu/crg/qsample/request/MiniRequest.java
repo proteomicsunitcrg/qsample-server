@@ -19,6 +19,8 @@ public class MiniRequest {
 
     private boolean local;
 
+    private String lastProcessedFileDate;
+
     public long getId() {
         return id;
     }
@@ -115,6 +117,14 @@ public class MiniRequest {
 
     public void setLocal(boolean local) {
         this.local = local;
+    }
+
+    public String getLastProcessedFileDate() {
+        return lastProcessedFileDate;
+    }
+
+    public void setLastProcessedFileDate(String lastProcessedFileDate) {
+        this.lastProcessedFileDate = lastProcessedFileDate;
     }
 
 }

@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import eu.crg.qsample.context_source.ContextSource;
 import eu.crg.qsample.context_source.ContextSourceRepository;
 import eu.crg.qsample.file.FileRepository;
+import eu.crg.qsample.file.RequestFile;
+import eu.crg.qsample.file.RequestFileRepository;
 import eu.crg.qsample.param.Param;
 import eu.crg.qsample.param.ParamRepository;
 import eu.crg.qsample.request.local.RequestLocal;
@@ -36,6 +38,8 @@ public class RequestService {
 
   @Autowired FileRepository fileRepository;
 
+  @Autowired RequestFileRepository requestFileRepository;
+
   @Autowired RequestRepository requestRepository;
 
   @Value("${local-requests}")
@@ -58,19 +62,21 @@ public class RequestService {
     List<MiniRequest> miniRequestList = new ArrayList<>();
 
     for (RequestLocal req : requestList) {
-      boolean hasData = requestHasData(req.getRequestCode());
+      String lastProcessedFileDate = getLastProcessedFileDate(req.getRequestCode());
 
       miniRequestList.add(
-          new MiniRequest(
-              req.getId(),
-              req.getApplication().getName(),
-              req.getCreator(),
-              req.getCreator(),
-              req.getCreationDate().toString().split("\\.")[0],
-              req.getStatus(),
-              req.getRequestCode(),
-              hasData,
-              true));
+          newMiniRequestWithLastProcessedFileDate(
+              new MiniRequest(
+                  req.getId(),
+                  req.getApplication().getName(),
+                  req.getCreator(),
+                  req.getCreator(),
+                  req.getCreationDate().toString().split("\\.")[0],
+                  req.getStatus(),
+                  req.getRequestCode(),
+                  lastProcessedFileDate != null,
+                  true),
+              lastProcessedFileDate));
     }
 
     return miniRequestList;
@@ -87,7 +93,8 @@ public class RequestService {
 
     for (AgendoRequest agendoRequest : response.getRequest()) {
       String requestCode = agendoRequest.getRef();
-      boolean hasData = requestHasData(requestCode);
+      String lastProcessedFileDate = getLastProcessedFileDate(requestCode);
+      boolean hasData = lastProcessedFileDate != null;
 
       if (!showAll) {
         String action = agendoRequest.getLast_action().getAction();
@@ -102,44 +109,55 @@ public class RequestService {
 
         if (shouldShow) {
           miniRequests.add(
-              new MiniRequest(
-                  agendoRequest.getId(),
-                  agendoRequest.getClasss(),
-                  agendoRequest.getCreated_by().getEmail(),
-                  agendoRequest.getCreated_by().getName(),
-                  agendoRequest.getdate_created(),
-                  agendoRequest.getLast_action().getAction(),
-                  requestCode,
-                  hasData,
-                  false));
+              newMiniRequestWithLastProcessedFileDate(
+                  new MiniRequest(
+                      agendoRequest.getId(),
+                      agendoRequest.getClasss(),
+                      agendoRequest.getCreated_by().getEmail(),
+                      agendoRequest.getCreated_by().getName(),
+                      agendoRequest.getdate_created(),
+                      agendoRequest.getLast_action().getAction(),
+                      requestCode,
+                      hasData,
+                      false),
+                  lastProcessedFileDate));
         }
       } else {
         miniRequests.add(
-            new MiniRequest(
-                agendoRequest.getId(),
-                agendoRequest.getClasss(),
-                agendoRequest.getCreated_by().getEmail(),
-                agendoRequest.getCreated_by().getName(),
-                agendoRequest.getdate_created(),
-                agendoRequest.getLast_action().getAction(),
-                requestCode,
-                hasData,
-                false));
+            newMiniRequestWithLastProcessedFileDate(
+                new MiniRequest(
+                    agendoRequest.getId(),
+                    agendoRequest.getClasss(),
+                    agendoRequest.getCreated_by().getEmail(),
+                    agendoRequest.getCreated_by().getName(),
+                    agendoRequest.getdate_created(),
+                    agendoRequest.getLast_action().getAction(),
+                    requestCode,
+                    hasData,
+                    false),
+                lastProcessedFileDate));
       }
     }
 
     return miniRequests;
   }
 
-  private boolean requestHasData(String requestCode) {
+  private String getLastProcessedFileDate(String requestCode) {
     if (requestCode == null || requestCode.trim().isEmpty()) {
-      return false;
+      return null;
     }
 
-    return fileRepository
-        .findAllByRequestCodeContains(requestCode)
-        .map(files -> !files.isEmpty())
-        .orElse(false);
+    return requestFileRepository
+        .findFirstByRequestCodeContainsOrderByCreationDateDesc(requestCode)
+        .map(RequestFile::getCreationDate)
+        .map(date -> date.toString().split("\\.", 2)[0])
+        .orElse(null);
+  }
+
+  private MiniRequest newMiniRequestWithLastProcessedFileDate(
+      MiniRequest miniRequest, String lastProcessedFileDate) {
+    miniRequest.setLastProcessedFileDate(lastProcessedFileDate);
+    return miniRequest;
   }
 
   private String convertDateToAgendoFormat(Date date) {
@@ -216,19 +234,22 @@ public class RequestService {
 
     for (AgendoRequest agendoRequest : response.getRequest()) {
       String requestCode = agendoRequest.getRef();
-      boolean hasData = requestHasData(requestCode);
+      String lastProcessedFileDate = getLastProcessedFileDate(requestCode);
+      boolean hasData = lastProcessedFileDate != null;
 
       miniRequests.add(
-          new MiniRequest(
-              agendoRequest.getId(),
-              agendoRequest.getClasss(),
-              agendoRequest.getCreated_by().getEmail(),
-              agendoRequest.getCreated_by().getName(),
-              agendoRequest.getdate_created(),
-              agendoRequest.getLast_action().getAction(),
-              requestCode,
-              hasData,
-              false));
+          newMiniRequestWithLastProcessedFileDate(
+              new MiniRequest(
+                  agendoRequest.getId(),
+                  agendoRequest.getClasss(),
+                  agendoRequest.getCreated_by().getEmail(),
+                  agendoRequest.getCreated_by().getName(),
+                  agendoRequest.getdate_created(),
+                  agendoRequest.getLast_action().getAction(),
+                  requestCode,
+                  hasData,
+                  false),
+              lastProcessedFileDate));
     }
 
     return miniRequests;
