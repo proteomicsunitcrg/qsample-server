@@ -5,5 +5,6 @@ public enum ERole {
     ROLE_EXTERNAL,
     ROLE_MANAGER,
     ROLE_ADMIN,
+    ROLE_SUPER_ADMIN,
     ROLE_USER
 }
