@@ -36,4 +36,13 @@ public interface DataRepository extends CrudRepository<Data, Long> {
     List<Data> findByFileInAndParam(List<WetLabFile> files, Param param);
 
 
+    @Query(value =
+        "SELECT DISTINCT f.requestCode " +
+        "FROM Data d " +
+        "JOIN d.file f " +
+        "WHERE d.contextSource.id = 1 " +
+        "AND f.requestCode IN ?1")
+    List<String> findRequestCodesWithProteinGroups(List<String> requestCodes);
+
+
 }

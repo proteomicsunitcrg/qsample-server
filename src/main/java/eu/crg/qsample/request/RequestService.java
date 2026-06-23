@@ -3,6 +3,7 @@ package eu.crg.qsample.request;
 import com.google.gson.Gson;
 import eu.crg.qsample.context_source.ContextSource;
 import eu.crg.qsample.context_source.ContextSourceRepository;
+import eu.crg.qsample.data.DataRepository;
 import eu.crg.qsample.file.FileRepository;
 import eu.crg.qsample.file.RequestFile;
 import eu.crg.qsample.file.RequestFileRepository;
@@ -41,6 +42,8 @@ public class RequestService {
   @Autowired FileRepository fileRepository;
 
   @Autowired RequestFileRepository requestFileRepository;
+
+  @Autowired DataRepository dataRepository;
 
   @Autowired RequestRepository requestRepository;
 
@@ -100,10 +103,14 @@ public class RequestService {
 
     Map<String, String> lastProcessedFileDates = getLastProcessedFileDates(requestCodes);
 
+    java.util.Set<String> requestsWithProteinGroups =
+        new java.util.HashSet<>(
+            dataRepository.findRequestCodesWithProteinGroups(requestCodes));
+
     for (AgendoRequest agendoRequest : response.getRequest()) {
       String requestCode = agendoRequest.getRef();
       String lastProcessedFileDate = lastProcessedFileDates.get(requestCode);
-      boolean hasData = lastProcessedFileDate != null;
+      boolean hasData = requestsWithProteinGroups.contains(requestCode);
 
       if (!showAll) {
         String action = agendoRequest.getLast_action().getAction();
@@ -268,10 +275,14 @@ public class RequestService {
 
     Map<String, String> lastProcessedFileDates = getLastProcessedFileDates(requestCodes);
 
+    java.util.Set<String> requestsWithProteinGroups =
+        new java.util.HashSet<>(
+            dataRepository.findRequestCodesWithProteinGroups(requestCodes));
+
     for (AgendoRequest agendoRequest : response.getRequest()) {
       String requestCode = agendoRequest.getRef();
       String lastProcessedFileDate = lastProcessedFileDates.get(requestCode);
-      boolean hasData = lastProcessedFileDate != null;
+      boolean hasData = requestsWithProteinGroups.contains(requestCode);
 
       miniRequests.add(
           newMiniRequestWithLastProcessedFileDate(
