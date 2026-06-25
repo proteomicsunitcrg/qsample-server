@@ -1182,6 +1182,18 @@ public class ChartController {
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Plot not found"));
         }
 
+        if ("modification_sites".equals(dataSourceKey)) {
+            return plotRepository
+                    .findOneByName("Number of modification sites")
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Plot not found"));
+        }
+
+        if ("modified_peptides".equals(dataSourceKey)) {
+            return plotRepository
+                    .findOneByName("Number of modified peptides")
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Plot not found"));
+        }
+
         UUID plotApiKey;
         try {
             plotApiKey = UUID.fromString(dataSourceKey);
