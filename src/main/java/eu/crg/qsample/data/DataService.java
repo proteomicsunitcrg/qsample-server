@@ -284,10 +284,17 @@ public class DataService {
             }
             parameterData.setParameter(param.get());
             for (DataValues dataValue : parameterData.getValues()) {
-                Optional<ContextSource> cs = null;
-                cs = csRepo.findById(dataValue.getContextSource());
+                Optional<ContextSource> cs = Optional.empty();
+
+                if (dataValue.getContextSource() != null) {
+                    cs = csRepo.findById(dataValue.getContextSource());
+                } else if (dataValue.getContextSourceApiKey() != null) {
+                    cs = csRepo.findOneByApiKey(dataValue.getContextSourceApiKey());
+                }
+
                 if (!cs.isPresent()) {
-                    continue;
+                    logger.error("Context source not found for data value");
+                    throw new DataRetrievalFailureException("Context source not found");
                 }
 
                 Data d = new Data(param.get(), cs.get(), file.get());
@@ -333,10 +340,17 @@ public class DataService {
             }
             parameterData.setParameter(param.get());
             for (DataValues dataValue : parameterData.getValues()) {
-                Optional<ContextSource> cs = null;
-                cs = csRepo.findById(dataValue.getContextSource());
+                Optional<ContextSource> cs = Optional.empty();
+
+                if (dataValue.getContextSource() != null) {
+                    cs = csRepo.findById(dataValue.getContextSource());
+                } else if (dataValue.getContextSourceApiKey() != null) {
+                    cs = csRepo.findOneByApiKey(dataValue.getContextSourceApiKey());
+                }
+
                 if (!cs.isPresent()) {
-                    continue;
+                    logger.error("Context source not found for data value");
+                    throw new DataRetrievalFailureException("Context source not found");
                 }
 
                 Data d = new Data(param.get(), cs.get(), file.get());

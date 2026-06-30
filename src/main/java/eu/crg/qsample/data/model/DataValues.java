@@ -6,6 +6,8 @@ public class DataValues {
 
     private Long contextSource;
 
+    private UUID contextSourceApiKey;
+
     private Float value;
 
     private Float calculatedValue;
@@ -18,6 +20,14 @@ public class DataValues {
 
     public void setContextSource(Long contextSource) {
         this.contextSource = contextSource;
+    }
+
+    public UUID getContextSourceApiKey() {
+        return contextSourceApiKey;
+    }
+
+    public void setContextSourceApiKey(UUID contextSourceApiKey) {
+        this.contextSourceApiKey = contextSourceApiKey;
     }
 
     public Float getValue() {
