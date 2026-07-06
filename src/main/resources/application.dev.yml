@@ -69,7 +69,7 @@ agendo:
     username: ${AGENDO_USERNAME:qsample}
     password: ${AGENDO_PASSWORD}
     from: ${AGENDO_FROM:Y3Jn}
-    url: ${AGENDO_URL:https://api.qcloud2.crg.eu/mirror?url=https://apieurope.agendoscience.com}
+    url: ${AGENDO_URL:https://apieurope.agendoscience.com}
     facility: ${AGENDO_FACILITY:10}
 
 local-requests: false # This environment must always use Agendo; local requests are only for external/lab-specific local setups.
