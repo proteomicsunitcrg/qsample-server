@@ -85,6 +85,7 @@ public class DataService {
         for (WetLabFile wlFile : files) { // TODO impriove this
             List<WetLabFile> triplicats = new ArrayList<>();
 			List<WetLabFile> clean_triplicats = new ArrayList<>();
+			List<Double> clean_triplicate_values = new ArrayList<>();
             triplicats.add(wlFile);
             for (WetLabFile wlFile2 : files) {
                 if (wlFile.getWeek() == wlFile2.getWeek() && wlFile.getYear() == wlFile2.getYear()
@@ -109,6 +110,7 @@ public class DataService {
 					if (value != null && value.doubleValue() > 0) {
 						res.add(value.floatValue());
 						clean_triplicats.add(DataFile);
+						clean_triplicate_values.add(value.doubleValue());
 					}
                 }
                 double average = getAverage(res);
@@ -117,7 +119,7 @@ public class DataService {
                     traces.put(cs.getAbbreviated(), generatePlotTraceFromContextSourceWetlab(cs));
                 }
                 traces.get(cs.getAbbreviated()).getPlotTracePoints()
-                        .add(generatePlotTracePointFromDataWetlab(wlFile, average, std, clean_triplicats));
+                        .add(generatePlotTracePointFromDataWetlab(wlFile, average, std, clean_triplicats, clean_triplicate_values));
                 order = order + 1;
             }
         }
@@ -183,8 +185,8 @@ public class DataService {
         return new PlotTracePoint(d.getFile(), d.getCalculatedValue(), d.getNonConformityStatus());
     }
 
-    private PlotTracePointWetlab generatePlotTracePointFromDataWetlab(WetLabFile wf, double value, double std, List<WetLabFile> triplicats) {
-        return new PlotTracePointWetlab("W" + wf.getWeek() + "Y" + wf.getYear(), value, std, wf.getWeek(), wf.getYear(), triplicats);
+    private PlotTracePointWetlab generatePlotTracePointFromDataWetlab(WetLabFile wf, double value, double std, List<WetLabFile> triplicats, List<Double> triplicateValues) {
+        return new PlotTracePointWetlab("W" + wf.getWeek() + "Y" + wf.getYear(), value, std, wf.getWeek(), wf.getYear(), triplicats, triplicateValues);
     }
 
     public List<PlotTrace> getTraceDataRequest(List <Long> csIds, Long paramId, String requestCode, String order) {

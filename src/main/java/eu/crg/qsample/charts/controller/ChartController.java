@@ -13,6 +13,7 @@ import eu.crg.qsample.charts.dto.ChartDefinitionSaveDTO;
 import eu.crg.qsample.charts.dto.ChartParameterDTO;
 import eu.crg.qsample.charts.dto.ChartParameterSaveDTO;
 import eu.crg.qsample.charts.dto.ChartSeriesDataPointDTO;
+import eu.crg.qsample.charts.dto.ReplicateFileDTO;
 import eu.crg.qsample.charts.dto.WetlabChartConfigDTO;
 import eu.crg.qsample.charts.dto.WetlabChartConfigSaveDTO;
 import eu.crg.qsample.charts.dto.WetlabPlotConfigDTO;
@@ -62,6 +63,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @RestController
 @RequestMapping("/api/charts")
@@ -1159,13 +1161,20 @@ public class ChartController {
                         null,
                         null,
                         point.getStd(),
-                        point.getTriplicats() == null
-                                ? Collections.emptyList()
-                                : point.getTriplicats()
-                                        .stream()
-                                        .map(file -> file.getFilename())
-                                        .collect(Collectors.toList())
+                        buildReplicateFiles(point)
                 ))
+                .collect(Collectors.toList());
+    }
+
+    private List<ReplicateFileDTO> buildReplicateFiles(PlotTracePointWetlab point) {
+        if (point.getTriplicats() == null) {
+            return Collections.emptyList();
+        }
+        List<Double> values = point.getTriplicateValues();
+        return IntStream.range(0, point.getTriplicats().size())
+                .mapToObj(i -> new ReplicateFileDTO(
+                        point.getTriplicats().get(i).getFilename(),
+                        values != null && i < values.size() ? values.get(i) : null))
                 .collect(Collectors.toList());
     }
 

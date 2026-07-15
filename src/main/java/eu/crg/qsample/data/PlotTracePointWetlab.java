@@ -20,6 +20,8 @@ public class PlotTracePointWetlab {
 
     private List<WetLabFile> triplicats;
 
+    private List<Double> triplicateValues;
+
     public String getName() {
         return name;
     }
@@ -47,13 +49,14 @@ public class PlotTracePointWetlab {
     }
 
     public PlotTracePointWetlab(String name, double value, double std, int week, int year,
-            List<WetLabFile> triplicats) {
+            List<WetLabFile> triplicats, List<Double> triplicateValues) {
         this.name = name;
         this.value = value;
         this.std = std;
         this.week = week;
         this.year = year;
         this.triplicats = triplicats;
+        this.triplicateValues = triplicateValues;
     }
 
     public PlotTracePointWetlab(String name, double value, double std, int week, int year) {
@@ -102,6 +105,14 @@ public class PlotTracePointWetlab {
 
     public void setTriplicats(List<WetLabFile> triplicats) {
         this.triplicats = triplicats;
+    }
+
+    public List<Double> getTriplicateValues() {
+        return triplicateValues;
+    }
+
+    public void setTriplicateValues(List<Double> triplicateValues) {
+        this.triplicateValues = triplicateValues;
     }
 
 }

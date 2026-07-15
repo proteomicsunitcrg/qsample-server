@@ -9,7 +9,7 @@ public class ChartDataPointDTO {
     private String checksum;
     private String creationDate;
     private Number std;
-    private List<String> replicateFiles;
+    private List<ReplicateFileDTO> replicateFiles;
 
 
 
@@ -24,7 +24,7 @@ public class ChartDataPointDTO {
         this(label, value, checksum, creationDate, std, null);
     }
 
-    public ChartDataPointDTO(String label, Number value, String checksum, String creationDate, Number std, List<String> replicateFiles) {
+    public ChartDataPointDTO(String label, Number value, String checksum, String creationDate, Number std, List<ReplicateFileDTO> replicateFiles) {
         this.label = label;
         this.value = value;
         this.checksum = checksum;
@@ -69,11 +69,11 @@ public class ChartDataPointDTO {
         this.std = std;
     }
 
-    public List<String> getReplicateFiles() {
+    public List<ReplicateFileDTO> getReplicateFiles() {
         return replicateFiles;
     }
 
-    public void setReplicateFiles(List<String> replicateFiles) {
+    public void setReplicateFiles(List<ReplicateFileDTO> replicateFiles) {
         this.replicateFiles = replicateFiles;
     }
 
