@@ -88,6 +88,11 @@ public class DataService {
 			List<Double> clean_triplicate_values = new ArrayList<>();
             triplicats.add(wlFile);
             int batch = (wlFile.getReplicate() - 1) / 3;
+            boolean weekHasMultipleBatches = files.stream()
+                    .filter(f -> f.getWeek() == wlFile.getWeek() && f.getYear() == wlFile.getYear())
+                    .mapToInt(f -> (f.getReplicate() - 1) / 3)
+                    .distinct()
+                    .count() > 1;
             for (WetLabFile wlFile2 : files) {
                 if (wlFile.getWeek() == wlFile2.getWeek() && wlFile.getYear() == wlFile2.getYear()
                         && (wlFile2.getReplicate() - 1) / 3 == batch
@@ -121,7 +126,7 @@ public class DataService {
                     traces.put(cs.getAbbreviated(), generatePlotTraceFromContextSourceWetlab(cs));
                 }
                 traces.get(cs.getAbbreviated()).getPlotTracePoints()
-                        .add(generatePlotTracePointFromDataWetlab(wlFile, average, std, clean_triplicats, clean_triplicate_values));
+                        .add(generatePlotTracePointFromDataWetlab(wlFile, average, std, clean_triplicats, clean_triplicate_values, weekHasMultipleBatches));
                 order = order + 1;
             }
         }
@@ -187,9 +192,13 @@ public class DataService {
         return new PlotTracePoint(d.getFile(), d.getCalculatedValue(), d.getNonConformityStatus());
     }
 
-    private PlotTracePointWetlab generatePlotTracePointFromDataWetlab(WetLabFile wf, double value, double std, List<WetLabFile> triplicats, List<Double> triplicateValues) {
-        int batch = (wf.getReplicate() - 1) / 3 + 1;
-        return new PlotTracePointWetlab("W" + wf.getWeek() + "Y" + wf.getYear() + "-B" + batch, value, std, wf.getWeek(), wf.getYear(), triplicats, triplicateValues);
+    private PlotTracePointWetlab generatePlotTracePointFromDataWetlab(WetLabFile wf, double value, double std, List<WetLabFile> triplicats, List<Double> triplicateValues, boolean weekHasMultipleBatches) {
+        String name = "W" + wf.getWeek() + "Y" + wf.getYear();
+        if (weekHasMultipleBatches) {
+            int batch = (wf.getReplicate() - 1) / 3 + 1;
+            name += "-B" + batch;
+        }
+        return new PlotTracePointWetlab(name, value, std, wf.getWeek(), wf.getYear(), triplicats, triplicateValues);
     }
 
     public List<PlotTrace> getTraceDataRequest(List <Long> csIds, Long paramId, String requestCode, String order) {

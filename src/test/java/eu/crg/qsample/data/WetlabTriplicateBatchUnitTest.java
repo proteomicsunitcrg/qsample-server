@@ -120,6 +120,54 @@ public class WetlabTriplicateBatchUnitTest {
         assertEquals(3, secondBatch.getTriplicats().size());
     }
 
+    /**
+     * A week with only a single triplicate (3 replicates) must keep the plain "W{week}Y{year}"
+     * name, with no "-B1" suffix, since there is nothing to disambiguate it from.
+     */
+    @Test
+    @Transactional
+    public void threeReplicatesInSameWeekProduceUnsuffixedSinglePoint() {
+        WetLab wetlab = wetLabRepo.save(new WetLab(null, UUID.randomUUID(), "Single batch test wetlab", null));
+
+        Param param = paramRepo.findAll().stream()
+                .findFirst()
+                .orElseGet(() -> {
+                    Param p = new Param();
+                    p.setApiKey(UUID.randomUUID());
+                    p.setName("Single batch test param");
+                    return paramRepo.save(p);
+                });
+
+        ContextSource cs = new ContextSource();
+        cs.setApiKey(UUID.randomUUID());
+        cs.setAbbreviated("SB");
+        cs.setName("Single batch test context");
+        cs = csRepo.save(cs);
+
+        Plot plot = new Plot(null, UUID.randomUUID(), Arrays.asList(cs), param);
+        plot = plotRepo.save(plot);
+
+        Date now = new Date();
+        Date startDate = new Date(0);
+        Date endDate = new Date(now.getTime() + 1000);
+
+        float[] values = { 10f, 20f, 30f };
+        for (int i = 0; i < values.length; i++) {
+            saveReplicate(wetlab, param, cs, i + 1, now, values[i]);
+        }
+
+        List<PlotTracePointWetlab> points = dataService
+                .getTraceData(startDate, endDate, plot.getId(), wetlab.getApiKey())
+                .stream()
+                .flatMap(trace -> trace.getPlotTracePoints().stream())
+                .collect(Collectors.toList());
+
+        assertEquals(1, points.size());
+        assertEquals("W5Y2026", points.get(0).getName());
+        assertEquals(20.0d, points.get(0).getValue(), 0.001d);
+        assertEquals(3, points.get(0).getTriplicats().size());
+    }
+
     private void saveReplicate(WetLab wetlab, Param param, ContextSource cs, int replicate, Date creationDate, float value) {
         WetLabFile file = new WetLabFile(wetlab, replicate, 2026, 5);
         file.setChecksum("tb-r" + replicate + "-" + UUID.randomUUID().toString().substring(0, 8));
