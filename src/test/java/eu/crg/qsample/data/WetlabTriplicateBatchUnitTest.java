@@ -109,12 +109,12 @@ public class WetlabTriplicateBatchUnitTest {
         PlotTracePointWetlab firstBatch = points.get(0);
         PlotTracePointWetlab secondBatch = points.get(1);
 
-        assertEquals("W5Y2026-T1", firstBatch.getName());
+        assertEquals("W5Y2026-B1", firstBatch.getName());
         assertEquals(20.0d, firstBatch.getValue(), 0.001d);
         assertEquals(8.164d, firstBatch.getStd(), 0.001d);
         assertEquals(3, firstBatch.getTriplicats().size());
 
-        assertEquals("W5Y2026-T2", secondBatch.getName());
+        assertEquals("W5Y2026-B2", secondBatch.getName());
         assertEquals(50.0d, secondBatch.getValue(), 0.001d);
         assertEquals(8.164d, secondBatch.getStd(), 0.001d);
         assertEquals(3, secondBatch.getTriplicats().size());

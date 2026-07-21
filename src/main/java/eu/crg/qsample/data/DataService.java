@@ -189,7 +189,7 @@ public class DataService {
 
     private PlotTracePointWetlab generatePlotTracePointFromDataWetlab(WetLabFile wf, double value, double std, List<WetLabFile> triplicats, List<Double> triplicateValues) {
         int batch = (wf.getReplicate() - 1) / 3 + 1;
-        return new PlotTracePointWetlab("W" + wf.getWeek() + "Y" + wf.getYear() + "-T" + batch, value, std, wf.getWeek(), wf.getYear(), triplicats, triplicateValues);
+        return new PlotTracePointWetlab("W" + wf.getWeek() + "Y" + wf.getYear() + "-B" + batch, value, std, wf.getWeek(), wf.getYear(), triplicats, triplicateValues);
     }
 
     public List<PlotTrace> getTraceDataRequest(List <Long> csIds, Long paramId, String requestCode, String order) {
