@@ -87,8 +87,10 @@ public class DataService {
 			List<WetLabFile> clean_triplicats = new ArrayList<>();
 			List<Double> clean_triplicate_values = new ArrayList<>();
             triplicats.add(wlFile);
+            int batch = (wlFile.getReplicate() - 1) / 3;
             for (WetLabFile wlFile2 : files) {
                 if (wlFile.getWeek() == wlFile2.getWeek() && wlFile.getYear() == wlFile2.getYear()
+                        && (wlFile2.getReplicate() - 1) / 3 == batch
                         && wlFile.getChecksum() != wlFile2.getChecksum()) {
                     triplicats.add(wlFile2);
                 }
@@ -186,7 +188,8 @@ public class DataService {
     }
 
     private PlotTracePointWetlab generatePlotTracePointFromDataWetlab(WetLabFile wf, double value, double std, List<WetLabFile> triplicats, List<Double> triplicateValues) {
-        return new PlotTracePointWetlab("W" + wf.getWeek() + "Y" + wf.getYear(), value, std, wf.getWeek(), wf.getYear(), triplicats, triplicateValues);
+        int batch = (wf.getReplicate() - 1) / 3 + 1;
+        return new PlotTracePointWetlab("W" + wf.getWeek() + "Y" + wf.getYear() + "-B" + batch, value, std, wf.getWeek(), wf.getYear(), triplicats, triplicateValues);
     }
 
     public List<PlotTrace> getTraceDataRequest(List <Long> csIds, Long paramId, String requestCode, String order) {
