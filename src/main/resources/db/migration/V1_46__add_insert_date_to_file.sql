@@ -1,0 +1,1 @@
+ALTER TABLE file ADD COLUMN insert_date DATETIME NULL;
