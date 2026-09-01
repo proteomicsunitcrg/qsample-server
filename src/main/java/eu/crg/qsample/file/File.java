@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.validator.constraints.UniqueElements;
 
 @Entity
@@ -35,6 +36,11 @@ public class File {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	  @Column(name = "creation_date", columnDefinition = "DATETIME")
     private Date creationDate;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @CreationTimestamp
+    @Column(name = "insert_date", columnDefinition = "DATETIME", updatable = false)
+    private Date insertDate;
 
     @Column(name = "filename", length = 50)
     @NotNull
@@ -64,6 +70,12 @@ public class File {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    @JsonAlias({ "insert_date" })
+    @JsonProperty("insert_date")
+    public Date getInsertDate() {
+        return insertDate;
     }
 
     public String getFilename() {

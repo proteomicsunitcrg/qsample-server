@@ -27,9 +27,9 @@ public interface FileRepository extends CrudRepository<File, Long> {
 
     // public Page<RequestFile> findAllByRequestCodeAndCreationDateBetweenOrderByFilename(String requestCode, Date startDate, Date endDate, Pageable page);
 
-    public List<WetLabFile> findAllByCreationDateBetweenAndFilenameContainsAndTypeIdOrderByCreationDateDesc(Date startDate, Date endDate, String filename, Long wetlabId);
+    public List<WetLabFile> findAllByCreationDateBetweenAndFilenameContainsAndTypeIdOrderByInsertDateDesc(Date startDate, Date endDate, String filename, Long wetlabId);
 
-    public List<WetLabFile> findAllByCreationDateBetweenAndFilenameContainsOrderByCreationDateDesc(Date startDate, Date endDate, String filename);
+    public List<WetLabFile> findAllByCreationDateBetweenAndFilenameContainsOrderByInsertDateDesc(Date startDate, Date endDate, String filename);
 
 
     public List<RequestFile> findAllByRequestCodeContainsAndFilenameContainsOrderByFilename(String requestCode, String filename);

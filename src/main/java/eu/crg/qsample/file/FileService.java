@@ -190,16 +190,16 @@ public class FileService {
     }
 
     public List<RequestFile> getRequestFileDashboard(Date startDate, Date endDate, String filename, String code) {
-        return requestFileRepo.findAllByCreationDateBetweenAndRequestCodeContainsAndFilenameContainsOrderByCreationDateDesc(endDate, startDate, filename, code);
+        return requestFileRepo.findAllByCreationDateBetweenAndRequestCodeContainsAndFilenameContainsOrderByInsertDateDesc(endDate, startDate, filename, code);
         // return fileRepository.findAllByRequestCodeContainsAndFilenameContainsOrderByFilename(filename, code);
     }
 
     public List<WetLabFile> getWetlabFileDashboard(Date startDate, Date endDate, String filename, Long wetlabId) {
         // System.out.println(wetlabId);
         if (wetlabId == 0l) {
-            return fileRepository.findAllByCreationDateBetweenAndFilenameContainsOrderByCreationDateDesc(endDate, startDate, filename);
+            return fileRepository.findAllByCreationDateBetweenAndFilenameContainsOrderByInsertDateDesc(endDate, startDate, filename);
         }
-        return fileRepository.findAllByCreationDateBetweenAndFilenameContainsAndTypeIdOrderByCreationDateDesc(endDate, startDate, filename, wetlabId);
+        return fileRepository.findAllByCreationDateBetweenAndFilenameContainsAndTypeIdOrderByInsertDateDesc(endDate, startDate, filename, wetlabId);
     }
 
     public String getNextflowWorkflow() {
