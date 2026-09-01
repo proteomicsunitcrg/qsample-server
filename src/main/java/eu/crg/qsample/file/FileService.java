@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import eu.crg.qsample.threshold.InstrumentStatus;
 import eu.crg.qsample.context_source.ContextSourceRepository;
@@ -25,7 +26,9 @@ import eu.crg.qsample.data.DataRepository;
 import eu.crg.qsample.guideset.GuideSetRepository;
 import eu.crg.qsample.mail.Mail;
 import eu.crg.qsample.mail.MailService;
+import eu.crg.qsample.modification.ModificationFileRepository;
 import eu.crg.qsample.param.ParamRepository;
+import eu.crg.qsample.quantification.QuantificationRepository;
 import eu.crg.qsample.request.favorite_request.FavoriteRequestRepository;
 import eu.crg.qsample.request.favorite_request.FavoriteRequestService;
 import eu.crg.qsample.request.favorite_request.FavoriteRequestsUsers;
@@ -63,6 +66,12 @@ public class FileService {
 
     @Autowired
     DataRepository dataRepo;
+
+    @Autowired
+    ModificationFileRepository modificationFileRepo;
+
+    @Autowired
+    QuantificationRepository quantificationRepo;
 
     @Autowired
     GuideSetRepository guideSetRepo;
@@ -208,6 +217,15 @@ public class FileService {
 
     public boolean isWorkflowEnabled() {
         return qcloud2Disabled;
+    }
+
+    @Transactional
+    public void deleteFile(Long fileId) {
+        modificationFileRepo.deleteByFile_Id(fileId);
+        quantificationRepo.deleteByFile_Id(fileId);
+        guideSetRepo.deleteFileFromGuideSets(fileId);
+        dataRepo.deleteByFile_Id(fileId);
+        fileRepository.deleteById(fileId);
     }
 
 }

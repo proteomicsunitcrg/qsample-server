@@ -19,6 +19,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -129,6 +130,17 @@ public class FileController {
     @PreAuthorize("hasRole('INTERNAL')")
     public boolean isWorkflowEnabled() {
         return fileService.isWorkflowEnabled();
+    }
+
+    /**
+     * Deletes a file (RequestFile or WetLabFile) and all its related modification,
+     * quantification and data rows. ADMIN only, see qsample-server#86.
+     * @param fileId
+     */
+    @DeleteMapping(value = "/{fileId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteFile(@PathVariable Long fileId) {
+        fileService.deleteFile(fileId);
     }
 
     @ExceptionHandler(DataRetrievalFailureException.class)

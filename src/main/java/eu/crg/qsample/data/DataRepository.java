@@ -2,6 +2,7 @@ package eu.crg.qsample.data;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -44,5 +45,8 @@ public interface DataRepository extends CrudRepository<Data, Long> {
         "AND f.requestCode IN ?1")
     List<String> findRequestCodesWithProteinGroups(List<String> requestCodes);
 
+    @Modifying
+    @Query("delete from Data d where d.file.id = ?1")
+    void deleteByFile_Id(Long fileId);
 
 }
