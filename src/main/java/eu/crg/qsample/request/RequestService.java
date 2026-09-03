@@ -24,9 +24,11 @@ import java.util.Optional;
 import javax.ws.rs.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class RequestService {
@@ -96,6 +98,10 @@ public class RequestService {
     Gson gson = new Gson();
     AgendoRequestWrapper response = gson.fromJson(ccc, AgendoRequestWrapper.class);
 
+    if (!response.isSuccess()) {
+      throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Agendo returned an unsuccessful response");
+    }
+
     List<String> requestCodes = new ArrayList<>();
     for (AgendoRequest agendoRequest : response.getRequest()) {
       requestCodes.add(agendoRequest.getRef());
@@ -103,9 +109,7 @@ public class RequestService {
 
     Map<String, String> lastProcessedFileDates = getLastProcessedFileDates(requestCodes);
 
-    java.util.Set<String> requestsWithProteinGroups =
-        new java.util.HashSet<>(
-            dataRepository.findRequestCodesWithProteinGroups(requestCodes));
+    java.util.Set<String> requestsWithProteinGroups = getRequestCodesWithProteinGroups(requestCodes);
 
     for (AgendoRequest agendoRequest : response.getRequest()) {
       String requestCode = agendoRequest.getRef();
@@ -156,6 +160,14 @@ public class RequestService {
     }
 
     return miniRequests;
+  }
+
+  private java.util.Set<String> getRequestCodesWithProteinGroups(List<String> requestCodes) {
+    if (requestCodes == null || requestCodes.isEmpty()) {
+      return new java.util.HashSet<>();
+    }
+
+    return new java.util.HashSet<>(dataRepository.findRequestCodesWithProteinGroups(requestCodes));
   }
 
   private Map<String, String> getLastProcessedFileDates(List<String> requestCodes) {
@@ -247,6 +259,11 @@ public class RequestService {
     Gson gson = new Gson();
     AgendoRequestWrapperOneRequest wrapper =
         gson.fromJson(restService.getRequestById(id), AgendoRequestWrapperOneRequest.class);
+
+    if (!wrapper.isSuccess()) {
+      throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Agendo returned an unsuccessful response");
+    }
+
     return wrapper.getRequest();
   }
 
@@ -268,6 +285,10 @@ public class RequestService {
     Gson gson = new Gson();
     AgendoRequestWrapper response = gson.fromJson(ccc, AgendoRequestWrapper.class);
 
+    if (!response.isSuccess()) {
+      throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Agendo returned an unsuccessful response");
+    }
+
     List<String> requestCodes = new ArrayList<>();
     for (AgendoRequest agendoRequest : response.getRequest()) {
       requestCodes.add(agendoRequest.getRef());
@@ -275,9 +296,7 @@ public class RequestService {
 
     Map<String, String> lastProcessedFileDates = getLastProcessedFileDates(requestCodes);
 
-    java.util.Set<String> requestsWithProteinGroups =
-        new java.util.HashSet<>(
-            dataRepository.findRequestCodesWithProteinGroups(requestCodes));
+    java.util.Set<String> requestsWithProteinGroups = getRequestCodesWithProteinGroups(requestCodes);
 
     for (AgendoRequest agendoRequest : response.getRequest()) {
       String requestCode = agendoRequest.getRef();

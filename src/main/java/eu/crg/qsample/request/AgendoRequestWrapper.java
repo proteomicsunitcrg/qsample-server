@@ -1,5 +1,6 @@
 package eu.crg.qsample.request;
 
+import java.util.Collections;
 import java.util.List;
 
 public class AgendoRequestWrapper {
@@ -26,7 +27,7 @@ public class AgendoRequestWrapper {
   }
 
   public List<AgendoRequest> getRequest() {
-    return request;
+    return request != null ? request : Collections.emptyList();
   }
 
   public void setRequest(List<AgendoRequest> request) {
