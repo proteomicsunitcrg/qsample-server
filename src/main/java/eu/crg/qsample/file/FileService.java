@@ -139,8 +139,24 @@ public class FileService {
     }
 
     public File insertFileRequest(RequestFile file) {
-        if (requestFileRepo.findOneByChecksum(file.getChecksum()).isPresent()) {
-            throw new DataIntegrityViolationException("A file with that checksum already exists!");
+        Optional<RequestFile> existing = requestFileRepo.findOneByChecksum(file.getChecksum());
+        if (existing.isPresent()) {
+            // The Atlas pipeline registers a RequestFile as soon as it starts
+            // processing (for the live "Request plots" status icon) and again
+            // once the report is ready - the second call updates the metadata
+            // the report computed (creation_date, filename) without duplicating.
+            logger.info("RequestFile already exists for checksum " + file.getChecksum() + " - updating metadata");
+            RequestFile toUpdate = existing.get();
+            if (file.getFilename() != null) {
+                toUpdate.setFilename(file.getFilename());
+            }
+            if (file.getCreationDate() != null) {
+                toUpdate.setCreationDate(file.getCreationDate());
+            }
+            if (file.getRequestCode() != null) {
+                toUpdate.setRequestCode(file.getRequestCode());
+            }
+            return requestFileRepo.save(toUpdate);
         }
         logger.info("File inserted with checksum: " + file.getChecksum());
         RequestFile fileInserted = fileRepository.save(file);
