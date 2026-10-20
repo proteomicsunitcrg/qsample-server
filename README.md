@@ -1,4 +1,7 @@
 # QSample Server
+> **Notice (2026-10):** Development of QSample Server has moved to an internal CRG repository (CRG staff only - not accessible from outside).
+> This GitHub repository is **frozen** and kept as a public archive: to download/install a version, see the [Releases](https://github.com/proteomicsunitcrg/qsample-server/releases) (clean snapshot per release).
+
 
 ![AngularJS](https://img.shields.io/badge/AngularJS-E23237?style=for-the-badge&logo=angularjs&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-F2F4F9?style=for-the-badge&logo=spring-boot)
