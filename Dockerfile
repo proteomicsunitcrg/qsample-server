@@ -1,6 +1,6 @@
 FROM node:14-bullseye as nodeclient
 
-RUN apt update && apt upgrade -y
+RUN apt update && (apt upgrade -y || true)
 RUN mkdir -p /tmp
 WORKDIR /tmp
 COPY qsample-client/ /tmp/
@@ -11,7 +11,7 @@ RUN apt clean
 
 FROM biocorecrg/debian-perlbrew-pyenv3-java:bullseye as jarserver
 
-RUN apt update && apt upgrade -y
+RUN apt update && (apt upgrade -y || true)
 RUN mkdir -p /tmp
 WORKDIR /tmp
 COPY mvn* /tmp/
@@ -23,7 +23,7 @@ RUN mvn package -DskipTests -f pom.xml
 RUN apt clean
 
 FROM biocorecrg/debian-perlbrew-pyenv3-java:bullseye
-RUN apt update && apt upgrade -y && apt -y install gettext-base
+RUN apt update && (apt upgrade -y || true) && apt -y install gettext-base
 ENV QSAMPLE_API_PREFIX=http://localhost:8099/
 VOLUME /tmp
 RUN mkdir -p /config
