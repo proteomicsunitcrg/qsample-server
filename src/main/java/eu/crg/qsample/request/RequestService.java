@@ -28,6 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -91,9 +92,14 @@ public class RequestService {
 
   private List<MiniRequest> getAllAgendo(boolean showAll, Date startDate, Date endDate) {
     List<MiniRequest> miniRequests = new ArrayList<>();
-    String ccc =
-        restService.getAllRequests(
-            convertDateToAgendoFormat(startDate), convertDateToAgendoFormat(endDate));
+    String ccc;
+    try {
+      ccc =
+          restService.getAllRequests(
+              convertDateToAgendoFormat(startDate), convertDateToAgendoFormat(endDate));
+    } catch (ResourceAccessException e) {
+      throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Agendo unreachable or timed out", e);
+    }
 
     Gson gson = new Gson();
     AgendoRequestWrapper response = gson.fromJson(ccc, AgendoRequestWrapper.class);

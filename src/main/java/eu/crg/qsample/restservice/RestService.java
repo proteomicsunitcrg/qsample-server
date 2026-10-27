@@ -1,5 +1,6 @@
 package eu.crg.qsample.restservice;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
@@ -57,7 +58,10 @@ public class RestService {
     String encodedAuth = Base64.getEncoder().encodeToString((agendoUser + ":" + agendoPass).getBytes());
 
     public RestService(final RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate = restTemplateBuilder.build();
+        this.restTemplate = restTemplateBuilder
+                .setConnectTimeout(Duration.ofSeconds(10))
+                .setReadTimeout(Duration.ofSeconds(30))
+                .build();
     }
 
     public String getAllRequests(String dateFrom, String dateTo) {
