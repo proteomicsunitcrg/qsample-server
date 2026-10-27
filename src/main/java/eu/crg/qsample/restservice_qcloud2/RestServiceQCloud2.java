@@ -1,5 +1,6 @@
 package eu.crg.qsample.restservice_qcloud2;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
@@ -45,7 +46,10 @@ public class RestServiceQCloud2 {
 
 
     public RestServiceQCloud2(final RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate = restTemplateBuilder.build();
+        this.restTemplate = restTemplateBuilder
+            .setConnectTimeout(Duration.ofSeconds(10))
+            .setReadTimeout(Duration.ofSeconds(30))
+            .build();
     }
 
     public List<QCloud2File> getFiles(String requestCode) {

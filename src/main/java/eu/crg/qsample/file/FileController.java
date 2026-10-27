@@ -29,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResourceAccessException;
 
 import eu.crg.qsample.wetlab.WetLabFile;
 import eu.crg.qsample.wetlab.WetLabService;
@@ -178,5 +180,14 @@ public class FileController {
         response.sendError(HttpStatus.BAD_REQUEST.value(), "Unknown host: " + e.getCause().getMessage());
     }
 
+    @ExceptionHandler(HttpServerErrorException.class)
+    void handleQCloud2ServerError(HttpServletResponse response, Exception e) throws IOException {
+        response.sendError(HttpStatus.SERVICE_UNAVAILABLE.value(), "QCloud2 API error");
+    }
+
+    @ExceptionHandler(ResourceAccessException.class)
+    void handleQCloud2Timeout(HttpServletResponse response, Exception e) throws IOException {
+        response.sendError(HttpStatus.SERVICE_UNAVAILABLE.value(), "QCloud2 API unreachable or timed out");
+    }
 
 }
